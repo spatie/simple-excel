@@ -90,7 +90,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
-SimpleExcelReader::create($pathToCsv)->getReader();
+$reader = SimpleExcelReader::create($pathToCsv)->getReader();
 ```
 
 ### Writing files
@@ -146,7 +146,7 @@ Jane,Doe
 Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.
 
 ```php
-SimpleExcelWriter::create($pathToCsv)->getWriter();
+$writer = SimpleExcelWriter::create($pathToCsv)->getWriter();
 ```
 
 ### Testing
