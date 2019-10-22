@@ -14,7 +14,7 @@ class SimpleExcelWriter
 
     private $processHeader = true;
 
-    private $firstRowAdded = false;
+    private $processingFirstRow = true;
 
     public static function create(string $file)
     {
@@ -23,7 +23,7 @@ class SimpleExcelWriter
 
     public function __construct(string $path)
     {
-        $this->writer = WriterEntityFactory::createReaderFromFile($path);
+        $this->writer = WriterEntityFactory::createWriterFromFile($path);
 
         $this->writer->openToFile($path);
     }
@@ -36,20 +36,18 @@ class SimpleExcelWriter
     public function  noHeader()
     {
         $this->processHeader = false;
+
+        return $this;
     }
 
     /**
      * @param \Box\Spout\Common\Entity\Row|array $row
      * @param \Box\Spout\Common\Entity\Style\Style|null $style
-     *
-     * @return \Box\Spout\Writer\WriterInterface
-     * @throws \Box\Spout\Common\Exception\IOException
-     * @throws \Box\Spout\Writer\Exception\WriterNotOpenedException
      */
-    public function addRow($row, Style $style = null): WriterInterface
+    public function addRow($row, Style $style = null)
     {
         if (is_array($row)) {
-            if (! $this->firstRowAdded) {
+            if ($this->processHeader && $this->processingFirstRow)  {
                 $this->writeHeaderFromRow($row);
             }
 
@@ -58,7 +56,10 @@ class SimpleExcelWriter
 
         $this->writer->addRow($row);
 
-        $this->firstRowAdded = true;
+
+        $this->processingFirstRow = false;
+
+        return $this;
     }
 
     protected function writeHeaderFromRow(array $row)
