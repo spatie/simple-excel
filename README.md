@@ -1,12 +1,22 @@
-# Very short description of the package
+# Easily read and write simple Excel and CSV files
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 [![Build Status](https://img.shields.io/travis/spatie/simple-excel/master.svg?style=flat-square)](https://travis-ci.org/spatie/:package_name)
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/simple-excel.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/:package_name)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/:package_name)
 
+This package allow you to easily read and write simple Excel and CSV. Behind the scenes generators are used to ensure a very low memory usage, even when working with large files.
 
-This is where your description should go. Try and limit it to a paragraph or two. Consider adding a small example.
+Here's an example on how to read an Excel or CSV.
+
+```php
+SimpleExcelReader::create($pathToFile)->getRows()
+   ->each(function(array $rowProperties) {
+        // process the row
+    });
+```
+
+If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx` or `xls` an Excel file is assumed.
 
 ## Installation
 
@@ -18,10 +28,75 @@ composer require spatie/simple-excel
 
 ## Usage
 
-``` php
-$skeleton = new Spatie\Skeleton();
-echo $skeleton->echoPhrase('Hello, Spatie!');
+### Reading a csv
+
+Imagine you have a csv with this content.
+
+```csv
+email,first_name
+john@example.com,john
+jane@example.com,jane
 ```
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)->getRows();
+
+$rows->each(function(array $rowProperties) {
+   // in the first pass $rowProperties will contain
+   // ['email' => 'john@example', 'first_name' => 'john']
+});
+```
+
+### Reading an Excel file
+
+Reading an excel is identical to reading a csv. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx` or `xls`.
+
+### Working with LazyCollections
+
+`getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). The class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
+
+You'll find a list of methods you can use on a `LazyCollection` [in the Laravel documentation](https://laravel.com/docs/master/collections#the-enumerable-contract).
+
+Here's a quick, silly example where we only want to processing rows that have `first_name` that contains more than 5 characters.
+
+```php
+SimpleExcelReader::create($pathToCsv)->getRows();
+    ->filter(function(array $rowProperties) {
+       return strlen($rowProperties['first_name']) > 5
+    })
+    ->each(function(array $rowProperties) {
+        // processing rows
+    });
+```
+
+### Writing files
+
+Here's how you can write a csv:
+
+```php
+SimpleExcelWriter::create($pathToCsv)
+ ->addRow([
+    'first_name' => 'John',
+    'last_name' => 'Doe',
+])
+->addRow([
+    'first_name' => 'Jane',
+    'last_name' => 'Doe',
+]);
+```
+
+The file at `pathToCsv` will contain
+
+```csv
+first_name,last_name
+John,Doe
+Jane,Doe
+```
+
+### Writing an Excel file
+
+Writing an excel is identical to wrting a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx` or `xls`.
 
 ### Testing
 

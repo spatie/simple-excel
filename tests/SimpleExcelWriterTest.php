@@ -53,7 +53,7 @@ class SimpleExcelWriterTest extends TestCase
             ->addRow([
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',
-            ]);;
+            ]);
 
         $this->assertMatchesFileSnapshot($this->pathToCsv);
     }
