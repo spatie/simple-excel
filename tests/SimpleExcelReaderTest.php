@@ -65,7 +65,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_work_with_a_file_where_the_row_is_too_short()
     {
-        $rows = SimpleExcelReader::create($this->getStubPath('header-too-short.csv'))
+        $rows = SimpleExcelReader::create($this->getStubPath('row-too-short.csv'))
             ->getRows()
             ->toArray();
 
