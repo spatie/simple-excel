@@ -141,6 +141,16 @@ This will output:
 Jane,Doe
 ```
 
+#### Using an alternative delimiter
+
+By default the `SimpleExcelReader` will assume that the delimiter is a `,`.
+
+This is how you can use an alternative delimiter:
+
+```php
+SimpleExcelWriter::create($pathToCsv)->useDelimiter(';');
+```
+
 #### Manually working with the writer object
 
 Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.

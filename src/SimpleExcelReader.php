@@ -9,6 +9,9 @@ use Illuminate\Support\LazyCollection;
 
 class SimpleExcelReader
 {
+    /**  @var string */
+    private $path;
+
     /** @var \Box\Spout\Reader\ReaderInterface */
     private $reader;
 
@@ -24,14 +27,28 @@ class SimpleExcelReader
 
     public function __construct(string $path)
     {
-        $this->reader = ReaderEntityFactory::createReaderFromFile($path);
+        $this->path = $path;
 
-        $this->reader->open($path);
+        $this->reader = ReaderEntityFactory::createReaderFromFile($this->path);
     }
 
     public function noTitleRow()
     {
         $this->processHeader = false;
+
+        return $this;
+    }
+
+    public function useDelimiter(string $delimiter)
+    {
+        $this->reader->setFieldDelimiter($delimiter);
+
+        return $this;
+    }
+
+    public function useFieldEnclosure(string $fieldEnclosure)
+    {
+        $this->reader->setFieldEnclosure($fieldEnclosure);
 
         return $this;
     }
@@ -43,6 +60,8 @@ class SimpleExcelReader
 
     public function getRows(): LazyCollection
     {
+        $this->reader->open($this->path);
+
         $sheet = $this->reader->getSheetIterator()->current();
 
         $this->rowIterator = $sheet->getRowIterator();

@@ -103,4 +103,20 @@ class SimpleExcelReaderTest extends TestCase
             ],
         ], $rows);
     }
+
+    /** @test */
+    public function it_can_use_an_alternative_delimiter()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'))
+            ->useDelimiter(';')
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+            ],
+        ], $rows);
+    }
 }
