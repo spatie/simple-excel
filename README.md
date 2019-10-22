@@ -49,11 +49,11 @@ $rows->each(function(array $rowProperties) {
 });
 ```
 
-### Reading an Excel file
+#### Reading an Excel file
 
 Reading an excel is identical to reading a csv. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx` or `xls`.
 
-### Working with LazyCollections
+#### Working with LazyCollections
 
 `getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). The class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
 
@@ -69,6 +69,28 @@ SimpleExcelReader::create($pathToCsv)->getRows();
     ->each(function(array $rowProperties) {
         // processing rows
     });
+```
+
+#### Reading a file without titles
+
+If the file you are reading does not contain a title row, than you should use the `noTitleRow()` method.
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->noTitleRow()
+    ->getRows()
+    ->each(function(array $rowProperties) {
+   // in the first pass $rowProperties will contain
+   // [0 => 'john@example', 1 => 'john']
+});
+
+#### Manually working with the reader object
+
+Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
+
+```php
+SimpleExcelReader::create($pathToCsv)->getReader();
 ```
 
 ### Writing files
@@ -95,9 +117,37 @@ John,Doe
 Jane,Doe
 ```
 
-### Writing an Excel file
+#### Writing an Excel file
 
-Writing an excel is identical to wrting a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx` or `xls`.
+Writing an excel is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx` or `xls`.
+
+#### Writing a file without titles
+
+If the file you are writing should have a title row adding automatically, thah you should use the `noTitleRow()` method.
+
+```php
+$rows = SimpleExcelWriter::create($pathToCsv)
+    ->noTitleRow()
+    ->addRow([
+        'first_name' => 'Jane',
+        'last_name' => 'Doe',
+    ]);
+});
+```
+
+This will output:
+
+```csv
+Jane,Doe
+```
+
+#### Manually working with the writer object
+
+Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.
+
+```php
+SimpleExcelWriter::create($pathToCsv)->getWriter();
+```
 
 ### Testing
 

@@ -33,7 +33,7 @@ class SimpleExcelWriter
         return $this->writer;
     }
 
-    public function  noHeader()
+    public function  noTitleRow()
     {
         $this->processHeader = false;
 

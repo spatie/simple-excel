@@ -81,7 +81,7 @@ class SimpleExcelReaderTest extends TestCase
     public function it_can_ignore_the_headers()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
-            ->noHeader()
+            ->noTitleRow()
             ->getRows()
             ->toArray();
 

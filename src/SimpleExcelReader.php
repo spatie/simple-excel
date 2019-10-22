@@ -29,7 +29,7 @@ class SimpleExcelReader
         $this->reader->open($path);
     }
 
-    public function noHeader()
+    public function noTitleRow()
     {
         $this->processHeader = false;
 
@@ -53,7 +53,7 @@ class SimpleExcelReader
         $firstRow = $this->rowIterator->current();
 
         if (is_null($firstRow)) {
-            $this->noHeader();
+            $this->noTitleRow();
         }
 
         if ($this->processHeader) {
