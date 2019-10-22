@@ -84,6 +84,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
    // in the first pass $rowProperties will contain
    // [0 => 'john@example', 1 => 'john']
 });
+```
 
 #### Manually working with the reader object
 
