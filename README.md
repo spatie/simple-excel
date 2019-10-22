@@ -100,14 +100,14 @@ Here's how you can write a csv:
 
 ```php
 SimpleExcelWriter::create($pathToCsv)
- ->addRow([
-    'first_name' => 'John',
-    'last_name' => 'Doe',
-])
-->addRow([
-    'first_name' => 'Jane',
-    'last_name' => 'Doe',
-]);
+     ->addRow([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ])
+    ->addRow([
+        'first_name' => 'Jane',
+        'last_name' => 'Doe',
+    ]);
 ```
 
 The file at `pathToCsv` will contain
