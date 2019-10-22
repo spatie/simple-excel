@@ -72,7 +72,7 @@ class SimpleExcelReaderTest extends TestCase
         $this->assertEquals([
             [
                 'email' => 'john@example.com',
-                'first_name' => 'john',
+                'first_name' => '',
             ],
         ], $rows);
     }
