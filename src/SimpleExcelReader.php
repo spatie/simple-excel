@@ -55,7 +55,7 @@ class SimpleExcelReader
 
     public function getReader(): ReaderInterface
     {
-        return $this->getReader();
+        return $this->reader;
     }
 
     public function getRows(): LazyCollection
