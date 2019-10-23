@@ -2,8 +2,8 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
-use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\Snapshots\MatchesSnapshots;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class SimpleExcelWriterTest extends TestCase
@@ -20,7 +20,7 @@ class SimpleExcelWriterTest extends TestCase
     {
         parent::setUp();
 
-        $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
+        $this->temporaryDirectory = new TemporaryDirectory(__DIR__.'/temp');
 
         $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
     }
@@ -36,7 +36,7 @@ class SimpleExcelWriterTest extends TestCase
             ->addRow([
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',
-            ]);;
+            ]);
 
         $this->assertMatchesFileSnapshot($this->pathToCsv);
     }
