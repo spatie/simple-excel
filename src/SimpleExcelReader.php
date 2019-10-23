@@ -62,6 +62,8 @@ class SimpleExcelReader
     {
         $this->reader->open($this->path);
 
+        $this->reader->getSheetIterator()->rewind();
+
         $sheet = $this->reader->getSheetIterator()->current();
 
         $this->rowIterator = $sheet->getRowIterator();
