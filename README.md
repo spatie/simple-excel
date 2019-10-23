@@ -6,7 +6,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/simple-excel.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/simple-excel)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
 
-This package allow you to easily read and write simple Excel and CSV. Behind the scenes generators are used to ensure a very low memory usage, even when working with large files.
+This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure a very low memory usage, even when working with very large files.
 
 Here's an example on how to read an Excel or CSV.
 
@@ -29,9 +29,9 @@ composer require spatie/simple-excel
 
 ## Usage
 
-### Reading a csv
+### Reading a CSV
 
-Imagine you have a csv with this content.
+Imagine you have a CSV with this content.
 
 ```csv
 email,first_name
@@ -51,18 +51,18 @@ $rows->each(function(array $rowProperties) {
 
 #### Reading an Excel file
 
-Reading an excel is identical to reading a csv. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx` or `xls`.
+Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx` or `xls`.
 
 #### Working with LazyCollections
 
-`getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). The class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
+`getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
 
 You'll find a list of methods you can use on a `LazyCollection` [in the Laravel documentation](https://laravel.com/docs/master/collections#the-enumerable-contract).
 
-Here's a quick, silly example where we only want to processing rows that have `first_name` that contains more than 5 characters.
+Here's a quick, silly example where we only want to process rows that have a `first_name` that contains more than 5 characters.
 
 ```php
-SimpleExcelReader::create($pathToCsv)->getRows();
+SimpleExcelReader::create($pathToCsv)->getRows()
     ->filter(function(array $rowProperties) {
        return strlen($rowProperties['first_name']) > 5
     })
@@ -96,7 +96,7 @@ $reader = SimpleExcelReader::create($pathToCsv)->getReader();
 
 ### Writing files
 
-Here's how you can write a csv:
+Here's how you can write a CSV file:
 
 ```php
 SimpleExcelWriter::create($pathToCsv)
@@ -120,11 +120,11 @@ Jane,Doe
 
 #### Writing an Excel file
 
-Writing an excel is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx` or `xls`.
+Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx` or `xls`.
 
 #### Writing a file without titles
 
-If the file you are writing should have a title row adding automatically, thah you should use the `noTitleRow()` method.
+If the file you are writing should not have a title row added automatically, then you should use the `noTitleRow()` method.
 
 ```php
 $rows = SimpleExcelWriter::create($pathToCsv)

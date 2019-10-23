@@ -3,13 +3,13 @@
 namespace Spatie\SimpleExcel;
 
 use Box\Spout\Common\Entity\Row;
-use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\ReaderInterface;
 use Illuminate\Support\LazyCollection;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class SimpleExcelReader
 {
-    /**  @var string */
+    /** @var string */
     private $path;
 
     /** @var \Box\Spout\Reader\ReaderInterface */
@@ -55,12 +55,14 @@ class SimpleExcelReader
 
     public function getReader(): ReaderInterface
     {
-        return $this->getReader();
+        return $this->reader;
     }
 
     public function getRows(): LazyCollection
     {
         $this->reader->open($this->path);
+
+        $this->reader->getSheetIterator()->rewind();
 
         $sheet = $this->reader->getSheetIterator()->current();
 
@@ -93,7 +95,7 @@ class SimpleExcelReader
 
     protected function getValueFromRow(Row $row): array
     {
-        if (!$this->processHeader) {
+        if (! $this->processHeader) {
             return $row->toArray();
         }
 

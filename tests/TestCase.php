@@ -8,6 +8,6 @@ abstract class TestCase extends PhpUnitTestCase
 {
     public function getStubPath(string $name): string
     {
-        return __DIR__ . "/stubs/{$name}";
+        return __DIR__."/stubs/{$name}";
     }
 }
