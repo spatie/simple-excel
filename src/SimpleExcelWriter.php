@@ -2,10 +2,9 @@
 
 namespace Spatie\SimpleExcel;
 
+use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Common\Entity\Style\Style;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Box\Spout\Writer\Common\Creator\WriterFactory;
-use Box\Spout\Writer\WriterInterface;
 
 class SimpleExcelWriter
 {
@@ -33,7 +32,7 @@ class SimpleExcelWriter
         return $this->writer;
     }
 
-    public function  noTitleRow()
+    public function noTitleRow()
     {
         $this->processHeader = false;
 
@@ -47,7 +46,7 @@ class SimpleExcelWriter
     public function addRow($row, Style $style = null)
     {
         if (is_array($row)) {
-            if ($this->processHeader && $this->processingFirstRow)  {
+            if ($this->processHeader && $this->processingFirstRow) {
                 $this->writeHeaderFromRow($row);
             }
 
@@ -55,7 +54,6 @@ class SimpleExcelWriter
         }
 
         $this->writer->addRow($row);
-
 
         $this->processingFirstRow = false;
 

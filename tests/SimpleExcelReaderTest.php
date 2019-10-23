@@ -30,7 +30,7 @@ class SimpleExcelReaderTest extends TestCase
                 'last_name' => 'doe',
             ],
             [
-                "email" => 'mary-jane@example.com',
+                'email' => 'mary-jane@example.com',
                 'first_name' => 'mary jane',
                 'last_name' => 'doe',
             ],
