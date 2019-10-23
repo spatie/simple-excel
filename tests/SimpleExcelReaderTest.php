@@ -119,4 +119,27 @@ class SimpleExcelReaderTest extends TestCase
             ],
         ], $rows);
     }
+
+    /** @test */
+    public function the_reader_is_macroable()
+    {
+        SimpleExcelReader::macro('onlyJohns', function() {
+            return $this
+                ->getRows()
+                ->filter(function(array $row) {
+                    return $row['first_name'] === 'john';
+                })
+                ->toArray();
+        });
+
+        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))->onlyJohns();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => 'doe',
+            ],
+        ], $rows);
+    }
 }
