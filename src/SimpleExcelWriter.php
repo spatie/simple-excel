@@ -5,12 +5,9 @@ namespace Spatie\SimpleExcel;
 use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Common\Entity\Style\Style;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
-use Spatie\Macroable\Macroable;
 
 class SimpleExcelWriter
 {
-    use Macroable;
-
     /** @var \Box\Spout\Writer\WriterInterface */
     private $writer;
 

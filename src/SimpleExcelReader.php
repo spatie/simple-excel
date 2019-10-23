@@ -6,12 +6,9 @@ use Box\Spout\Common\Entity\Row;
 use Box\Spout\Reader\ReaderInterface;
 use Illuminate\Support\LazyCollection;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
-use Spatie\Macroable\Macroable;
 
 class SimpleExcelReader
 {
-    use Macroable;
-
     /** @var string */
     private $path;
 
