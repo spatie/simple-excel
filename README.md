@@ -11,7 +11,7 @@ This package allows you to easily read and write simple Excel and CSV files. Beh
 Here's an example on how to read an Excel or CSV.
 
 ```php
-SimpleExcelReader::create($pathToFile)->getRows()
+SimpleExcelReader::open($pathToFile)->getRows()
    ->each(function(array $rowProperties) {
         // process the row
     });
@@ -41,7 +41,7 @@ jane@example.com,jane
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
-$rows = SimpleExcelReader::create($pathToCsv)->getRows();
+$rows = SimpleExcelReader::open($pathToCsv)->getRows();
 
 $rows->each(function(array $rowProperties) {
    // in the first pass $rowProperties will contain
@@ -62,7 +62,7 @@ You'll find a list of methods you can use on a `LazyCollection` [in the Laravel 
 Here's a quick, silly example where we only want to process rows that have a `first_name` that contains more than 5 characters.
 
 ```php
-SimpleExcelReader::create($pathToCsv)->getRows()
+SimpleExcelReader::open($pathToCsv)->getRows()
     ->filter(function(array $rowProperties) {
        return strlen($rowProperties['first_name']) > 5
     })
@@ -73,12 +73,12 @@ SimpleExcelReader::create($pathToCsv)->getRows()
 
 #### Reading a file without titles
 
-If the file you are reading does not contain a title row, than you should use the `noTitleRow()` method.
+If the file you are reading does not contain a title row, than you should use the `noHeaderRow()` method.
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
-$rows = SimpleExcelReader::create($pathToCsv)
-    ->noTitleRow()
+$rows = SimpleExcelReader::open($pathToCsv)
+    ->noHeaderRow()
     ->getRows()
     ->each(function(array $rowProperties) {
    // in the first pass $rowProperties will contain
@@ -91,7 +91,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
-$reader = SimpleExcelReader::create($pathToCsv)->getReader();
+$reader = SimpleExcelReader::open($pathToCsv)->getReader();
 ```
 
 ### Writing files
@@ -124,11 +124,11 @@ Writing an Excel file is identical to writing a csv. Just make sure that the pat
 
 #### Writing a file without titles
 
-If the file you are writing should not have a title row added automatically, then you should use the `noTitleRow()` method.
+If the file you are writing should not have a title row added automatically, then you should use the `noHeaderRow()` method.
 
 ```php
 $rows = SimpleExcelWriter::create($pathToCsv)
-    ->noTitleRow()
+    ->noHeaderRow()
     ->addRow([
         'first_name' => 'Jane',
         'last_name' => 'Doe',

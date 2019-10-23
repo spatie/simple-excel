@@ -6,9 +6,12 @@ use Box\Spout\Common\Entity\Row;
 use Box\Spout\Reader\ReaderInterface;
 use Illuminate\Support\LazyCollection;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+use Spatie\Macroable\Macroable;
 
 class SimpleExcelReader
 {
+    use Macroable;
+
     /** @var string */
     private $path;
 
@@ -32,7 +35,7 @@ class SimpleExcelReader
         $this->reader = ReaderEntityFactory::createReaderFromFile($this->path);
     }
 
-    public function noTitleRow()
+    public function noHeaderRow()
     {
         $this->processHeader = false;
 
@@ -74,7 +77,7 @@ class SimpleExcelReader
         $firstRow = $this->rowIterator->current();
 
         if (is_null($firstRow)) {
-            $this->noTitleRow();
+            $this->noHeaderRow();
         }
 
         if ($this->processHeader) {
@@ -108,8 +111,13 @@ class SimpleExcelReader
         return array_combine($this->headers, $values);
     }
 
-    public function __destruct()
+    public function close()
     {
         $this->reader->close();
+    }
+
+    public function __destruct()
+    {
+        $this->close();
     }
 }

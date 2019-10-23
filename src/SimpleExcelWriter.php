@@ -5,9 +5,12 @@ namespace Spatie\SimpleExcel;
 use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Common\Entity\Style\Style;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Spatie\Macroable\Macroable;
 
 class SimpleExcelWriter
 {
+    use Macroable;
+
     /** @var \Box\Spout\Writer\WriterInterface */
     private $writer;
 
@@ -32,7 +35,7 @@ class SimpleExcelWriter
         return $this->writer;
     }
 
-    public function noTitleRow()
+    public function noHeaderRow()
     {
         $this->processHeader = false;
 
@@ -69,8 +72,13 @@ class SimpleExcelWriter
         $this->writer->addRow($headerRow);
     }
 
-    public function __destruct()
+    public function close()
     {
         $this->writer->close();
+    }
+
+    public function __destruct()
+    {
+        $this->close();
     }
 }

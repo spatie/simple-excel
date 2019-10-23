@@ -45,7 +45,7 @@ class SimpleExcelWriterTest extends TestCase
     public function it_can_write_a_csv_without_a_header()
     {
         SimpleExcelWriter::create($this->pathToCsv)
-            ->noTitleRow()
+            ->noHeaderRow()
             ->addRow([
                 'first_name' => 'John',
                 'last_name' => 'Doe',
