@@ -73,7 +73,7 @@ SimpleExcelReader::open($pathToCsv)->getRows()
 
 #### Reading a file without titles
 
-If the file you are reading does not contain a title row, than you should use the `noHeaderRow()` method.
+If the file you are reading does not contain a title row, then you should use the `noHeaderRow()` method.
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
