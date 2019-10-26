@@ -20,7 +20,7 @@ class SimpleExcelWriterTest extends TestCase
     {
         parent::setUp();
 
-        $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
+        $this->temporaryDirectory = new TemporaryDirectory(__DIR__.'/temp');
 
         $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
     }
