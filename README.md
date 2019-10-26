@@ -17,7 +17,7 @@ SimpleExcelReader::open($pathToFile)->getRows()
     });
 ```
 
-If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx` or `xls` an Excel file is assumed.
+If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx` or `xls`, an Excel file is assumed.
 
 ## Installation
 
