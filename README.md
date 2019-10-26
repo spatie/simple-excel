@@ -1,4 +1,4 @@
-# Easily read and write simple Excel and CSV files
+# Read and write simple Excel and CSV files
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
 [![Build Status](https://img.shields.io/travis/spatie/simple-excel/master.svg?style=flat-square)](https://travis-ci.org/spatie/simple-excel)
