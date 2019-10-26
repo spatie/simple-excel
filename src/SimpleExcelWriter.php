@@ -15,6 +15,8 @@ class SimpleExcelWriter
 
     private $processingFirstRow = true;
 
+    private $numberOfRows = 0;
+
     public static function create(string $file)
     {
         return new static($file);
@@ -30,6 +32,11 @@ class SimpleExcelWriter
     public function getWriter(): WriterInterface
     {
         return $this->writer;
+    }
+
+    public function getNumberOfRows(): int
+    {
+        return $this->numberOfRows;
     }
 
     public function noHeaderRow()
@@ -54,6 +61,7 @@ class SimpleExcelWriter
         }
 
         $this->writer->addRow($row);
+        $this->numberOfRows++;
 
         $this->processingFirstRow = false;
 
@@ -67,6 +75,7 @@ class SimpleExcelWriter
         $headerRow = WriterEntityFactory::createRowFromArray($headerValues);
 
         $this->writer->addRow($headerRow);
+        $this->numberOfRows++;
     }
 
     public function close()

@@ -152,6 +152,20 @@ This is how you can use an alternative delimiter:
 SimpleExcelWriter::create($pathToCsv)->useDelimiter(';');
 ```
 
+#### Getting the number of rows written
+
+You can get the number of rows that are written. This number includes the automatically added header row.
+
+```php
+$writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
+    ->addRow([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
+
+$writerWithoutAutomaticHeader->getNumberOfRows() // returns 2
+```
+
 #### Manually working with the writer object
 
 Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.

@@ -20,7 +20,7 @@ class SimpleExcelWriterTest extends TestCase
     {
         parent::setUp();
 
-        $this->temporaryDirectory = new TemporaryDirectory(__DIR__.'/temp');
+        $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
 
         $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
     }
@@ -56,5 +56,26 @@ class SimpleExcelWriterTest extends TestCase
             ]);
 
         $this->assertMatchesFileSnapshot($this->pathToCsv);
+    }
+
+    /** @test */
+    public function it_can_get_the_number_of_rows_written()
+    {
+        $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
+            ->addRow([
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+            ]);
+
+        $this->assertEquals(2, $writerWithAutomaticHeader->getNumberOfRows());
+
+        $writerWithoutAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
+            ->noHeaderRow()
+            ->addRow([
+                'first_name' => 'John',
+                'last_name' => 'Doe',
+            ]);
+
+        $this->assertEquals(1, $writerWithoutAutomaticHeader->getNumberOfRows());
     }
 }
