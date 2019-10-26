@@ -99,7 +99,7 @@ $reader = SimpleExcelReader::open($pathToCsv)->getReader();
 Here's how you can write a CSV file:
 
 ```php
-SimpleExcelWriter::create($pathToCsv)
+$writer = SimpleExcelWriter::create($pathToCsv)
      ->addRow([
         'first_name' => 'John',
         'last_name' => 'Doe',
@@ -127,7 +127,7 @@ Writing an Excel file is identical to writing a csv. Just make sure that the pat
 If the file you are writing should not have a title row added automatically, then you should use the `noHeaderRow()` method.
 
 ```php
-$rows = SimpleExcelWriter::create($pathToCsv)
+$writer = SimpleExcelWriter::create($pathToCsv)
     ->noHeaderRow()
     ->addRow([
         'first_name' => 'Jane',
@@ -141,6 +141,27 @@ This will output:
 ```csv
 Jane,Doe
 ```
+
+#### Adding layout
+
+Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
+
+```php
+use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
+use Box\Spout\Common\Entity\Style\Color;
+
+$style = (new StyleBuilder())
+   ->setFontBold()
+   ->setFontSize(15)
+   ->setFontColor(Color::BLUE)
+   ->setShouldWrapText()
+   ->setBackgroundColor(Color::YELLOW)
+   ->build();
+
+$writer->addRow(['values, 'of', 'the', 'row'], $style)
+```
+
+For more information on styles head over to [the Sprout docs](https://opensource.box.com/spout/docs/#styling).
 
 #### Using an alternative delimiter
 
@@ -173,6 +194,7 @@ Under the hood this package uses the [box/sprout](https://github.com/box/spout) 
 ```php
 $writer = SimpleExcelWriter::create($pathToCsv)->getWriter();
 ```
+
 
 ### Testing
 
@@ -211,6 +233,11 @@ Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview 
 
 Does your business depend on our contributions? Reach out and support us on [Patreon](https://www.patreon.com/spatie). 
 All pledges will be dedicated to allocating workforce on maintenance and new awesome stuff.
+
+## Alternatives
+
+- [PhpSpreadsheet](https://phpspreadsheet.readthedocs.io/en/latest/)
+- [laravel-excel](https://laravel-excel.com)
 
 ## License
 
