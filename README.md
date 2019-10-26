@@ -110,7 +110,7 @@ $writer = SimpleExcelWriter::create($pathToCsv)
     ]);
 ```
 
-The file at `pathToCsv` will contain
+The file at `pathToCsv` will contain:
 
 ```csv
 first_name,last_name
