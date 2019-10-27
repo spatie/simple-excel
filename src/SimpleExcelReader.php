@@ -32,6 +32,11 @@ class SimpleExcelReader
         $this->reader = ReaderEntityFactory::createReaderFromFile($this->path);
     }
 
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
     public function noHeaderRow()
     {
         $this->processHeader = false;

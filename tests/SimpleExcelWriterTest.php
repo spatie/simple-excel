@@ -2,6 +2,7 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
+use Spatie\SimpleExcel\SimpleExcelReader;
 use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -77,5 +78,13 @@ class SimpleExcelWriterTest extends TestCase
             ]);
 
         $this->assertEquals(1, $writerWithoutAutomaticHeader->getNumberOfRows());
+    }
+
+    /** @test */
+    public function the_writer_can_get_the_path()
+    {
+        $writer = SimpleExcelWriter::create($this->pathToCsv);
+
+        $this->assertEquals($this->pathToCsv, $writer->getPath());
     }
 }

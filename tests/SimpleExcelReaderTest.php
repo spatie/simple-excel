@@ -119,4 +119,14 @@ class SimpleExcelReaderTest extends TestCase
             ],
         ], $rows);
     }
+
+    /** @test */
+    public function the_reader_can_get_the_path()
+    {
+        $path = $this->getStubPath('alternative-delimiter.csv');
+
+        $reader = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'));
+
+        $this->assertEquals($path, $reader->getPath());
+    }
 }

@@ -11,6 +11,8 @@ class SimpleExcelWriter
     /** @var \Box\Spout\Writer\WriterInterface */
     private $writer;
 
+    private $path = '';
+
     private $processHeader = true;
 
     private $processingFirstRow = true;
@@ -26,7 +28,14 @@ class SimpleExcelWriter
     {
         $this->writer = WriterEntityFactory::createWriterFromFile($path);
 
-        $this->writer->openToFile($path);
+        $this->path = $path;
+
+        $this->writer->openToFile($this->path);
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
     }
 
     public function getWriter(): WriterInterface
