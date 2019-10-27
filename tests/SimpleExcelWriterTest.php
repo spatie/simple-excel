@@ -2,7 +2,6 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
-use Spatie\SimpleExcel\SimpleExcelReader;
 use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
