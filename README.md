@@ -17,7 +17,7 @@ SimpleExcelReader::open($pathToFile)->getRows()
     });
 ```
 
-If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx` or `xls`, an Excel file is assumed.
+If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx`, an Excel file is assumed.
 
 ## Installation
 
@@ -51,7 +51,7 @@ $rows->each(function(array $rowProperties) {
 
 #### Reading an Excel file
 
-Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx` or `xls`.
+Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx`.
 
 #### Working with LazyCollections
 
@@ -120,7 +120,7 @@ Jane,Doe
 
 #### Writing an Excel file
 
-Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx` or `xls`.
+Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
 
 #### Writing a file without titles
 
