@@ -81,8 +81,8 @@ $rows = SimpleExcelReader::open($pathToCsv)
     ->noHeaderRow()
     ->getRows()
     ->each(function(array $rowProperties) {
-   // in the first pass $rowProperties will contain
-   // [0 => 'john@example', 1 => 'john']
+       // in the first pass $rowProperties will contain
+       // [0 => 'john@example', 1 => 'john']
 });
 ```
 
