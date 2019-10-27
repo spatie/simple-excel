@@ -1,4 +1,4 @@
-# Easily read and write simple Excel and CSV files
+# Read and write simple Excel and CSV files
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
 [![Build Status](https://img.shields.io/travis/spatie/simple-excel/master.svg?style=flat-square)](https://travis-ci.org/spatie/simple-excel)
@@ -6,7 +6,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/spatie/simple-excel.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/simple-excel)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
 
-This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure a very low memory usage, even when working with very large files.
+This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure low memory usage, even when working with large files.
 
 Here's an example on how to read an Excel or CSV.
 
@@ -17,7 +17,7 @@ SimpleExcelReader::open($pathToFile)->getRows()
     });
 ```
 
-If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx` or `xls` an Excel file is assumed.
+If `$pathToFile` ends with `csv` a csv is assumed. If it ends with `xlsx` or `xls`, an Excel file is assumed.
 
 ## Installation
 
@@ -110,7 +110,7 @@ $writer = SimpleExcelWriter::create($pathToCsv)
     ]);
 ```
 
-The file at `pathToCsv` will contain
+The file at `pathToCsv` will contain:
 
 ```csv
 first_name,last_name

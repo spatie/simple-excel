@@ -1,6 +1,6 @@
 {
     "name": "spatie/simple-excel",
-    "description": "Easily read and write simple Excel and CSV files",
+    "description": "Read and write simple Excel and CSV files",
     "keywords": [
         "spatie",
         "simple-excel"
