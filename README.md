@@ -11,7 +11,7 @@ This package allows you to easily read and write simple Excel and CSV files. Beh
 Here's an example on how to read an Excel or CSV.
 
 ```php
-SimpleExcelReader::open($pathToFile)->getRows()
+SimpleExcelReader::create($pathToFile)->getRows()
    ->each(function(array $rowProperties) {
         // process the row
     });
@@ -41,7 +41,7 @@ jane@example.com,jane
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
-$rows = SimpleExcelReader::open($pathToCsv)->getRows();
+$rows = SimpleExcelReader::create($pathToCsv)->getRows();
 
 $rows->each(function(array $rowProperties) {
    // in the first pass $rowProperties will contain
@@ -62,7 +62,7 @@ You'll find a list of methods you can use on a `LazyCollection` [in the Laravel 
 Here's a quick, silly example where we only want to process rows that have a `first_name` that contains more than 5 characters.
 
 ```php
-SimpleExcelReader::open($pathToCsv)->getRows()
+SimpleExcelReader::create($pathToCsv)->getRows()
     ->filter(function(array $rowProperties) {
        return strlen($rowProperties['first_name']) > 5
     })
