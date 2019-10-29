@@ -88,7 +88,7 @@ $rows = SimpleExcelReader::open($pathToCsv)
 
 #### Manually working with the reader object
 
-Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
+Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
 $reader = SimpleExcelReader::open($pathToCsv)->getReader();
