@@ -88,7 +88,7 @@ $rows = SimpleExcelReader::open($pathToCsv)
 
 #### Manually working with the reader object
 
-Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
+Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
 $reader = SimpleExcelReader::open($pathToCsv)->getReader();
@@ -144,7 +144,7 @@ Jane,Doe
 
 #### Adding layout
 
-Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
+Under the hood this package uses the [box/spout](https://github.com/box/spout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
 
 ```php
 use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
@@ -161,7 +161,7 @@ $style = (new StyleBuilder())
 $writer->addRow(['values, 'of', 'the', 'row'], $style)
 ```
 
-For more information on styles head over to [the Sprout docs](https://opensource.box.com/spout/docs/#styling).
+For more information on styles head over to [the Spout docs](https://opensource.box.com/spout/docs/#styling).
 
 #### Using an alternative delimiter
 
@@ -189,7 +189,7 @@ $writerWithoutAutomaticHeader->getNumberOfRows() // returns 2
 
 #### Manually working with the writer object
 
-Under the hood this package uses the [box/sprout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.
+Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.
 
 ```php
 $writer = SimpleExcelWriter::create($pathToCsv)->getWriter();
