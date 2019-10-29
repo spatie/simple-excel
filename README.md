@@ -11,7 +11,7 @@ This package allows you to easily read and write simple Excel and CSV files. Beh
 Here's an example on how to read an Excel or CSV.
 
 ```php
-SimpleExcelReader::open($pathToFile)->getRows()
+SimpleExcelReader::create($pathToFile)->getRows()
    ->each(function(array $rowProperties) {
         // process the row
     });
@@ -41,7 +41,7 @@ jane@example.com,jane
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
-$rows = SimpleExcelReader::open($pathToCsv)->getRows();
+$rows = SimpleExcelReader::create($pathToCsv)->getRows();
 
 $rows->each(function(array $rowProperties) {
    // in the first pass $rowProperties will contain
@@ -62,7 +62,7 @@ You'll find a list of methods you can use on a `LazyCollection` [in the Laravel 
 Here's a quick, silly example where we only want to process rows that have a `first_name` that contains more than 5 characters.
 
 ```php
-SimpleExcelReader::open($pathToCsv)->getRows()
+SimpleExcelReader::create($pathToCsv)->getRows()
     ->filter(function(array $rowProperties) {
        return strlen($rowProperties['first_name']) > 5
     })
@@ -77,7 +77,7 @@ If the file you are reading does not contain a title row, then you should use th
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
-$rows = SimpleExcelReader::open($pathToCsv)
+$rows = SimpleExcelReader::create($pathToCsv)
     ->noHeaderRow()
     ->getRows()
     ->each(function(array $rowProperties) {
@@ -91,7 +91,7 @@ $rows = SimpleExcelReader::open($pathToCsv)
 Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
-$reader = SimpleExcelReader::open($pathToCsv)->getReader();
+$reader = SimpleExcelReader::create($pathToCsv)->getReader();
 ```
 
 ### Writing files
