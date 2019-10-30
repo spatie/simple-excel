@@ -129,4 +129,25 @@ class SimpleExcelReaderTest extends TestCase
 
         $this->assertEquals($path, $reader->getPath());
     }
+
+    /** @test */
+    public function it_combines_headers_with_correct_values_even_though_they_are_returned_in_the_wrong_order()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('columns-returned-in-wrong-order.xlsx'))
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'id' => 11223344,
+                'place' => '',
+                'status' => 'yes',
+            ],
+            [
+                'id' => 11112222,
+                'place' => '',
+                'status' => 'no',
+            ],
+        ], $rows);
+    }
 }

@@ -100,11 +100,14 @@ class SimpleExcelReader
 
     protected function getValueFromRow(Row $row): array
     {
+        $values = $row->toArray();
+        ksort($values);
+
         if (! $this->processHeader) {
-            return $row->toArray();
+            return $values;
         }
 
-        $values = array_slice($row->toArray(), 0, count($this->headers));
+        $values = array_slice($values, 0, count($this->headers));
 
         while (count($values) < count($this->headers)) {
             $values[] = '';
