@@ -3,9 +3,9 @@
 namespace Spatie\SimpleExcel;
 
 use Box\Spout\Common\Entity\Row;
+use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\ReaderInterface;
 use Illuminate\Support\LazyCollection;
-use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class SimpleExcelReader
 {
@@ -83,7 +83,7 @@ class SimpleExcelReader
         }
 
         if ($this->processHeader) {
-            $this->headers = $firstRow->toArray();
+            $this->headers = array_map('trim', $firstRow->toArray());
             $this->rowIterator->next();
         }
 
@@ -110,7 +110,25 @@ class SimpleExcelReader
             $values[] = '';
         }
 
-        return array_combine($this->headers, $values);
+        $headerIndexes = range(0, count($this->headers) - 1);
+
+        return array_reduce(
+            $headerIndexes,
+            function ($out, $index) use ($values) {
+                $header = $this->headers[$index];
+                $value = $values[$index];
+                // Merge existing values into an array
+                if (isset($out[$header])) {
+                    $out[$header] = array_merge((array) $out[$header], [$value]);
+
+                    return $out;
+                }
+                $out[$header] = $value;
+
+                return $out;
+            },
+            []
+        );
     }
 
     public function close()

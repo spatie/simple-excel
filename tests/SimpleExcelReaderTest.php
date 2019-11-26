@@ -129,4 +129,25 @@ class SimpleExcelReaderTest extends TestCase
 
         $this->assertEquals($path, $reader->getPath());
     }
+
+    /** @test */
+    public function it_allows_duplicate_columns()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('duplicate-columns.csv'))
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => ['doe', 'deer'],
+            ],
+            [
+                'email' => 'mary-jane@example.com',
+                'first_name' => 'mary jane',
+                'last_name' => ['doe', 'deer'],
+            ],
+        ], $rows);
+    }
 }
