@@ -2,8 +2,8 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
-use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\SimpleExcel\SimpleExcelWriter;
+use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 class SimpleExcelWriterTest extends TestCase
