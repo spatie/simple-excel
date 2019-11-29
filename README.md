@@ -122,6 +122,23 @@ Jane,Doe
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
 
+#### Streaming an excel file to the browser
+
+Instead of writing a file to disk, you can stream it directly to the browser.
+
+```php
+$writer = SimpleExcelWriter::respond($pathToCsv)
+     ->addRow([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ])
+    ->addRow([
+        'first_name' => 'Jane',
+        'last_name' => 'Doe',
+    ])
+    ->streamToBrowser();
+```
+
 #### Writing a file without titles
 
 If the file you are writing should not have a title row added automatically, then you should use the `noHeaderRow()` method.

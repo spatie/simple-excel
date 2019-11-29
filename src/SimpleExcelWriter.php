@@ -24,6 +24,15 @@ class SimpleExcelWriter
         return new static($file);
     }
 
+    public static function respond(string $downloadName)
+    {
+        $simpleExcelWriter = new static($downloadName);
+
+        $simpleExcelWriter->getWriter()->openToBrowser($downloadName);
+
+        return $simpleExcelWriter;
+    }
+
     public function __construct(string $path)
     {
         $this->writer = WriterEntityFactory::createWriterFromFile($path);
@@ -85,6 +94,12 @@ class SimpleExcelWriter
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
+    }
+
+    public function streamToBrowser()
+    {
+        $this->writer->close();
+        exit;
     }
 
     public function close()
