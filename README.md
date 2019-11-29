@@ -122,12 +122,12 @@ Jane,Doe
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
 
-#### Streaming an excel file to the browser
+#### Streaming an Excel file to the browser
 
 Instead of writing a file to disk, you can stream it directly to the browser.
 
 ```php
-$writer = SimpleExcelWriter::respond($pathToCsv)
+$writer = SimpleExcelWriter::respond('your-export.xlsx')
      ->addRow([
         'first_name' => 'John',
         'last_name' => 'Doe',
