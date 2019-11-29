@@ -2,9 +2,9 @@
 
 namespace Spatie\SimpleExcel;
 
-use Box\Spout\Writer\WriterInterface;
 use Box\Spout\Common\Entity\Style\Style;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Writer\WriterInterface;
 
 class SimpleExcelWriter
 {
