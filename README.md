@@ -127,7 +127,7 @@ Writing an Excel file is identical to writing a csv. Just make sure that the pat
 Instead of writing a file to disk, you can stream it directly to the browser.
 
 ```php
-$writer = SimpleExcelWriter::respond('your-export.xlsx')
+$writer = SimpleExcelWriter::streamDownload('your-export.xlsx')
      ->addRow([
         'first_name' => 'John',
         'last_name' => 'Doe',
@@ -136,7 +136,7 @@ $writer = SimpleExcelWriter::respond('your-export.xlsx')
         'first_name' => 'Jane',
         'last_name' => 'Doe',
     ])
-    ->streamToBrowser();
+    ->toBrowser();
 ```
 
 #### Writing a file without titles

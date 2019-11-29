@@ -24,7 +24,7 @@ class SimpleExcelWriter
         return new static($file);
     }
 
-    public static function respond(string $downloadName)
+    public static function streamDownload(string $downloadName)
     {
         $simpleExcelWriter = new static($downloadName);
 
@@ -96,9 +96,10 @@ class SimpleExcelWriter
         $this->numberOfRows++;
     }
 
-    public function streamToBrowser()
+    public function toBrowser()
     {
         $this->writer->close();
+
         exit;
     }
 
