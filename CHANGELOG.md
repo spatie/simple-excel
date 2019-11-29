@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.2.2 - 2019-11-29
+
+- make sure `streamDownload` does not create a file
+
 ## 1.2.0 - 2019-11-29
 
 - add `streamDownload` and `toBrowser`

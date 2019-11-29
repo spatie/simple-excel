@@ -21,7 +21,11 @@ class SimpleExcelWriter
 
     public static function create(string $file)
     {
-        return new static($file);
+        $simpleExcelWriter = new static($file);
+
+        $simpleExcelWriter->getWriter()->openToFile($file);
+
+        return $simpleExcelWriter;
     }
 
     public static function streamDownload(string $downloadName)
@@ -33,13 +37,11 @@ class SimpleExcelWriter
         return $simpleExcelWriter;
     }
 
-    public function __construct(string $path)
+    protected function __construct(string $path)
     {
         $this->writer = WriterEntityFactory::createWriterFromFile($path);
 
         $this->path = $path;
-
-        $this->writer->openToFile($this->path);
     }
 
     public function getPath(): string
