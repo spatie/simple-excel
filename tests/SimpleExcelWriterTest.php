@@ -10,11 +10,9 @@ class SimpleExcelWriterTest extends TestCase
 {
     use MatchesSnapshots;
 
-    /** @var \Spatie\TemporaryDirectory\TemporaryDirectory */
-    private $temporaryDirectory;
+    private TemporaryDirectory $temporaryDirectory;
 
-    /** @var string */
-    private $pathToCsv;
+    private string $pathToCsv;
 
     public function setUp(): void
     {

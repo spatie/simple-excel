@@ -8,16 +8,15 @@ use Box\Spout\Writer\WriterInterface;
 
 class SimpleExcelWriter
 {
-    /** @var \Box\Spout\Writer\WriterInterface */
-    private $writer;
+    private WriterInterface $writer;
 
-    private $path = '';
+    private string $path = '';
 
-    private $processHeader = true;
+    private bool $processHeader = true;
 
-    private $processingFirstRow = true;
+    private bool $processingFirstRow = true;
 
-    private $numberOfRows = 0;
+    private int $numberOfRows = 0;
 
     public static function create(string $file)
     {

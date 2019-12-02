@@ -2,6 +2,7 @@
 
 namespace Spatie\SimpleExcel;
 
+use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Common\Entity\Row;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\ReaderInterface;
@@ -9,16 +10,13 @@ use Illuminate\Support\LazyCollection;
 
 class SimpleExcelReader
 {
-    /** @var string */
-    private $path;
+    private string $path;
 
-    /** @var \Box\Spout\Reader\ReaderInterface */
-    private $reader;
+    private ReaderInterface $reader;
 
-    /** @var \Box\Spout\Reader\IteratorInterface */
-    private $rowIterator;
+    private IteratorInterface $rowIterator;
 
-    private $processHeader = true;
+    private bool $processHeader = true;
 
     public static function create(string $file)
     {
