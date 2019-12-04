@@ -12,12 +12,7 @@ class SimpleExcelReader
 {
     private string $path;
 
-    private ReaderInterface $reader;
-
-    private IteratorInterface $rowIterator;
-
-    private bool $processHeader = true;
-
+    pr
     public static function create(string $file)
     {
         return new static($file);
