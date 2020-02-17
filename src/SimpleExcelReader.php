@@ -2,9 +2,9 @@
 
 namespace Spatie\SimpleExcel;
 
-use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Common\Entity\Row;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
 use Illuminate\Support\LazyCollection;
 
