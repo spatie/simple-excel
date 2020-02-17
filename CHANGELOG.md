@@ -2,6 +2,11 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+
+## 1.3.1 - 2019-02-17
+
+- Fix columns being returned in the wrong order
+
 ## 1.3.0 - 2019-01-02
 
 - drop support for PHP 7.3
