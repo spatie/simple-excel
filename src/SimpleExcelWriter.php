@@ -109,11 +109,7 @@ class SimpleExcelWriter
         $this->writer->close();
     }
 
-    /**
-     * @param  string  $delimiter
-     * @return $this
-     */
-    public function useDelimiter(string $delimiter)
+    public function useDelimiter(string $delimiter): self
     {
         $this->writer->setFieldDelimiter($delimiter);
 
