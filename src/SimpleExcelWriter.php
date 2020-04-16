@@ -109,6 +109,13 @@ class SimpleExcelWriter
         $this->writer->close();
     }
 
+    public function useDelimiter(string $delimiter): self
+    {
+        $this->writer->setFieldDelimiter($delimiter);
+
+        return $this;
+    }
+
     public function __destruct()
     {
         $this->close();
