@@ -2,7 +2,11 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
-## 1.4.0 - 20202-04-15
+## 1.5.0 - 2020-07-01
+
+- add `addRows`
+
+## 1.4.0 - 2020-04-15
 
 - Add `useDelmiter` method for `SimpleExcelWriter` (#25)
 
