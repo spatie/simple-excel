@@ -87,7 +87,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addRows(array $rows)
+    public function addRows(iterable $rows)
     {
         foreach ($rows as $row) {
             $this->addRow($row);
