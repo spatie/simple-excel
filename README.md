@@ -147,6 +147,24 @@ $writer = SimpleExcelWriter::streamDownload('your-export.xlsx')
     ->toBrowser();
 ```
 
+### Writing multiple rows at once
+
+You can use `addRows` instead of `addRow` to add multiple rows at once.
+
+```php
+$writer = SimpleExcelWriter::streamDownload('your-export.xlsx')
+     ->addRows([
+        [
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ],
+        [
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+        ],
+    ]);
+```
+
 #### Writing a file without titles
 
 If the file you are writing should not have a title row added automatically, then you should use the `noHeaderRow()` method.

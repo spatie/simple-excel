@@ -87,6 +87,13 @@ class SimpleExcelWriter
         return $this;
     }
 
+    public function addRows(iterable $rows)
+    {
+        foreach ($rows as $row) {
+            $this->addRow($row);
+        }
+    }
+
     protected function writeHeaderFromRow(array $row)
     {
         $headerValues = array_keys($row);

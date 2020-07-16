@@ -2,9 +2,13 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
-## 1.5.0 - 2020-07-01
+## 1.6.0 - 2020-07-16
 
 - add `addRows`
+
+## 1.5.0 - 2020-07-01
+
+- wrong tag, please ignore
 
 ## 1.4.0 - 2020-04-15
 

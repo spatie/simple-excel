@@ -18,7 +18,7 @@ class SimpleExcelWriterTest extends TestCase
     {
         parent::setUp();
 
-        $this->temporaryDirectory = new TemporaryDirectory(__DIR__.'/temp');
+        $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
 
         $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
     }
@@ -35,6 +35,25 @@ class SimpleExcelWriterTest extends TestCase
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',
             ]);
+
+        $this->assertMatchesFileSnapshot($this->pathToCsv);
+    }
+
+    /** @test */
+    public function add_multiple_rows()
+    {
+        SimpleExcelWriter::create($this->pathToCsv)
+            ->addRows([
+                    [
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                    ],
+                    [
+                        'first_name' => 'Jane',
+                        'last_name' => 'Doe',
+                    ],
+                ]
+            );
 
         $this->assertMatchesFileSnapshot($this->pathToCsv);
     }
