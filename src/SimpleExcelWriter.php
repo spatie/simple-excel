@@ -92,6 +92,8 @@ class SimpleExcelWriter
         foreach ($rows as $row) {
             $this->addRow($row);
         }
+        
+        return $this;
     }
 
     protected function writeHeaderFromRow(array $row)
