@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.7.0 - 2020-08-19
+
+- make `addRows` chainable
+
 ## 1.6.0 - 2020-07-16
 
 - add `addRows`
