@@ -23,7 +23,7 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpunit/phpunit": "^9.0",
-        "spatie/phpunit-snapshot-assertions": "^2.1",
+        "spatie/phpunit-snapshot-assertions": "^4.0",
         "spatie/temporary-directory": "^1.2"
     },
     "autoload": {
