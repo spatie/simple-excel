@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.7.1 - 2020-09-08
+
+- allow Laravel 8
+
 ## 1.7.0 - 2020-08-19
 
 - make `addRows` chainable
