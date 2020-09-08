@@ -18,11 +18,11 @@
     "require": {
         "php": "^7.4",
         "box/spout": "^3.0",
-        "illuminate/support": "^6.3|^7.0"
+        "illuminate/support": "^6.3|^7.0|^8.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
-        "phpunit/phpunit": "^8.4",
+        "phpunit/phpunit": "^9.0",
         "spatie/phpunit-snapshot-assertions": "^2.1",
         "spatie/temporary-directory": "^1.2"
     },
