@@ -43,7 +43,8 @@ class SimpleExcelWriterTest extends TestCase
     public function add_multiple_rows()
     {
         SimpleExcelWriter::create($this->pathToCsv)
-            ->addRows([
+            ->addRows(
+                [
                     [
                         'first_name' => 'John',
                         'last_name' => 'Doe',
