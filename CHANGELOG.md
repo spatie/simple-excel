@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.8.0 - 2020-10-04
+
+- add 'take' and 'skip' functions to reader (#35)
+
 ## 1.7.1 - 2020-09-08
 
 - allow Laravel 8
