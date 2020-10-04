@@ -102,6 +102,27 @@ Under the hood this package uses the [box/spout](https://github.com/box/spout) p
 $reader = SimpleExcelReader::create($pathToCsv)->getReader();
 ```
 
+#### Limiting the result set
+
+The `take` method allows you to specify a limit on how many rows should be returned. 
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->take(5)
+    ->getRows();
+```
+
+The `skip` method allows you to define which row to start reading data from. In this example we get rows 11 to 16.
+
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->skip(10)
+    ->take(5)
+    ->getRows();
+```
+
 ### Writing files
 
 Here's how you can write a CSV file:
