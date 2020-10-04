@@ -18,11 +18,11 @@ class SimpleExcelReader
 
     private bool $processHeader = true;
 
-    private $skip = 0;
+    private int $skip = 0;
 
-    private $limit = 0;
+    private int $limit = 0;
 
-    private $use_limit = false;
+    private bool $useLimit = false;
 
     public static function create(string $file)
     {
@@ -67,17 +67,17 @@ class SimpleExcelReader
         return $this->reader;
     }
 
-    public function skip($count)
+    public function skip(int $count): SimpleExcelReader
     {
         $this->skip = $count;
 
         return $this;
     }
 
-    public function take($count)
+    public function take(int $count): SimpleExcelReader
     {
         $this->limit = $count;
-        $this->use_limit = true;
+        $this->useLimit = true;
 
         return $this;
     }
@@ -110,7 +110,7 @@ class SimpleExcelReader
             while ($this->rowIterator->valid() && $this->skip--) {
                 $this->rowIterator->next();
             }
-            while ($this->rowIterator->valid() && (! $this->use_limit || $this->limit--)) {
+            while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
                 $row = $this->rowIterator->current();
 
                 yield $this->getValueFromRow($row);
