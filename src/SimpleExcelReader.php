@@ -107,7 +107,7 @@ class SimpleExcelReader
         }
 
         return LazyCollection::make(function () {
-            while ($this->rowIterator->valid() && $this->skip--) {
+            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
                 $this->rowIterator->next();
             }
             while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
