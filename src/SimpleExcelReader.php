@@ -20,8 +20,6 @@ class SimpleExcelReader
 
     private int $skip = 0;
 
-    private bool $useSkip = false;
-
     private int $limit = 0;
 
     private bool $useLimit = false;
@@ -72,7 +70,6 @@ class SimpleExcelReader
     public function skip(int $count): SimpleExcelReader
     {
         $this->skip = $count;
-        $this->useSkip = true;
 
         return $this;
     }
@@ -110,7 +107,7 @@ class SimpleExcelReader
         }
 
         return LazyCollection::make(function () {
-            while ($this->rowIterator->valid() && $this->useSkip && $this->skip--) {
+            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
                 $this->rowIterator->next();
             }
             while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
