@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.9.0 - 2020-10-30
+
+- add Header Styling Method (#39)
+
 ## 1.8.1 - 2020-10-08
 
 - fix `skip` method
