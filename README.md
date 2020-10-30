@@ -222,6 +222,11 @@ $style = (new StyleBuilder())
 
 $writer->addRow(['values, 'of', 'the', 'row'], $style)
 ```
+To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
+
+```php
+$writer->setHeaderStyle($style);
+```
 
 For more information on styles head over to [the Spout docs](https://opensource.box.com/spout/docs/#styling).
 

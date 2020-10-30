@@ -18,6 +18,8 @@ class SimpleExcelWriter
 
     private int $numberOfRows = 0;
 
+    private $headerStyle = null;
+
     public static function create(string $file)
     {
         $simpleExcelWriter = new static($file);
@@ -66,6 +68,14 @@ class SimpleExcelWriter
     }
 
     /**
+     *  @param \Box\Spout\Common\Entity\Style\Style $style
+     */
+    public function setHeaderStyle($style)
+    {
+        $this->headerStyle = $style;
+    }
+
+    /**
      * @param \Box\Spout\Common\Entity\Row|array $row
      * @param \Box\Spout\Common\Entity\Style\Style|null $style
      */
@@ -92,7 +102,7 @@ class SimpleExcelWriter
         foreach ($rows as $row) {
             $this->addRow($row);
         }
-        
+
         return $this;
     }
 
@@ -100,7 +110,7 @@ class SimpleExcelWriter
     {
         $headerValues = array_keys($row);
 
-        $headerRow = WriterEntityFactory::createRowFromArray($headerValues);
+        $headerRow = WriterEntityFactory::createRowFromArray($headerValues, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
