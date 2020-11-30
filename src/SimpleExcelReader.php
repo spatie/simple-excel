@@ -18,6 +18,12 @@ class SimpleExcelReader
 
     private bool $processHeader = true;
 
+    private int $skip = 0;
+
+    private int $limit = 0;
+
+    private bool $useLimit = false;
+
     public static function create(string $file)
     {
         return new static($file);
@@ -61,6 +67,21 @@ class SimpleExcelReader
         return $this->reader;
     }
 
+    public function skip(int $count): SimpleExcelReader
+    {
+        $this->skip = $count;
+
+        return $this;
+    }
+
+    public function take(int $count): SimpleExcelReader
+    {
+        $this->limit = $count;
+        $this->useLimit = true;
+
+        return $this;
+    }
+
     public function getRows(): LazyCollection
     {
         $this->reader->open($this->path);
@@ -86,7 +107,10 @@ class SimpleExcelReader
         }
 
         return LazyCollection::make(function () {
-            while ($this->rowIterator->valid()) {
+            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
+                $this->rowIterator->next();
+            }
+            while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
                 $row = $this->rowIterator->current();
 
                 yield $this->getValueFromRow($row);

@@ -19,9 +19,7 @@ If `$pathToFile` ends with `.csv` a CSV file is assumed. If it ends with `.xlsx`
 
 ## Support us
 
-Learn how to create a package like this one, by watching our premium video course:
-
-[![Laravel Package training](https://spatie.be/github/package-training.jpg)](https://laravelpackage.training)
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/simple-excel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/simple-excel)
 
 We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
 
@@ -100,6 +98,27 @@ Under the hood this package uses the [box/spout](https://github.com/box/spout) p
 
 ```php
 $reader = SimpleExcelReader::create($pathToCsv)->getReader();
+```
+
+#### Limiting the result set
+
+The `take` method allows you to specify a limit on how many rows should be returned. 
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->take(5)
+    ->getRows();
+```
+
+The `skip` method allows you to define which row to start reading data from. In this example we get rows 11 to 16.
+
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->skip(10)
+    ->take(5)
+    ->getRows();
 ```
 
 ### Writing files
@@ -202,6 +221,11 @@ $style = (new StyleBuilder())
    ->build();
 
 $writer->addRow(['values, 'of', 'the', 'row'], $style)
+```
+To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
+
+```php
+$writer->setHeaderStyle($style);
 ```
 
 For more information on styles head over to [the Spout docs](https://opensource.box.com/spout/docs/#styling).
