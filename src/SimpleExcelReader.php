@@ -25,20 +25,18 @@ class SimpleExcelReader
 
     private bool $useLimit = false;
 
-    public static function create(string $file, ?string $type = null)
+    public static function create(string $file, string $type = '')
     {
         return new static($file, $type);
     }
 
-    public function __construct(string $path, ?string $type = null)
+    public function __construct(string $path, string $type = '')
     {
         $this->path = $path;
 
-        if ($type) {
-            $this->reader = ReaderFactory::createFromType($type);
-        } else {
-            $this->reader = ReaderEntityFactory::createReaderFromFile($this->path);
-        }
+        $this->reader = $type ?
+            ReaderFactory::createFromType($type) :
+            ReaderEntityFactory::createReaderFromFile($this->path);
     }
 
     public function getPath(): string
