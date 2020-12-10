@@ -59,6 +59,14 @@ $rows->each(function(array $rowProperties) {
 
 Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx`.
 
+#### Manually setting the file type
+
+You can pass the file type to the `create` method of `SimpleExcelReader` as the second, optional argument:
+
+```php
+SimpleExcelReader::create($pathToFile, 'csv');
+```
+
 #### Working with LazyCollections
 
 `getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
@@ -102,7 +110,7 @@ $reader = SimpleExcelReader::create($pathToCsv)->getReader();
 
 #### Limiting the result set
 
-The `take` method allows you to specify a limit on how many rows should be returned. 
+The `take` method allows you to specify a limit on how many rows should be returned.
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
@@ -148,6 +156,14 @@ Jane,Doe
 #### Writing an Excel file
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
+
+#### Manually setting the file type
+
+You can pass the file type to the `create` method of `SimpleExcelWriter` as the second, optional argument:
+
+```php
+SimpleExcelWriter::create('php://output', 'csv');
+```
 
 #### Streaming an Excel file to the browser
 

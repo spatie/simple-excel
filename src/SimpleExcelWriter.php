@@ -20,29 +20,33 @@ class SimpleExcelWriter
 
     private $headerStyle = null;
 
-    public static function create(string $file)
+    public static function create(string $file, ?string $type = null)
     {
-        $simpleExcelWriter = new static($file);
+        $simpleExcelWriter = new static($file, $type);
 
         $simpleExcelWriter->getWriter()->openToFile($file);
 
         return $simpleExcelWriter;
     }
 
-    public static function streamDownload(string $downloadName)
+    public static function streamDownload(string $downloadName, ?string $type = null)
     {
-        $simpleExcelWriter = new static($downloadName);
+        $simpleExcelWriter = new static($downloadName, $type);
 
         $simpleExcelWriter->getWriter()->openToBrowser($downloadName);
 
         return $simpleExcelWriter;
     }
 
-    protected function __construct(string $path)
+    protected function __construct(string $path, ?string $type = null)
     {
-        $this->writer = WriterEntityFactory::createWriterFromFile($path);
-
         $this->path = $path;
+
+        if ($type) {
+            $this->writer = WriterEntityFactory::createWriter($type);
+        } else {
+            $this->writer = WriterEntityFactory::createWriterFromFile($this->path);
+        }
     }
 
     public function getPath(): string

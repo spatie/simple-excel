@@ -2,6 +2,7 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
+use Box\Spout\Reader\CSV\Reader;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
 class SimpleExcelReaderTest extends TestCase
@@ -206,5 +207,13 @@ class SimpleExcelReaderTest extends TestCase
 
         $this->assertNotNull($firstRow);
         $this->assertNotNull($firstRowAgain);
+    }
+
+    /** @test */
+    public function it_allows_setting_the_reader_type_manually()
+    {
+        $reader = SimpleExcelReader::create('php://input', 'csv');
+
+        $this->assertInstanceOf(Reader::class, $reader->getReader());
     }
 }

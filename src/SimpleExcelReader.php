@@ -4,6 +4,7 @@ namespace Spatie\SimpleExcel;
 
 use Box\Spout\Common\Entity\Row;
 use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
+use Box\Spout\Reader\Common\Creator\ReaderFactory;
 use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
 use Illuminate\Support\LazyCollection;
@@ -24,16 +25,20 @@ class SimpleExcelReader
 
     private bool $useLimit = false;
 
-    public static function create(string $file)
+    public static function create(string $file, ?string $type = null)
     {
-        return new static($file);
+        return new static($file, $type);
     }
 
-    public function __construct(string $path)
+    public function __construct(string $path, ?string $type = null)
     {
         $this->path = $path;
 
-        $this->reader = ReaderEntityFactory::createReaderFromFile($this->path);
+        if ($type) {
+            $this->reader = ReaderFactory::createFromType($type);
+        } else {
+            $this->reader = ReaderEntityFactory::createReaderFromFile($this->path);
+        }
     }
 
     public function getPath(): string
