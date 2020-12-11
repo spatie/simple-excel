@@ -2,6 +2,7 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
+use Box\Spout\Writer\CSV\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\TemporaryDirectory\TemporaryDirectory;
@@ -120,5 +121,13 @@ class SimpleExcelWriterTest extends TestCase
         $writer = SimpleExcelWriter::create($this->pathToCsv);
 
         $this->assertEquals($this->pathToCsv, $writer->getPath());
+    }
+
+    /** @test */
+    public function it_allows_setting_the_writer_type_manually()
+    {
+        $writer = SimpleExcelWriter::create('php://output', 'csv');
+
+        $this->assertInstanceOf(Writer::class, $writer->getWriter());
     }
 }
