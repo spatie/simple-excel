@@ -100,6 +100,32 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
+#### Trimming Header Row values
+
+If the file you are reading contains a title row, but you need to trim additional characters on the title values, then you should use the `trimHeaderRow()` method.
+This functionality mimics the `trim` method, and the default characters it trims, matches that function.
+
+Imagine you have a csv file with this content.
+
+```csv
+email , first_name
+john@example.com,john
+jane@example.com,jane
+```
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->trimHeaderRow()
+    ->getRows()
+    ->each(function(array $rowProperties) {
+       // in the first pass $rowProperties will contain
+       // ['email' => 'john@example', 'last_name' => 'john']
+});
+```
+
+`trimHeaderRow()` additionally accepts a param to specify what characters to trim. This param can utilize the same functionality allowed by the trim function's `$characters` definition including a range of characters.
+
 #### Manually working with the reader object
 
 Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
