@@ -216,4 +216,48 @@ class SimpleExcelReaderTest extends TestCase
 
         $this->assertInstanceOf(Reader::class, $reader->getReader());
     }
+
+    /** @test */
+    public function it_can_trim_the_header_row_names()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-with-spaces.csv'))
+            ->trimHeaderRow()
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => 'doe',
+            ],
+            [
+                'email' => 'mary-jane@example.com ',
+                'first_name' => 'mary jane',
+                'last_name' => 'doe',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
+    public function it_can_trim_the_header_row_names_with_alternate_characters()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-with-spaces.csv'))
+            ->trimHeaderRow('e')
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'mail ' => 'john@example.com',
+                ' first_name ' => 'john',
+                ' last_nam' => 'doe',
+            ],
+            [
+                'mail ' => 'mary-jane@example.com ',
+                ' first_name ' => 'mary jane',
+                ' last_nam' => 'doe',
+            ],
+        ], $rows);
+    }
 }

@@ -19,6 +19,10 @@ class SimpleExcelReader
 
     private bool $processHeader = true;
 
+    private bool $trimHeader = false;
+
+    private $trimHeaderCharacters = null;
+
     private int $skip = 0;
 
     private int $limit = 0;
@@ -65,6 +69,14 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function trimHeaderRow(string $characters = null)
+    {
+        $this->trimHeader = true;
+        $this->trimHeaderCharacters = $characters;
+
+        return $this;
+    }
+
     public function getReader(): ReaderInterface
     {
         return $this->reader;
@@ -105,7 +117,7 @@ class SimpleExcelReader
         }
 
         if ($this->processHeader) {
-            $this->headers = $firstRow->toArray();
+            $this->headers = $this->processHeaderRow($firstRow->toArray());
             $this->rowIterator->next();
         }
 
@@ -121,6 +133,17 @@ class SimpleExcelReader
                 $this->rowIterator->next();
             }
         });
+    }
+
+    protected function processHeaderRow(array $headers): array
+    {
+        if ($this->trimHeader) {
+            $headers = array_map(function ($header) {
+                return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
+            }, $headers);
+        }
+
+        return $headers;
     }
 
     protected function getValueFromRow(Row $row): array
