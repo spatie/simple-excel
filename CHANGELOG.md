@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.10.1 - 2020-12-27
+
+- enable header row trimming (#46)
+
 ## 1.10.0 - 2020-12-08
 
 - allow setting the writer/reader type manually (#43)
