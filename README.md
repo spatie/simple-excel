@@ -296,6 +296,14 @@ $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
 $writerWithoutAutomaticHeader->getNumberOfRows() // returns 2
 ```
 
+#### Disable BOM
+
+You can also disable adding a BOM to the start of the file. BOM must be disabled on create and cannot be disabled after creation of the writer.
+
+```php
+SimpleExcelWriter::create($this->pathToCsv, $type, fn ($writer) => $writer->setShouldAddBOM(false));
+```
+
 #### Manually working with the writer object
 
 Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.

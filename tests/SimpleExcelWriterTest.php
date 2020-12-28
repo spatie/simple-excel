@@ -130,4 +130,16 @@ class SimpleExcelWriterTest extends TestCase
 
         $this->assertInstanceOf(Writer::class, $writer->getWriter());
     }
+
+    /** @test */
+    public function it_can_write_a_csv_without_bom()
+    {
+        $writer = SimpleExcelWriter::create($this->pathToCsv, '', fn ($writer) => $writer->setShouldAddBOM(false))
+            ->addRow([
+                'first_name' => 'Jane',
+                'last_name' => 'Doe',
+            ]);
+
+        $this->assertMatchesFileSnapshot($this->pathToCsv);
+    }
 }
