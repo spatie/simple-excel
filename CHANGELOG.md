@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.10.2 - 2020-12-28
+
+- use setHeaderStyle fluently (#47)
+
 ## 1.10.1 - 2020-12-27
 
 - enable header row trimming (#46)
