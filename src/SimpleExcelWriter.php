@@ -75,6 +75,8 @@ class SimpleExcelWriter
     public function setHeaderStyle($style)
     {
         $this->headerStyle = $style;
+        
+        return $this;
     }
 
     /**
