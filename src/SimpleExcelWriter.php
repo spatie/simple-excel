@@ -35,6 +35,11 @@ class SimpleExcelWriter
         return $simpleExcelWriter;
     }
 
+    public static function createWithoutBom(string $file, string $type = '')
+    {
+        return static::create($file, $type, fn ($writer) => $writer->setShouldAddBOM(false));
+    }
+
     public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null)
     {
         $simpleExcelWriter = new static($downloadName, $type);

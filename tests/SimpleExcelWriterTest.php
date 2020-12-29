@@ -134,7 +134,7 @@ class SimpleExcelWriterTest extends TestCase
     /** @test */
     public function it_can_write_a_csv_without_bom()
     {
-        $writer = SimpleExcelWriter::create($this->pathToCsv, '', fn ($writer) => $writer->setShouldAddBOM(false))
+        $writer = SimpleExcelWriter::createWithoutBom($this->pathToCsv)
             ->addRow([
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',

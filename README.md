@@ -300,9 +300,13 @@ $writerWithoutAutomaticHeader->getNumberOfRows() // returns 2
 
 You can also disable adding a BOM to the start of the file. BOM must be disabled on create and cannot be disabled after creation of the writer.
 
+A BOM, or byte order mark, indicates a number of things for the file being written including the file being unicode as well as it's UTF encoding type.
+
 ```php
-SimpleExcelWriter::create($this->pathToCsv, $type, fn ($writer) => $writer->setShouldAddBOM(false));
+SimpleExcelWriter::createWithoutBom($this->pathToCsv, $type);
 ```
+
+Additional information about BOM can be found [here](https://en.wikipedia.org/wiki/Byte_order_mark).
 
 #### Manually working with the writer object
 
