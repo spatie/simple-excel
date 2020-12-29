@@ -154,9 +154,9 @@ class SimpleExcelReader
 
         if ($this->headersToSnakeCase) {
             $headers = array_map(function ($header) {
-                return strtolower(preg_replace('/(.)(?=[A-Z])/', '_', $header));
-                // return strtolower(preg_replace('/(?<!^)[A-Z]/', '_', $header));
-                // return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
+                return str_replace(
+                    ' ', '_', strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
+                );
             }, $headers);   
         }
 
