@@ -157,19 +157,19 @@ class SimpleExcelReader
         return $headers;
     }
 
-    private function convertHeaders(callable $callback, array $headers): array
+    protected function convertHeaders(callable $callback, array $headers): array
     {
         return array_map(function ($header) use ($callback) {
             return call_user_func($callback, $header);
         }, $headers);
     }
 
-    private function trim(string $header): string 
+    protected function trim(string $header): string 
     {
         return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
     } 
 
-    private function toSnakeCase(string $header): string 
+    protected function toSnakeCase(string $header): string 
     {
         return str_replace(
             ' ', '_', strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
