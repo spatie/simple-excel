@@ -21,6 +21,8 @@ class SimpleExcelReader
 
     private bool $trimHeader = false;
 
+    private bool $headersToSnakeCase = false;
+
     private $trimHeaderCharacters = null;
 
     private int $skip = 0;
@@ -73,6 +75,13 @@ class SimpleExcelReader
     {
         $this->trimHeader = true;
         $this->trimHeaderCharacters = $characters;
+
+        return $this;
+    }
+
+    public function headersToSnakeCase()
+    {
+        $this->headersToSnakeCase = true;
 
         return $this;
     }
@@ -141,6 +150,14 @@ class SimpleExcelReader
             $headers = array_map(function ($header) {
                 return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
             }, $headers);
+        }
+
+        if ($this->headersToSnakeCase) {
+            $headers = array_map(function ($header) {
+                return strtolower(preg_replace('/(.)(?=[A-Z])/', '_', $header));
+                // return strtolower(preg_replace('/(?<!^)[A-Z]/', '_', $header));
+                // return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
+            }, $headers);   
         }
 
         return $headers;

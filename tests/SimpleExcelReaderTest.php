@@ -260,4 +260,26 @@ class SimpleExcelReaderTest extends TestCase
             ],
         ], $rows);
     }
+
+    /** @test */
+    public function it_can_convert_headers_to_snake_case()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('headers-not-snake-case.csv'))
+            ->headersToSnakeCase()
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => 'doe',
+            ],
+            [
+                'email' => 'mary-jane@example.com',
+                'first_name' => 'mary jane',
+                'last_name' => 'doe',
+            ],
+        ], $rows);
+    }
 }
