@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.11.0 - 2020-12-29
+
+- enable disabling BOM on writer (#48)
+
 ## 1.10.2 - 2020-12-28
 
 - use setHeaderStyle fluently (#47)
