@@ -20,20 +20,37 @@ class SimpleExcelWriter
 
     private $headerStyle = null;
 
-    public static function create(string $file, string $type = '')
+    public static function create(string $file, string $type = '', callable $configureWriter = null)
     {
         $simpleExcelWriter = new static($file, $type);
 
-        $simpleExcelWriter->getWriter()->openToFile($file);
+        $writer = $simpleExcelWriter->getWriter();
+
+        if ($configureWriter) {
+            $configureWriter($writer);
+        }
+
+        $writer->openToFile($file);
 
         return $simpleExcelWriter;
     }
 
-    public static function streamDownload(string $downloadName, string $type = '')
+    public static function createWithoutBom(string $file, string $type = '')
+    {
+        return static::create($file, $type, fn ($writer) => $writer->setShouldAddBOM(false));
+    }
+
+    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null)
     {
         $simpleExcelWriter = new static($downloadName, $type);
 
-        $simpleExcelWriter->getWriter()->openToBrowser($downloadName);
+        $writer = $simpleExcelWriter->getWriter();
+
+        if ($writerCallback) {
+            $writerCallback($writer);
+        }
+
+        $writer->openToBrowser($downloadName);
 
         return $simpleExcelWriter;
     }
@@ -75,7 +92,7 @@ class SimpleExcelWriter
     public function setHeaderStyle($style)
     {
         $this->headerStyle = $style;
-        
+
         return $this;
     }
 
