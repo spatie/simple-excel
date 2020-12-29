@@ -144,7 +144,28 @@ $rows = SimpleExcelReader::create($pathToCsv)
     ->each(function(array $rowProperties) {
         // rowProperties converted to snake_case
         // ['email' => 'john@example', 'first_name' => 'John', 'last_name' => 'doe']
-});
+    });
+```
+
+#### Custom headers formatter
+
+You can use a custom formatter to change the headers using the ```headerRowFormatter``` method and passing a closure.
+
+```csv
+email,first_name,last_name
+john@example.com,john,doe
+mary-jane@example.com,mary jane,doe
+```
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->headerRowFormatter(function($header) {
+        return $header . '_simple_excel';
+    })
+    ->getRows()
+    ->each(function(array $rowProperties) {
+        // ['email_simple_excel' => 'john@example', 'first_name_simple_excel' => 'John', 'last_name_simple_excel' => 'doe']
+    });
 ```
 
 #### Manually working with the reader object

@@ -25,6 +25,8 @@ class SimpleExcelReader
 
     private $trimHeaderCharacters = null;
 
+    private $headerRowFormatter;
+
     private int $skip = 0;
 
     private int $limit = 0;
@@ -154,6 +156,10 @@ class SimpleExcelReader
             $headers = $this->convertHeaders([$this, 'toSnakecase'], $headers);
         }
 
+        if ($this->headerRowFormatter) {
+            $headers = $this->convertHeaders($this->headerRowFormatter, $headers);   
+        }
+
         return $headers;
     }
 
@@ -162,6 +168,13 @@ class SimpleExcelReader
         return array_map(function ($header) use ($callback) {
             return call_user_func($callback, $header);
         }, $headers);
+    }
+
+    public function headerRowFormatter(callable $callback) 
+    {
+        $this->headerRowFormatter = $callback;
+
+        return $this;
     }
 
     protected function trim(string $header): string 

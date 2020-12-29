@@ -284,4 +284,28 @@ class SimpleExcelReaderTest extends TestCase
             ],
         ], $rows);
     }
+
+    /** @test */
+    public function it_can_use_custom_header_row_formatter()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
+            ->headerRowFormatter(function($header) {
+                return $header . '_suffix';
+            })
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email_suffix' => 'john@example.com',
+                'first_name_suffix' => 'john',
+                'last_name_suffix' => 'doe'
+            ],
+            [
+                'email_suffix' => 'mary-jane@example.com',
+                'first_name_suffix' => 'mary jane',
+                'last_name_suffix' => 'doe'
+            ],
+        ], $rows);
+    }
 }
