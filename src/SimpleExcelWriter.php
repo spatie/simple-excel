@@ -20,14 +20,14 @@ class SimpleExcelWriter
 
     private $headerStyle = null;
 
-    public static function create(string $file, string $type = '', callable $writerCallback = null)
+    public static function create(string $file, string $type = '', callable $configureWriter = null)
     {
         $simpleExcelWriter = new static($file, $type);
 
         $writer = $simpleExcelWriter->getWriter();
 
-        if ($writerCallback) {
-            $writerCallback($writer);
+        if ($configureWriter) {
+            $configureWriter($writer);
         }
 
         $writer->openToFile($file);
