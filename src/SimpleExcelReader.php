@@ -147,20 +147,33 @@ class SimpleExcelReader
     protected function processHeaderRow(array $headers): array
     {
         if ($this->trimHeader) {
-            $headers = array_map(function ($header) {
-                return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
-            }, $headers);
+            $headers = $this->convertHeaders([$this, 'trim'], $headers);
         }
 
         if ($this->headersToSnakeCase) {
-            $headers = array_map(function ($header) {
-                return str_replace(
-                    ' ', '_', strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
-                );
-            }, $headers);   
+            $headers = $this->convertHeaders([$this, 'toSnakecase'], $headers);
         }
 
         return $headers;
+    }
+
+    private function convertHeaders(callable $callback, array $headers): array
+    {
+        return array_map(function ($header) use ($callback) {
+            return call_user_func($callback, $header);
+        }, $headers);
+    }
+
+    private function trim(string $header): string 
+    {
+        return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
+    } 
+
+    private function toSnakeCase(string $header): string 
+    {
+        return str_replace(
+            ' ', '_', strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
+        );
     }
 
     protected function getValueFromRow(Row $row): array
