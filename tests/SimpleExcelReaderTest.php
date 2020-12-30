@@ -274,13 +274,13 @@ class SimpleExcelReaderTest extends TestCase
                 'email' => 'john@example.com',
                 'first_name' => 'john',
                 'last_name' => 'doe',
-                'job_title' => 'male nutter'
+                'job_title' => 'male nutter',
             ],
             [
                 'email' => 'mary-jane@example.com',
                 'first_name' => 'mary jane',
                 'last_name' => 'doe',
-                'job_title' => 'female nutter'
+                'job_title' => 'female nutter',
             ],
         ], $rows);
     }
@@ -289,7 +289,7 @@ class SimpleExcelReaderTest extends TestCase
     public function it_can_use_custom_header_row_formatter()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
-            ->headerRowFormatter(function($header) {
+            ->headerRowFormatter(function ($header) {
                 return $header . '_suffix';
             })
             ->getRows()
@@ -299,12 +299,12 @@ class SimpleExcelReaderTest extends TestCase
             [
                 'email_suffix' => 'john@example.com',
                 'first_name_suffix' => 'john',
-                'last_name_suffix' => 'doe'
+                'last_name_suffix' => 'doe',
             ],
             [
                 'email_suffix' => 'mary-jane@example.com',
                 'first_name_suffix' => 'mary jane',
-                'last_name_suffix' => 'doe'
+                'last_name_suffix' => 'doe',
             ],
         ], $rows);
     }

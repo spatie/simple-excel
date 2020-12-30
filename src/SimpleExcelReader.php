@@ -157,7 +157,7 @@ class SimpleExcelReader
         }
 
         if ($this->headerRowFormatter) {
-            $headers = $this->convertHeaders($this->headerRowFormatter, $headers);   
+            $headers = $this->convertHeaders($this->headerRowFormatter, $headers);
         }
 
         return $headers;
@@ -170,22 +170,24 @@ class SimpleExcelReader
         }, $headers);
     }
 
-    public function headerRowFormatter(callable $callback) 
+    public function headerRowFormatter(callable $callback)
     {
         $this->headerRowFormatter = $callback;
 
         return $this;
     }
 
-    protected function trim(string $header): string 
+    protected function trim(string $header): string
     {
         return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
-    } 
+    }
 
-    protected function toSnakeCase(string $header): string 
+    protected function toSnakeCase(string $header): string
     {
         return str_replace(
-            ' ', '_', strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
+            ' ',
+            '_',
+            strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
         );
     }
 
