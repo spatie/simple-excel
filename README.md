@@ -126,6 +126,48 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 `trimHeaderRow()` additionally accepts a param to specify what characters to trim. This param can utilize the same functionality allowed by the trim function's `$characters` definition including a range of characters.
 
+
+#### Convert headers to snake_case
+
+If you would like all the headers to be converted to snake_case, use the the `headersToSnakeCase()` method.
+
+```csv
+Email,First Name,Last Name
+john@example.com,john,doe
+mary-jane@example.com,mary jane,doe
+```
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->headersToSnakeCase()
+    ->getRows()
+    ->each(function(array $rowProperties) {
+        // rowProperties converted to snake_case
+        // ['email' => 'john@example', 'first_name' => 'John', 'last_name' => 'doe']
+    });
+```
+
+#### Custom headers formatter
+
+You can use a custom formatter to change the headers using the ```headerRowFormatter``` method and passing a closure.
+
+```csv
+email,first_name,last_name
+john@example.com,john,doe
+mary-jane@example.com,mary jane,doe
+```
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->headerRowFormatter(function($header) {
+        return $header . '_simple_excel';
+    })
+    ->getRows()
+    ->each(function(array $rowProperties) {
+        // ['email_simple_excel' => 'john@example', 'first_name_simple_excel' => 'John', 'last_name_simple_excel' => 'doe']
+    });
+```
+
 #### Manually working with the reader object
 
 Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
