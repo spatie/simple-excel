@@ -148,7 +148,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 #### Manually formatting headers
 
-You can use a custom formatter to change the headers using the ```formatHeaderUsing``` method and passing a closure.
+You can use a custom formatter to change the headers using the `formatHeadersUsing` method and passing a closure.
 
 ```csv
 email,first_name,last_name
@@ -158,7 +158,7 @@ mary-jane@example.com,mary jane,doe
 
 ```php
 $rows = SimpleExcelReader::create($pathToCsv)
-    ->formatHeaderUsing(fn($header) => "{$header}_simple_excel")
+    ->formatHeadersUsing(fn($header) => "{$header}_simple_excel")
     ->getRows()
     ->each(function(array $rowProperties) {
         // ['email_simple_excel' => 'john@example', 'first_name_simple_excel' => 'John', 'last_name_simple_excel' => 'doe']

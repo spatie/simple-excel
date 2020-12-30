@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.12.0 - 2020-12-30
+
+- add `headersToSnakeCase` and `formatHeadersUsing`
+
 ## 1.11.0 - 2020-12-29
 
 - enable disabling BOM on writer (#48)

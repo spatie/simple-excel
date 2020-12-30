@@ -289,7 +289,7 @@ class SimpleExcelReaderTest extends TestCase
     public function it_can_use_custom_header_row_formatter()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
-            ->formatHeaderUsing(function ($header) {
+            ->formatHeadersUsing(function ($header) {
                 return $header . '_suffix';
             })
             ->getRows()

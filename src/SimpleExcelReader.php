@@ -26,7 +26,7 @@ class SimpleExcelReader
 
     protected ?string $trimHeaderCharacters = null;
 
-    protected ?Closure $formatHeaderUsing = null;
+    protected ?Closure $formatHeadersUsing = null;
 
     protected int $skip = 0;
 
@@ -82,9 +82,9 @@ class SimpleExcelReader
         return $this;
     }
 
-    public function formatHeaderUsing(callable $callback): self
+    public function formatHeadersUsing(callable $callback): self
     {
-        $this->formatHeaderUsing = $callback;
+        $this->formatHeadersUsing = $callback;
 
         return $this;
     }
@@ -169,8 +169,8 @@ class SimpleExcelReader
             $headers = $this->convertHeaders([$this, 'toSnakecase'], $headers);
         }
 
-        if ($this->formatHeaderUsing) {
-            $headers = $this->convertHeaders($this->formatHeaderUsing, $headers);
+        if ($this->formatHeadersUsing) {
+            $headers = $this->convertHeaders($this->formatHeadersUsing, $headers);
         }
 
         return $headers;
