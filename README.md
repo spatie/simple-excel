@@ -126,7 +126,6 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 `trimHeaderRow()` additionally accepts a param to specify what characters to trim. This param can utilize the same functionality allowed by the trim function's `$characters` definition including a range of characters.
 
-
 #### Convert headers to snake_case
 
 If you would like all the headers to be converted to snake_case, use the the `headersToSnakeCase()` method.
@@ -147,9 +146,9 @@ $rows = SimpleExcelReader::create($pathToCsv)
     });
 ```
 
-#### Custom headers formatter
+#### Manually formatting headers
 
-You can use a custom formatter to change the headers using the ```headerRowFormatter``` method and passing a closure.
+You can use a custom formatter to change the headers using the ```formatHeaderUsing``` method and passing a closure.
 
 ```csv
 email,first_name,last_name
@@ -159,9 +158,7 @@ mary-jane@example.com,mary jane,doe
 
 ```php
 $rows = SimpleExcelReader::create($pathToCsv)
-    ->headerRowFormatter(function($header) {
-        return $header . '_simple_excel';
-    })
+    ->formatHeaderUsing(fn($header) => "{$header}_simple_excel")
     ->getRows()
     ->each(function(array $rowProperties) {
         // ['email_simple_excel' => 'john@example', 'first_name_simple_excel' => 'John', 'last_name_simple_excel' => 'doe']

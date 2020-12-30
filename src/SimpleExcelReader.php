@@ -7,31 +7,32 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Common\Creator\ReaderFactory;
 use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
+use Closure;
 use Illuminate\Support\LazyCollection;
 
 class SimpleExcelReader
 {
-    private string $path;
+    protected string $path;
 
-    private ReaderInterface $reader;
+    protected ReaderInterface $reader;
 
-    private IteratorInterface $rowIterator;
+    protected IteratorInterface $rowIterator;
 
-    private bool $processHeader = true;
+    protected bool $processHeader = true;
 
-    private bool $trimHeader = false;
+    protected bool $trimHeader = false;
 
-    private bool $headersToSnakeCase = false;
+    protected bool $headersToSnakeCase = false;
 
-    private $trimHeaderCharacters = null;
+    protected ?string $trimHeaderCharacters = null;
 
-    private $headerRowFormatter;
+    protected ?Closure $formatHeaderUsing = null;
 
-    private int $skip = 0;
+    protected int $skip = 0;
 
-    private int $limit = 0;
+    protected int $limit = 0;
 
-    private bool $useLimit = false;
+    protected bool $useLimit = false;
 
     public static function create(string $file, string $type = '')
     {
@@ -52,28 +53,28 @@ class SimpleExcelReader
         return $this->path;
     }
 
-    public function noHeaderRow()
+    public function noHeaderRow(): self
     {
         $this->processHeader = false;
 
         return $this;
     }
 
-    public function useDelimiter(string $delimiter)
+    public function useDelimiter(string $delimiter): self
     {
         $this->reader->setFieldDelimiter($delimiter);
 
         return $this;
     }
 
-    public function useFieldEnclosure(string $fieldEnclosure)
+    public function useFieldEnclosure(string $fieldEnclosure): self
     {
         $this->reader->setFieldEnclosure($fieldEnclosure);
 
         return $this;
     }
 
-    public function trimHeaderRow(string $characters = null)
+    public function trimHeaderRow(string $characters = null): self
     {
         $this->trimHeader = true;
         $this->trimHeaderCharacters = $characters;
@@ -81,7 +82,14 @@ class SimpleExcelReader
         return $this;
     }
 
-    public function headersToSnakeCase()
+    public function formatHeaderUsing(callable $callback): self
+    {
+        $this->formatHeaderUsing = $callback;
+
+        return $this;
+    }
+
+    public function headersToSnakeCase(): self
     {
         $this->headersToSnakeCase = true;
 
@@ -146,6 +154,11 @@ class SimpleExcelReader
         });
     }
 
+    public function close()
+    {
+        $this->reader->close();
+    }
+
     protected function processHeaderRow(array $headers): array
     {
         if ($this->trimHeader) {
@@ -156,8 +169,8 @@ class SimpleExcelReader
             $headers = $this->convertHeaders([$this, 'toSnakecase'], $headers);
         }
 
-        if ($this->headerRowFormatter) {
-            $headers = $this->convertHeaders($this->headerRowFormatter, $headers);   
+        if ($this->formatHeaderUsing) {
+            $headers = $this->convertHeaders($this->formatHeaderUsing, $headers);
         }
 
         return $headers;
@@ -170,19 +183,12 @@ class SimpleExcelReader
         }, $headers);
     }
 
-    public function headerRowFormatter(callable $callback) 
-    {
-        $this->headerRowFormatter = $callback;
-
-        return $this;
-    }
-
-    protected function trim(string $header): string 
+    protected function trim(string $header): string
     {
         return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
-    } 
+    }
 
-    protected function toSnakeCase(string $header): string 
+    protected function toSnakeCase(string $header): string
     {
         return str_replace(
             ' ', '_', strtolower(preg_replace('/(?<=\d)(?=[A-Za-z])|(?<=[A-Za-z])(?=\d)|(?<=[a-z])(?=[A-Z])/', '_', trim($header)))
@@ -205,11 +211,6 @@ class SimpleExcelReader
         }
 
         return array_combine($this->headers, $values);
-    }
-
-    public function close()
-    {
-        $this->reader->close();
     }
 
     public function __destruct()
