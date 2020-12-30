@@ -274,13 +274,13 @@ class SimpleExcelReaderTest extends TestCase
                 'email' => 'john@example.com',
                 'first_name' => 'john',
                 'last_name' => 'doe',
-                'job_title' => 'male nutter'
+                'job_title' => 'male nutter',
             ],
             [
                 'email' => 'mary-jane@example.com',
                 'first_name' => 'mary jane',
                 'last_name' => 'doe',
-                'job_title' => 'female nutter'
+                'job_title' => 'female nutter',
             ],
         ], $rows);
     }
@@ -299,12 +299,12 @@ class SimpleExcelReaderTest extends TestCase
             [
                 'email_suffix' => 'john@example.com',
                 'first_name_suffix' => 'john',
-                'last_name_suffix' => 'doe'
+                'last_name_suffix' => 'doe',
             ],
             [
                 'email_suffix' => 'mary-jane@example.com',
                 'first_name_suffix' => 'mary jane',
-                'last_name_suffix' => 'doe'
+                'last_name_suffix' => 'doe',
             ],
         ], $rows);
     }
