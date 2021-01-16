@@ -100,6 +100,17 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
+#### Retrieving Header Row values
+
+If you would like to retrieve the header row as an array, you can use the `getHeaders()` method.
+
+```php
+$headers = SimpleExcelReader::create($pathToCsv)->getHeaders();
+
+// $headers will contain
+// [ 'email', 'first_name' ]
+```
+
 #### Trimming Header Row values
 
 If the file you are reading contains a title row, but you need to trim additional characters on the title values, then you should use the `trimHeaderRow()` method.
