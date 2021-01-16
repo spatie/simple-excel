@@ -28,6 +28,10 @@ class SimpleExcelReader
 
     protected ?Closure $formatHeadersUsing = null;
 
+    protected bool $spreadsheetProcessed = false;
+
+    protected ?array $headers = null;
+
     protected int $skip = 0;
 
     protected int $limit = 0;
@@ -118,6 +122,42 @@ class SimpleExcelReader
 
     public function getRows(): LazyCollection
     {
+        $this->processSpreadsheet();
+
+        return LazyCollection::make(function () {
+            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
+                $this->rowIterator->next();
+            }
+            while ($this->rowIterator->valid() && (!$this->useLimit || $this->limit--)) {
+                $row = $this->rowIterator->current();
+
+                yield $this->getValueFromRow($row);
+
+                $this->rowIterator->next();
+            }
+        });
+    }
+
+    public function getHeaders(): ?array
+    {
+        $this->processSpreadsheet();
+
+        return $this->headers;
+    }
+
+    public function close()
+    {
+        $this->reader->close();
+    }
+
+    protected function processSpreadsheet()
+    {
+        if ($this->spreadsheetProcessed) {
+            return;
+        }
+
+        $this->spreadsheetProcessed = true;
+
         $this->reader->open($this->path);
 
         $this->reader->getSheetIterator()->rewind();
@@ -139,24 +179,6 @@ class SimpleExcelReader
             $this->headers = $this->processHeaderRow($firstRow->toArray());
             $this->rowIterator->next();
         }
-
-        return LazyCollection::make(function () {
-            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
-                $this->rowIterator->next();
-            }
-            while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
-                $row = $this->rowIterator->current();
-
-                yield $this->getValueFromRow($row);
-
-                $this->rowIterator->next();
-            }
-        });
-    }
-
-    public function close()
-    {
-        $this->reader->close();
     }
 
     protected function processHeaderRow(array $headers): array
@@ -209,7 +231,7 @@ class SimpleExcelReader
         $values = $row->toArray();
         ksort($values);
 
-        if (! $this->processHeader) {
+        if (!$this->processHeader) {
             return $values;
         }
 
