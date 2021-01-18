@@ -163,26 +163,33 @@ class SimpleExcelReader
 
     public function getHeaders(): ?array
     {
-        if ($this->processHeader && ! $this->headers) {
-            $reader = $this->type ?
-                ReaderFactory::createFromType($this->type) :
-                ReaderEntityFactory::createReaderFromFile($this->path);
-
-            $reader->open($this->path);
-
-            $reader->getSheetIterator()->rewind();
-
-            $sheet = $reader->getSheetIterator()->current();
-
-            $this->rowIterator = $sheet->getRowIterator();
-
-            $this->rowIterator->rewind();
-
-            /** @var \Box\Spout\Common\Entity\Row $firstRow */
-            $firstRow = $this->rowIterator->current();
-
-            $this->headers = $this->processHeaderRow($firstRow->toArray());
+        if (! $this->processHeader) {
+            return null;
         }
+
+        if ($this->headers) {
+            return $this->headers;
+        }
+
+        $reader = $this->type ?
+            ReaderFactory::createFromType($this->type) :
+            ReaderEntityFactory::createReaderFromFile($this->path);
+
+        $reader->open($this->path);
+
+        $reader->getSheetIterator()->rewind();
+
+        $sheet = $reader->getSheetIterator()->current();
+
+        $this->rowIterator = $sheet->getRowIterator();
+
+        $this->rowIterator->rewind();
+
+        /** @var \Box\Spout\Common\Entity\Row $firstRow */
+        $firstRow = $this->rowIterator->current();
+
+        $this->headers = $this->processHeaderRow($firstRow->toArray());
+
         return $this->headers;
     }
 
