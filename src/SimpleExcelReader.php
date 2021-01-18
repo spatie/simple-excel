@@ -14,6 +14,8 @@ class SimpleExcelReader
 {
     protected string $path;
 
+    protected string $type;
+
     protected ReaderInterface $reader;
 
     protected IteratorInterface $rowIterator;
@@ -27,6 +29,8 @@ class SimpleExcelReader
     protected ?string $trimHeaderCharacters = null;
 
     protected ?Closure $formatHeadersUsing = null;
+
+    protected ?array $headers = null;
 
     protected int $skip = 0;
 
@@ -42,6 +46,8 @@ class SimpleExcelReader
     public function __construct(string $path, string $type = '')
     {
         $this->path = $path;
+
+        $this->type = $type;
 
         $this->reader = $type ?
             ReaderFactory::createFromType($type) :
@@ -137,6 +143,7 @@ class SimpleExcelReader
 
         if ($this->processHeader) {
             $this->headers = $this->processHeaderRow($firstRow->toArray());
+
             $this->rowIterator->next();
         }
 
@@ -152,6 +159,44 @@ class SimpleExcelReader
                 $this->rowIterator->next();
             }
         });
+    }
+
+    public function getHeaders(): ?array
+    {
+        if (! $this->processHeader) {
+            return null;
+        }
+
+        if ($this->headers) {
+            return $this->headers;
+        }
+
+        $reader = $this->type ?
+            ReaderFactory::createFromType($this->type) :
+            ReaderEntityFactory::createReaderFromFile($this->path);
+
+        $reader->open($this->path);
+
+        $reader->getSheetIterator()->rewind();
+
+        $sheet = $reader->getSheetIterator()->current();
+
+        $this->rowIterator = $sheet->getRowIterator();
+
+        $this->rowIterator->rewind();
+
+        /** @var \Box\Spout\Common\Entity\Row $firstRow */
+        $firstRow = $this->rowIterator->current();
+
+        if (is_null($firstRow)) {
+            $this->noHeaderRow();
+
+            return null;
+        }
+
+        $this->headers = $this->processHeaderRow($firstRow->toArray());
+
+        return $this->headers;
     }
 
     public function close()
