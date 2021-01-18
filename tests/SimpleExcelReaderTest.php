@@ -96,7 +96,7 @@ class SimpleExcelReaderTest extends TestCase
         $this->assertEquals([
             0 => 'email',
             1 => 'first_name',
-            2 => 'last_name'
+            2 => 'last_name',
         ], $headers);
     }
 
@@ -239,7 +239,7 @@ class SimpleExcelReaderTest extends TestCase
         $this->assertEquals([
             0 => 'email',
             1 => 'first_name',
-            2 => 'last_name'
+            2 => 'last_name',
         ], $headers);
 
         $rows = $reader->getRows()->toArray();
