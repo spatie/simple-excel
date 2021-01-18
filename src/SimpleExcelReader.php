@@ -188,6 +188,12 @@ class SimpleExcelReader
         /** @var \Box\Spout\Common\Entity\Row $firstRow */
         $firstRow = $this->rowIterator->current();
 
+        if (is_null($firstRow)) {
+            $this->noHeaderRow();
+
+            return null;
+        }
+
         $this->headers = $this->processHeaderRow($firstRow->toArray());
 
         return $this->headers;
