@@ -14,6 +14,8 @@ class SimpleExcelReader
 {
     protected string $path;
 
+    protected string $type;
+
     protected ReaderInterface $reader;
 
     protected IteratorInterface $rowIterator;
@@ -27,8 +29,6 @@ class SimpleExcelReader
     protected ?string $trimHeaderCharacters = null;
 
     protected ?Closure $formatHeadersUsing = null;
-
-    protected bool $spreadsheetProcessed = false;
 
     protected ?array $headers = null;
 
@@ -46,6 +46,8 @@ class SimpleExcelReader
     public function __construct(string $path, string $type = '')
     {
         $this->path = $path;
+
+        $this->type = $type;
 
         $this->reader = $type ?
             ReaderFactory::createFromType($type) :
@@ -122,42 +124,6 @@ class SimpleExcelReader
 
     public function getRows(): LazyCollection
     {
-        $this->processSpreadsheet();
-
-        return LazyCollection::make(function () {
-            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
-                $this->rowIterator->next();
-            }
-            while ($this->rowIterator->valid() && (!$this->useLimit || $this->limit--)) {
-                $row = $this->rowIterator->current();
-
-                yield $this->getValueFromRow($row);
-
-                $this->rowIterator->next();
-            }
-        });
-    }
-
-    public function getHeaders(): ?array
-    {
-        $this->processSpreadsheet();
-
-        return $this->headers;
-    }
-
-    public function close()
-    {
-        $this->reader->close();
-    }
-
-    protected function processSpreadsheet()
-    {
-        if ($this->spreadsheetProcessed) {
-            return;
-        }
-
-        $this->spreadsheetProcessed = true;
-
         $this->reader->open($this->path);
 
         $this->reader->getSheetIterator()->rewind();
@@ -177,8 +143,52 @@ class SimpleExcelReader
 
         if ($this->processHeader) {
             $this->headers = $this->processHeaderRow($firstRow->toArray());
+
             $this->rowIterator->next();
         }
+
+        return LazyCollection::make(function () {
+            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
+                $this->rowIterator->next();
+            }
+            while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
+                $row = $this->rowIterator->current();
+
+                yield $this->getValueFromRow($row);
+
+                $this->rowIterator->next();
+            }
+        });
+    }
+
+    public function getHeaders(): ?array
+    {
+        if ($this->processHeader && ! $this->headers) {
+            $reader = $this->type ?
+                ReaderFactory::createFromType($this->type) :
+                ReaderEntityFactory::createReaderFromFile($this->path);
+
+            $reader->open($this->path);
+
+            $reader->getSheetIterator()->rewind();
+
+            $sheet = $reader->getSheetIterator()->current();
+
+            $this->rowIterator = $sheet->getRowIterator();
+
+            $this->rowIterator->rewind();
+
+            /** @var \Box\Spout\Common\Entity\Row $firstRow */
+            $firstRow = $this->rowIterator->current();
+
+            $this->headers = $this->processHeaderRow($firstRow->toArray());
+        }
+        return $this->headers;
+    }
+
+    public function close()
+    {
+        $this->reader->close();
     }
 
     protected function processHeaderRow(array $headers): array
@@ -231,7 +241,7 @@ class SimpleExcelReader
         $values = $row->toArray();
         ksort($values);
 
-        if (!$this->processHeader) {
+        if (! $this->processHeader) {
             return $values;
         }
 
