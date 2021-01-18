@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.13.0 - 2020-01-18
+
+- add `getHeaders()` (#52)
+
 ## 1.12.0 - 2020-12-30
 
 - add `headersToSnakeCase` and `formatHeadersUsing`
