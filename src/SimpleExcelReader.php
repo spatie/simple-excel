@@ -171,15 +171,11 @@ class SimpleExcelReader
             return $this->headers;
         }
 
-        $reader = $this->type ?
-            ReaderFactory::createFromType($this->type) :
-            ReaderEntityFactory::createReaderFromFile($this->path);
+        $this->reader->open($this->path);
 
-        $reader->open($this->path);
+        $this->reader->getSheetIterator()->rewind();
 
-        $reader->getSheetIterator()->rewind();
-
-        $sheet = $reader->getSheetIterator()->current();
+        $sheet = $this->reader->getSheetIterator()->current();
 
         $this->rowIterator = $sheet->getRowIterator();
 

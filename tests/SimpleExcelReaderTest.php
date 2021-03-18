@@ -414,4 +414,42 @@ class SimpleExcelReaderTest extends TestCase
             2 => 'last_name_suffix',
         ], $headers);
     }
+
+    /** @test */
+    public function it_can_retrieve_rows_with_a_different_delimiter()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows-other-delimiter.csv'))
+            ->useDelimiter(';')
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => 'doe',
+                'job_title' => 'male nutter',
+            ],
+            [
+                'email' => 'mary-jane@example.com',
+                'first_name' => 'mary jane',
+                'last_name' => 'doe',
+                'job_title' => 'female nutter',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
+    public function it_can_retrieve_headers_with_a_different_delimiter()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('header-and-rows-other-delimiter.csv'))
+            ->useDelimiter(';')
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'email',
+            1 => 'first_name',
+            2 => 'last_name',
+        ], $headers);
+    }
 }
