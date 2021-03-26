@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.13.1 - 2021-03-26
+
+- make sure `getHeaders()` take delimiter in account (#57)
+
 ## 1.13.0 - 2020-01-18
 
 - add `getHeaders()` (#52)
