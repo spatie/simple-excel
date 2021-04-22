@@ -6,17 +6,11 @@
 
 This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure low memory usage, even when working with large files.
 
-Import the package.
- 
-```php
-use Spatie\SimpleExcel\SimpleExcelReader;
-use Spatie\SimpleExcel\SimpleExcelWriter;
-
-```
-
 Here's an example on how to read an Excel or CSV.
 
 ```php
+use Spatie\SimpleExcel\SimpleExcelReader;
+
 SimpleExcelReader::create($pathToFile)->getRows()
    ->each(function(array $rowProperties) {
         // process the row
@@ -54,6 +48,8 @@ jane@example.com,jane
 ```
 
 ```php
+use Spatie\SimpleExcel\SimpleExcelReader;
+
 // $rows is an instance of Illuminate\Support\LazyCollection
 $rows = SimpleExcelReader::create($pathToCsv)->getRows();
 
@@ -218,6 +214,8 @@ $rows = SimpleExcelReader::create($pathToCsv)
 Here's how you can write a CSV file:
 
 ```php
+use Spatie\SimpleExcel\SimpleExcelWriter;
+
 $writer = SimpleExcelWriter::create($pathToCsv)
      ->addRow([
         'first_name' => 'John',
