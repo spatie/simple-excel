@@ -6,6 +6,14 @@
 
 This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure low memory usage, even when working with large files.
 
+Import the package.
+ 
+```php
+use Spatie\SimpleExcel\SimpleExcelReader;
+use Spatie\SimpleExcel\SimpleExcelWriter;
+
+```
+
 Here's an example on how to read an Excel or CSV.
 
 ```php
