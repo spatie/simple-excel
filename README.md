@@ -82,7 +82,7 @@ Here's a quick, silly example where we only want to process rows that have a `fi
 ```php
 SimpleExcelReader::create($pathToCsv)->getRows()
     ->filter(function(array $rowProperties) {
-       return strlen($rowProperties['first_name']) > 5
+       return strlen($rowProperties['first_name']) > 5;
     })
     ->each(function(array $rowProperties) {
         // processing rows
@@ -318,7 +318,7 @@ $style = (new StyleBuilder())
    ->setBackgroundColor(Color::YELLOW)
    ->build();
 
-$writer->addRow(['values, 'of', 'the', 'row'], $style)
+$writer->addRow(['values, 'of', 'the', 'row'], $style);
 ```
 To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
 
@@ -349,7 +349,7 @@ $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
         'last_name' => 'Doe',
     ]);
 
-$writerWithoutAutomaticHeader->getNumberOfRows() // returns 2
+$writerWithoutAutomaticHeader->getNumberOfRows(); // returns 2
 ```
 
 #### Disable BOM
