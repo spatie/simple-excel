@@ -28,7 +28,7 @@ class SimpleExcelReader
 
     protected ?string $trimHeaderCharacters = null;
 
-    protected ?Closure $formatHeadersUsing = null;
+    protected mixed $formatHeadersUsing = null;
 
     protected ?array $headers = null;
 
