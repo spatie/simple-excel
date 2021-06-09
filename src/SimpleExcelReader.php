@@ -7,7 +7,6 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Common\Creator\ReaderFactory;
 use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
-use Closure;
 use Illuminate\Support\LazyCollection;
 
 class SimpleExcelReader
