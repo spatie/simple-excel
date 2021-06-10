@@ -452,9 +452,9 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_trim_nullable_headers()
+    public function it_can_trim_empty_header_title()
     {
-        $headers = SimpleExcelReader::create($this->getStubPath('nullable-header.csv'))
+        $headers = SimpleExcelReader::create($this->getStubPath('empty-header-title.csv'))
             ->trimHeaderRow()
             ->getHeaders();
 
