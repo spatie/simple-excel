@@ -2,6 +2,11 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.14.0 - 2021-06-10
+
+- Allow all forms of callables to format header (#63)
+- drop support for PHP 7
+
 ## 1.13.1 - 2021-03-26
 
 - make sure `getHeaders()` take delimiter in account (#57)
