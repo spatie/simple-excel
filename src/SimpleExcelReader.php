@@ -233,7 +233,7 @@ class SimpleExcelReader
 
     protected function trim(string $header): string
     {
-        return call_user_func_array('trim', array_filter([$header, $this->trimHeaderCharacters]));
+        return call_user_func_array('trim', array_merge([$header], array_filter([$this->trimHeaderCharacters])));
     }
 
     protected function toSnakeCase(string $header): string
