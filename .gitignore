@@ -5,4 +5,4 @@ vendor
 coverage
 .phpunit.result.cache
 tests/temp
-.php_cs.cache
+.php-cs-fixer.cache
