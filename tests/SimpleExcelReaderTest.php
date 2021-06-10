@@ -450,4 +450,18 @@ class SimpleExcelReaderTest extends TestCase
             2 => 'last_name',
         ], $headers);
     }
+
+    /** @test */
+    public function it_can_trim_nullable_headers()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('nullable-header.csv'))
+            ->trimHeaderRow()
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'email',
+            1 => '',
+            2 => 'last',
+        ], $headers);
+    }
 }
