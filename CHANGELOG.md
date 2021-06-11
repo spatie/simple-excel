@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.14.1 - 2021-06-11
+
+- Allow trimming empty header titles (#64)
+
 ## 1.14.0 - 2021-06-10
 
 - Allow all forms of callables to format header (#63)
