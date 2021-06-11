@@ -450,4 +450,32 @@ class SimpleExcelReaderTest extends TestCase
             2 => 'last_name',
         ], $headers);
     }
+
+    /** @test */
+    public function it_can_trim_empty_header_title()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('empty-header-title.csv'))
+            ->trimHeaderRow()
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'email',
+            1 => '',
+            2 => 'last',
+        ], $headers);
+    }
+
+    /** @test */
+    public function it_can_trim_empty_header_title_with_custom_trim_characters()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('empty-header-title.csv'))
+            ->trimHeaderRow('il ')
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'ema',
+            1 => '',
+            2 => 'ast',
+        ], $headers);
+    }
 }
