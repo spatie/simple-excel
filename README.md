@@ -293,7 +293,6 @@ $writer = SimpleExcelWriter::create($pathToCsv)
         'first_name' => 'Jane',
         'last_name' => 'Doe',
     ]);
-});
 ```
 
 This will output:
@@ -349,7 +348,7 @@ $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
         'last_name' => 'Doe',
     ]);
 
-$writerWithoutAutomaticHeader->getNumberOfRows(); // returns 2
+$writerWithAutomaticHeader->getNumberOfRows(); // returns 2
 ```
 
 #### Disable BOM
