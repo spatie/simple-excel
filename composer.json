@@ -18,7 +18,7 @@
     "require": {
         "php": "^8.0",
         "box/spout": "^3.0",
-        "illuminate/support": "^8.71"
+        "illuminate/support": "^8.71|^9.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.4",
