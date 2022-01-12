@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.15.0 - 2022-01-12
+
+- support Laravel 9
+
 ## 1.14.1 - 2021-06-11
 
 - Allow trimming empty header titles (#64)
