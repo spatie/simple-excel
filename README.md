@@ -135,7 +135,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
     ->getRows()
     ->each(function(array $rowProperties) {
        // in the first pass $rowProperties will contain
-       // ['email' => 'john@example', 'last_name' => 'john']
+       // ['email' => 'john@example', 'first_name' => 'john']
 });
 ```
 
