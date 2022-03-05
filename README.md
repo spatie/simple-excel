@@ -317,7 +317,7 @@ $style = (new StyleBuilder())
    ->setBackgroundColor(Color::YELLOW)
    ->build();
 
-$writer->addRow(['values, 'of', 'the', 'row'], $style);
+$writer->addRow(['values', 'of', 'the', 'row'], $style);
 ```
 To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
 
