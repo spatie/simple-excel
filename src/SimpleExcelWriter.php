@@ -155,6 +155,13 @@ class SimpleExcelWriter
 
         return $this;
     }
+    
+    public function useEnclosure(string $enclosure): self
+    {
+        $this->writer->setFieldEnclosure($enclosure);
+
+        return $this;
+    }
 
     public function __destruct()
     {
