@@ -19,6 +19,8 @@ class SimpleExcelReader
 
     protected IteratorInterface $rowIterator;
 
+    protected int $sheetNumber = 1;
+
     protected bool $processHeader = true;
 
     protected bool $trimHeader = false;
@@ -121,13 +123,22 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function fromSheet(int $sheetNumber): SimpleExcelReader
+    {
+        $this->sheetNumber = $sheetNumber;
+
+        return $this;
+    }
+
     public function getRows(): LazyCollection
     {
         $this->reader->open($this->path);
 
-        $this->reader->getSheetIterator()->rewind();
-
-        $sheet = $this->reader->getSheetIterator()->current();
+        foreach ($this->reader->getSheetIterator() as $key => $sheet) {
+            if ($key === $this->sheetNumber) {
+                break;
+            }
+        }
 
         $this->rowIterator = $sheet->getRowIterator();
 
