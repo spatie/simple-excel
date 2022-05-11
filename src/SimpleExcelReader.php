@@ -7,6 +7,7 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Common\Creator\ReaderFactory;
 use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
+use Box\Spout\Reader\SheetInterface;
 use Illuminate\Support\LazyCollection;
 
 class SimpleExcelReader
@@ -126,19 +127,14 @@ class SimpleExcelReader
     public function fromSheet(int $sheetNumber): SimpleExcelReader
     {
         $this->sheetNumber = $sheetNumber;
+        $this->headers = null;
 
         return $this;
     }
 
     public function getRows(): LazyCollection
     {
-        $this->reader->open($this->path);
-
-        foreach ($this->reader->getSheetIterator() as $key => $sheet) {
-            if ($key === $this->sheetNumber) {
-                break;
-            }
-        }
+        $sheet = $this->getSheet();
 
         $this->rowIterator = $sheet->getRowIterator();
 
@@ -181,11 +177,7 @@ class SimpleExcelReader
             return $this->headers;
         }
 
-        $this->reader->open($this->path);
-
-        $this->reader->getSheetIterator()->rewind();
-
-        $sheet = $this->reader->getSheetIterator()->current();
+        $sheet = $this->getSheet();
 
         $this->rowIterator = $sheet->getRowIterator();
 
@@ -277,6 +269,19 @@ class SimpleExcelReader
         }
 
         return array_combine($this->headers, $values);
+    }
+
+    protected function getSheet(): SheetInterface
+    {
+        $this->reader->open($this->path);
+
+        foreach ($this->reader->getSheetIterator() as $key => $sheet) {
+            if ($key === $this->sheetNumber) {
+                break;
+            }
+        }
+
+        return $sheet;
     }
 
     public function __destruct()
