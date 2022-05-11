@@ -2,6 +2,22 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 1.15.1 - 2022-05-11
+
+## What's Changed
+
+- Update README.md by @vdvcoder in https://github.com/spatie/simple-excel/pull/80
+- Typo by @saurabhsharma2u in https://github.com/spatie/simple-excel/pull/83
+- Allow for selecting sheet by number by @dakira in https://github.com/spatie/simple-excel/pull/86
+
+## New Contributors
+
+- @vdvcoder made their first contribution in https://github.com/spatie/simple-excel/pull/80
+- @saurabhsharma2u made their first contribution in https://github.com/spatie/simple-excel/pull/83
+- @dakira made their first contribution in https://github.com/spatie/simple-excel/pull/86
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/1.15.0...1.15.1
+
 ## 1.15.0 - 2022-01-12
 
 - support Laravel 9
