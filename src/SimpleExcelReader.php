@@ -9,6 +9,7 @@ use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
 use Box\Spout\Reader\SheetInterface;
 use Illuminate\Support\LazyCollection;
+use InvalidArgumentException;
 
 class SimpleExcelReader
 {
@@ -279,6 +280,10 @@ class SimpleExcelReader
             if ($key === $this->sheetNumber) {
                 break;
             }
+        }
+
+        if ($this->sheetNumber !== $key) {
+            throw new InvalidArgumentException("Sheet {$key} does not exist in {$this->path}.");
         }
 
         return $sheet;
