@@ -7,7 +7,9 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 use Box\Spout\Reader\Common\Creator\ReaderFactory;
 use Box\Spout\Reader\IteratorInterface;
 use Box\Spout\Reader\ReaderInterface;
+use Box\Spout\Reader\SheetInterface;
 use Illuminate\Support\LazyCollection;
+use InvalidArgumentException;
 
 class SimpleExcelReader
 {
@@ -18,6 +20,8 @@ class SimpleExcelReader
     protected ReaderInterface $reader;
 
     protected IteratorInterface $rowIterator;
+
+    protected int $sheetNumber = 1;
 
     protected bool $processHeader = true;
 
@@ -121,13 +125,17 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function fromSheet(int $sheetNumber): SimpleExcelReader
+    {
+        $this->sheetNumber = $sheetNumber;
+        $this->headers = null;
+
+        return $this;
+    }
+
     public function getRows(): LazyCollection
     {
-        $this->reader->open($this->path);
-
-        $this->reader->getSheetIterator()->rewind();
-
-        $sheet = $this->reader->getSheetIterator()->current();
+        $sheet = $this->getSheet();
 
         $this->rowIterator = $sheet->getRowIterator();
 
@@ -170,11 +178,7 @@ class SimpleExcelReader
             return $this->headers;
         }
 
-        $this->reader->open($this->path);
-
-        $this->reader->getSheetIterator()->rewind();
-
-        $sheet = $this->reader->getSheetIterator()->current();
+        $sheet = $this->getSheet();
 
         $this->rowIterator = $sheet->getRowIterator();
 
@@ -266,6 +270,23 @@ class SimpleExcelReader
         }
 
         return array_combine($this->headers, $values);
+    }
+
+    protected function getSheet(): SheetInterface
+    {
+        $this->reader->open($this->path);
+
+        foreach ($this->reader->getSheetIterator() as $key => $sheet) {
+            if ($key === $this->sheetNumber) {
+                break;
+            }
+        }
+
+        if ($this->sheetNumber !== $key) {
+            throw new InvalidArgumentException("Sheet {$key} does not exist in {$this->path}.");
+        }
+
+        return $sheet;
     }
 
     public function __destruct()
