@@ -3,6 +3,7 @@
 namespace Spatie\SimpleExcel\Tests;
 
 use Box\Spout\Reader\CSV\Reader;
+use InvalidArgumentException;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
 class SimpleExcelReaderTest extends TestCase
@@ -477,5 +478,31 @@ class SimpleExcelReaderTest extends TestCase
             1 => '',
             2 => 'ast',
         ], $headers);
+    }
+
+    /** @test */
+    public function it_can_select_the_sheet_of_an_excel_file()
+    {
+        $reader = SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx'));
+
+        $this->assertEquals([
+            0 => 'firstname',
+            1 => 'lastname',
+        ], $reader->getHeaders());
+
+        $this->assertEquals([
+            0 => 'contact',
+            1 => 'email',
+        ], $reader->fromSheet(2)->getHeaders());
+    }
+
+    /** @test */
+    public function it_will_not_open_non_existing_sheets()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx'))
+            ->fromSheet(3)
+            ->getHeaders();
     }
 }
