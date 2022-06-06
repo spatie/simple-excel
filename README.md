@@ -185,7 +185,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 #### Manually working with the reader object
 
-Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying reader that implements `\Box\Spout\Reader\ReaderInterface` by calling the `getReader` method.
+Under the hood this package uses the [box/spout](https://github.com/openspout/openspout) package. You can get to the underlying reader that implements `\OpenSpout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
 $reader = SimpleExcelReader::create($pathToCsv)->getReader();
@@ -306,7 +306,7 @@ Jane,Doe
 
 #### Adding layout
 
-Under the hood this package uses the [box/spout](https://github.com/box/spout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
+Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
 
 ```php
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
@@ -328,7 +328,7 @@ To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
 $writer->setHeaderStyle($style);
 ```
 
-For more information on styles head over to [the Spout docs](https://opensource.box.com/spout/docs/#styling).
+For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/3.x/docs).
 
 #### Using an alternative delimiter
 
@@ -368,7 +368,7 @@ Additional information about BOM can be found [here](https://en.wikipedia.org/wi
 
 #### Manually working with the writer object
 
-Under the hood this package uses the [box/spout](https://github.com/box/spout) package. You can get to the underlying writer that implements `\Box\Spout\Reader\WriterInterface` by calling the `getWriter` method.
+Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. You can get to the underlying writer that implements `\OpenSpout\Reader\WriterInterface` by calling the `getWriter` method.
 
 ```php
 $writer = SimpleExcelWriter::create($pathToCsv)->getWriter();
