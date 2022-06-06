@@ -2,7 +2,7 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
-use Box\Spout\Writer\CSV\Writer;
+use OpenSpout\Writer\CSV\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Spatie\Snapshots\MatchesSnapshots;
 use Spatie\TemporaryDirectory\TemporaryDirectory;

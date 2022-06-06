@@ -309,8 +309,8 @@ Jane,Doe
 Under the hood this package uses the [box/spout](https://github.com/box/spout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
 
 ```php
-use Box\Spout\Writer\Common\Creator\Style\StyleBuilder;
-use Box\Spout\Common\Entity\Style\Color;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use OpenSpout\Common\Entity\Style\Color;
 
 $style = (new StyleBuilder())
    ->setFontBold()

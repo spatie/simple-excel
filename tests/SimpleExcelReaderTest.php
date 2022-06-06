@@ -2,7 +2,7 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
-use Box\Spout\Reader\CSV\Reader;
+use OpenSpout\Reader\CSV\Reader;
 use InvalidArgumentException;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
