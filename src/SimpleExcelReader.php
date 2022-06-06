@@ -2,14 +2,14 @@
 
 namespace Spatie\SimpleExcel;
 
+use Illuminate\Support\LazyCollection;
+use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
 use OpenSpout\Reader\Common\Creator\ReaderFactory;
-use OpenSpout\Reader\SheetInterface;
-use Illuminate\Support\LazyCollection;
-use InvalidArgumentException;
 use OpenSpout\Reader\IteratorInterface;
 use OpenSpout\Reader\ReaderInterface;
+use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
 {
