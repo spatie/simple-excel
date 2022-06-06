@@ -2,8 +2,8 @@
 
 namespace Spatie\SimpleExcel\Tests;
 
-use OpenSpout\Reader\CSV\Reader;
 use InvalidArgumentException;
+use OpenSpout\Reader\CSV\Reader;
 use Spatie\SimpleExcel\SimpleExcelReader;
 
 class SimpleExcelReaderTest extends TestCase
