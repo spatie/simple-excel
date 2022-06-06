@@ -2,6 +2,10 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 2.0.0 - 2022-06-06
+
+- move from box/spout to openspout/openspout
+
 ## 1.15.1 - 2022-05-11
 
 ## What's Changed
