@@ -186,7 +186,6 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
-        /** @var \Box\Spout\Common\Entity\Row $firstRow */
         $headerRow = $this->rowIterator->current();
 
         if ($this->headerOnRow > 0) {
