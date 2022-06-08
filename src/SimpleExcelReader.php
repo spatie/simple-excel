@@ -150,9 +150,8 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
-        $this->getHeaders();
-
         if ($this->processHeader) {
+            $this->getHeaders();
             $this->rowIterator->next();
         }
 
