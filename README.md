@@ -118,6 +118,40 @@ $headers = SimpleExcelReader::create($pathToCsv)->getHeaders();
 // [ 'email', 'first_name' ]
 ```
 
+#### Dealing with headers that are not on the first line
+
+If your file has headers that are not on the first line, you can use the `headerOnRow()` method
+to indicate the line at which the headers are present. Any data above this line
+will be discarded from the result.
+
+`headerOnRow` accepts the line number as an argument, starting at 0. Blank lines are not counted. 
+
+Since blank lines will not be counted, this method is mostly useful for files
+that include formatting above the actual dataset, which can be the case with Excel files.
+
+```csv
+This is my data sheet
+See worksheet 1 for the data, worksheet 2 for the graphs.
+
+
+
+email , firstname
+john@example.com,john
+jane@example.com,jane
+```
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->trimHeaderRow()
+    ->setHeaderRow(3)
+    ->getRows()
+    ->each(function(array $rowProperties) {
+       // in the first pass $rowProperties will contain
+       // ['email' => 'john@example', 'first_name' => 'john']
+});
+```
+
 #### Trimming Header Row values
 
 If the file you are reading contains a title row, but you need to trim additional characters on the title values, then you should use the `trimHeaderRow()` method.

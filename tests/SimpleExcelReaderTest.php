@@ -102,6 +102,39 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
+    public function it_can_read_headers_when_header_is_not_on_the_first_row()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('header-not-on-first-row.xlsx'))
+            ->headerOnRow(2)
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'firstname',
+            1 => 'lastname',
+        ], $headers);
+    }
+
+    /** @test */
+    public function it_can_read_content_when_header_is_not_on_the_first_row()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-not-on-first-row.xlsx'))
+            ->headerOnRow(2)
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'firstname' => 'Taylor',
+                'lastname' => 'Otwell',
+            ],
+            [
+                'firstname' => 'Adam',
+                'lastname' => 'Wathan',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
     public function it_can_ignore_the_headers()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))

@@ -35,6 +35,8 @@ class SimpleExcelReader
 
     protected ?array $headers = null;
 
+    protected int $headerOnRow = 0;
+
     protected int $skip = 0;
 
     protected int $limit = 0;
@@ -60,6 +62,13 @@ class SimpleExcelReader
     public function getPath(): string
     {
         return $this->path;
+    }
+
+    public function headerOnRow(int $headerRow): self
+    {
+        $this->headerOnRow = $headerRow;
+
+        return $this;
     }
 
     public function noHeaderRow(): self
@@ -141,16 +150,8 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
-        /** @var \Box\Spout\Common\Entity\Row $firstRow */
-        $firstRow = $this->rowIterator->current();
-
-        if (is_null($firstRow)) {
-            $this->noHeaderRow();
-        }
-
         if ($this->processHeader) {
-            $this->headers = $this->processHeaderRow($firstRow->toArray());
-
+            $this->getHeaders();
             $this->rowIterator->next();
         }
 
@@ -184,16 +185,23 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
-        /** @var \Box\Spout\Common\Entity\Row $firstRow */
-        $firstRow = $this->rowIterator->current();
+        $headerRow = $this->rowIterator->current();
 
-        if (is_null($firstRow)) {
+        if ($this->headerOnRow > 0) {
+            $skip = $this->headerOnRow;
+            while ($skip--) {
+                $this->rowIterator->next();
+            }
+            $headerRow = $this->rowIterator->current();
+        }
+
+        if (is_null($headerRow)) {
             $this->noHeaderRow();
 
             return null;
         }
 
-        $this->headers = $this->processHeaderRow($firstRow->toArray());
+        $this->headers = $this->processHeaderRow($headerRow->toArray());
 
         return $this->headers;
     }
