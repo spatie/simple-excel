@@ -1,25 +1,28 @@
 <?php
+declare(strict_types=1);
 
 namespace Spatie\SimpleExcel;
 
 use Illuminate\Support\LazyCollection;
 use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
-use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
-use OpenSpout\Reader\Common\Creator\ReaderFactory;
-use OpenSpout\Reader\IteratorInterface;
+use OpenSpout\Common\Exception\UnsupportedTypeException;
+use OpenSpout\Reader\CSV\Reader as CsvReader;
+use OpenSpout\Reader\ODS\Reader as OdsReader;
 use OpenSpout\Reader\ReaderInterface;
+use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
+use OpenSpout\Reader\XLSX\Reader as XlsxReader;
 
 class SimpleExcelReader
 {
-    protected string $path;
+    use SimpleExcelReaderOptions;
 
-    protected string $type;
+    protected string $path;
 
     protected ReaderInterface $reader;
 
-    protected IteratorInterface $rowIterator;
+    protected RowIteratorInterface $rowIterator;
 
     protected int $sheetNumber = 1;
 
@@ -43,20 +46,67 @@ class SimpleExcelReader
 
     protected bool $useLimit = false;
 
-    public static function create(string $file, string $type = '')
+    public static function options(): self
     {
-        return new static($file, $type);
+        return new static();
     }
 
-    public function __construct(string $path, string $type = '')
+    public static function create(string $file, ?string $type = \null)
     {
-        $this->path = $path;
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        $this->type = $type;
+        if ($type !== \null) {
+            $extension = strtolower($type);
+        }
 
-        $this->reader = $type ?
-            ReaderFactory::createFromType($type) :
-            ReaderEntityFactory::createReaderFromFile($this->path);
+        return match ($extension) {
+            'csv' => (new self)->openCsv($file),
+            'ods' => (new self)->openOds($file),
+            'xlsx' => (new self)->openXlsx($file),
+            default => throw new UnsupportedTypeException('No readers supporting the given type: '.$extension),
+        };
+    }
+
+    public static function createCsv(string $file)
+    {
+        return (new self)->openCsv($file);
+    }
+
+    public function openCsv(string $file)
+    {
+        $this->path = $file;
+
+        $this->reader = new CsvReader($this->getCsvOptions());
+
+        return $this;
+    }
+
+    public static function createOds(string $file)
+    {
+        return (new self)->openOds($file);
+    }
+
+    public function openOds(string $file)
+    {
+        $this->path = $file;
+
+        $this->reader = new OdsReader($this->getOdsOptions());
+
+        return $this;
+    }
+
+    public static function createXlsx(string $file)
+    {
+        return (new self)->openXlsx($file);
+    }
+
+    public function openXlsx(string $file)
+    {
+        $this->path = $file;
+
+        $this->reader = new XlsxReader($this->getXlsxOptions());
+
+        return $this;
     }
 
     public function getPath(): string
@@ -74,20 +124,6 @@ class SimpleExcelReader
     public function noHeaderRow(): self
     {
         $this->processHeader = false;
-
-        return $this;
-    }
-
-    public function useDelimiter(string $delimiter): self
-    {
-        $this->reader->setFieldDelimiter($delimiter);
-
-        return $this;
-    }
-
-    public function useFieldEnclosure(string $fieldEnclosure): self
-    {
-        $this->reader->setFieldEnclosure($fieldEnclosure);
 
         return $this;
     }
@@ -150,8 +186,9 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
+        $this->getHeaders();
+
         if ($this->processHeader) {
-            $this->getHeaders();
             $this->rowIterator->next();
         }
 
@@ -185,6 +222,7 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
+        /** @var \OpenSpout\Common\Entity\Row|null $headerRow */
         $headerRow = $this->rowIterator->current();
 
         if ($this->headerOnRow > 0) {
@@ -262,8 +300,14 @@ class SimpleExcelReader
         );
     }
 
+    /**
+     * @param \OpenSpout\Common\Entity\Row $row
+     *
+     * @return array<int,string>
+     */
     protected function getValueFromRow(Row $row): array
     {
+        /** @var array<int,string> $values */
         $values = $row->toArray();
         ksort($values);
 

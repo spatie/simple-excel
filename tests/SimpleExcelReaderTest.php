@@ -174,8 +174,9 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
-        $rows = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'))
+        $rows = SimpleExcelReader::options()
             ->useDelimiter(';')
+            ->openCsv($this->getStubPath('alternative-delimiter.csv'))
             ->getRows()
             ->toArray();
 
@@ -307,7 +308,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_allows_setting_the_reader_type_manually()
     {
-        $reader = SimpleExcelReader::create('php://input', 'csv');
+        $reader = SimpleExcelReader::createCsv('php://input');
 
         $this->assertInstanceOf(Reader::class, $reader->getReader());
     }
@@ -452,8 +453,9 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_retrieve_rows_with_a_different_delimiter()
     {
-        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows-other-delimiter.csv'))
+        $rows = SimpleExcelReader::options()
             ->useDelimiter(';')
+            ->openCsv($this->getStubPath('header-and-rows-other-delimiter.csv'))
             ->getRows()
             ->toArray();
 
@@ -474,8 +476,9 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_retrieve_headers_with_a_different_delimiter()
     {
-        $headers = SimpleExcelReader::create($this->getStubPath('header-and-rows-other-delimiter.csv'))
+        $headers = SimpleExcelReader::options()
             ->useDelimiter(';')
+            ->openCsv($this->getStubPath('header-and-rows-other-delimiter.csv'))
             ->getHeaders();
 
         $this->assertEquals([
@@ -534,7 +537,7 @@ class SimpleExcelReaderTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx'))
+        SimpleExcelReader::createXlsx($this->getStubPath('multiple_sheets.xlsx'))
             ->fromSheet(3)
             ->getHeaders();
     }
