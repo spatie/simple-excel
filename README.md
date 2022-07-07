@@ -73,11 +73,11 @@ Because of changes in Openspout V4, options must be set before opening a reader 
 Note the new function call openXXX when using options.
 
 ```php
-SimpleExcelReader::options()->useDelimiter(';')->openCsv($pathToFile);
+SimpleExcelReader::useDelimiter(';')->openCsv($pathToFile);
 ```
 
 ```php
-SimpleExcelReader::options()->formatDates()->openXlsx($pathToFile);
+SimpleExcelReader::formatDates()->openXlsx($pathToFile);
 ```
 [Options information](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md)
 
