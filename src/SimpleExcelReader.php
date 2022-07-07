@@ -18,6 +18,8 @@ class SimpleExcelReader
 {
     use SimpleExcelReaderOptions;
 
+    private static $instance;
+
     protected string $path;
 
     protected ReaderInterface $reader;
@@ -46,9 +48,13 @@ class SimpleExcelReader
 
     protected bool $useLimit = false;
 
-    public static function options(): self
+    public static function getInstance()
     {
-        return new static();
+        if (! is_object(self::$instance)) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
     }
 
     public static function create(string $file, ?string $type = \null)
@@ -67,12 +73,12 @@ class SimpleExcelReader
         };
     }
 
-    public static function createCsv(string $file)
+    public static function createCsv(string $file): self
     {
         return (new self)->openCsv($file);
     }
 
-    public function openCsv(string $file)
+    public function openCsv(string $file): self
     {
         $this->path = $file;
 
@@ -81,12 +87,12 @@ class SimpleExcelReader
         return $this;
     }
 
-    public static function createOds(string $file)
+    public static function createOds(string $file): self
     {
         return (new self)->openOds($file);
     }
 
-    public function openOds(string $file)
+    public function openOds(string $file): self
     {
         $this->path = $file;
 
@@ -95,12 +101,12 @@ class SimpleExcelReader
         return $this;
     }
 
-    public static function createXlsx(string $file)
+    public static function createXlsx(string $file): self
     {
         return (new self)->openXlsx($file);
     }
 
-    public function openXlsx(string $file)
+    public function openXlsx(string $file): self
     {
         $this->path = $file;
 
@@ -192,10 +198,12 @@ class SimpleExcelReader
             $this->rowIterator->next();
         }
 
+
         return LazyCollection::make(function () {
             while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
                 $this->rowIterator->next();
             }
+
             while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
                 $row = $this->rowIterator->current();
 
@@ -344,5 +352,7 @@ class SimpleExcelReader
     public function __destruct()
     {
         $this->close();
+
+        self::$instance = \null;
     }
 }

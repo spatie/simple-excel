@@ -15,6 +15,8 @@ class SimpleExcelWriter
 {
     use SimpleExcelWriterOptions;
 
+    private static $instance;
+
     private WriterInterface $writer;
 
     private string $path = '';
@@ -25,9 +27,13 @@ class SimpleExcelWriter
 
     private int $numberOfRows = 0;
 
-    public static function options(): self
+    public static function getInstance()
     {
-        return new static();
+        if (! is_object(self::$instance)) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
     }
 
     public static function create(string $file): self
@@ -186,5 +192,7 @@ class SimpleExcelWriter
     public function __destruct()
     {
         $this->close();
+
+        self::$instance = \null;
     }
 }

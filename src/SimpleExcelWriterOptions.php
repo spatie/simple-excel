@@ -10,49 +10,55 @@ use OpenSpout\Writer\XLSX\Options as XlsxOptions;
 trait SimpleExcelWriterOptions
 {
     /* CSV options */
-    public string $field_delimiter = ',';
-    public string $field_enclosure = '"';
-    public bool $should_add_bom = true;
-    public int $flush_threshold = 500;
+    public static string $field_delimiter = ',';
+    public static string $field_enclosure = '"';
+    public static bool $should_add_bom = true;
+    public static int $flush_threshold = 500;
 
     /* XLSX options */
-    public bool $should_use_inline_strings = true;
+    public static bool $should_use_inline_strings = true;
 
-    public function withoutInlineStrings(): self
+    public static function withoutInlineStrings(): self
     {
-        $this->should_use_inline_strings = \false;
+        self::$should_use_inline_strings = \false;
 
-        return $this;
+        return self::getInstance();
     }
 
-    public function flushThreshold(int $threshold): self
+    public static function flushThreshold(int $threshold): self
     {
-        $this->flush_threshold = $threshold;
+        self::$flush_threshold = $threshold;
 
-        return $this;
+        return self::getInstance();
     }
 
-    public function withoutBom(): self
+    public static function withoutBom(): self
     {
-        $this->should_add_bom = \false;
+        self::$should_add_bom = \false;
 
-        return $this;
+        return self::getInstance();
     }
 
-    public function useDelimiter(string $delimiter): self
+    public static function useDelimiter(string $delimiter): self
     {
-        $this->field_delimiter = $delimiter;
+        self::$field_delimiter = $delimiter;
 
-        return $this;
+        return self::getInstance();
     }
 
     public function getCsvOptions(): CsvOptions
     {
         $options = new CsvOptions();
-        $options->FIELD_DELIMITER = $this->field_delimiter;
-        $options->FIELD_ENCLOSURE = $this->field_enclosure;
-        $options->SHOULD_ADD_BOM = $this->should_add_bom;
-        $options->FLUSH_THRESHOLD = $this->flush_threshold;
+        $options->FIELD_DELIMITER = self::$field_delimiter;
+        $options->FIELD_ENCLOSURE = self::$field_enclosure;
+        $options->SHOULD_ADD_BOM = self::$should_add_bom;
+        $options->FLUSH_THRESHOLD = self::$flush_threshold;
+
+        $reset = new \OpenSpout\Writer\CSV\Options();
+        self::$field_delimiter = $reset->FIELD_DELIMITER;
+        self::$field_enclosure = $reset->FIELD_ENCLOSURE;
+        self::$should_add_bom = $reset->SHOULD_ADD_BOM;
+        self::$flush_threshold = $reset->FLUSH_THRESHOLD;
 
         return $options;
     }
@@ -60,7 +66,10 @@ trait SimpleExcelWriterOptions
     public function getXlsxOptions(): XlsxOptions
     {
         $options = new XlsxOptions();
-        $options->SHOULD_USE_INLINE_STRINGS = $this->should_use_inline_strings;
+        $options->SHOULD_USE_INLINE_STRINGS = self::$should_use_inline_strings;
+
+        $reset = new \OpenSpout\Writer\XLSX\Options();
+        self::$should_use_inline_strings = $reset->SHOULD_USE_INLINE_STRINGS;
 
         return $options;
     }

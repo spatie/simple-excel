@@ -174,8 +174,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
-        $rows = SimpleExcelReader::options()
-            ->useDelimiter(';')
+        $rows = SimpleExcelReader::useDelimiter(';')
             ->openCsv($this->getStubPath('alternative-delimiter.csv'))
             ->getRows()
             ->toArray();
@@ -453,8 +452,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_retrieve_rows_with_a_different_delimiter()
     {
-        $rows = SimpleExcelReader::options()
-            ->useDelimiter(';')
+        $rows = SimpleExcelReader::useDelimiter(';')
             ->openCsv($this->getStubPath('header-and-rows-other-delimiter.csv'))
             ->getRows()
             ->toArray();
@@ -476,8 +474,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_retrieve_headers_with_a_different_delimiter()
     {
-        $headers = SimpleExcelReader::options()
-            ->useDelimiter(';')
+        $headers = SimpleExcelReader::useDelimiter(';')
             ->openCsv($this->getStubPath('header-and-rows-other-delimiter.csv'))
             ->getHeaders();
 
@@ -536,6 +533,7 @@ class SimpleExcelReaderTest extends TestCase
     public function it_will_not_open_non_existing_sheets()
     {
         $this->expectException(InvalidArgumentException::class);
+
 
         SimpleExcelReader::createXlsx($this->getStubPath('multiple_sheets.xlsx'))
             ->fromSheet(3)
