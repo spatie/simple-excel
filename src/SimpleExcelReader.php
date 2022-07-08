@@ -18,7 +18,7 @@ class SimpleExcelReader
 {
     use SimpleExcelReaderOptions;
 
-    private static $instance;
+    private static ?SimpleExcelReader $instance = \null;
 
     protected string $path;
 
@@ -48,7 +48,7 @@ class SimpleExcelReader
 
     protected bool $useLimit = false;
 
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (! is_object(self::$instance)) {
             self::$instance = new static();
@@ -57,7 +57,12 @@ class SimpleExcelReader
         return self::$instance;
     }
 
-    public static function create(string $file, ?string $type = \null)
+    private static function clearInstance(): void
+    {
+        self::$instance = \null;
+    }
+
+    public static function create(string $file, ?string $type = \null): self
     {
         $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
@@ -66,51 +71,42 @@ class SimpleExcelReader
         }
 
         return match ($extension) {
-            'csv' => (new self)->openCsv($file),
-            'ods' => (new self)->openOds($file),
-            'xlsx' => (new self)->openXlsx($file),
+            'csv' => self::getInstance()->openCsv($file),
+            'ods' => self::getInstance()->openOds($file),
+            'xlsx' => self::getInstance()->openXlsx($file),
             default => throw new UnsupportedTypeException('No readers supporting the given type: '.$extension),
         };
     }
 
-    public static function createCsv(string $file): self
-    {
-        return (new self)->openCsv($file);
-    }
-
-    public function openCsv(string $file): self
+    private function openCsv(string $file): self
     {
         $this->path = $file;
 
         $this->reader = new CsvReader($this->getCsvOptions());
 
+        self::clearInstance();
+
         return $this;
     }
 
-    public static function createOds(string $file): self
-    {
-        return (new self)->openOds($file);
-    }
-
-    public function openOds(string $file): self
+    private function openOds(string $file): self
     {
         $this->path = $file;
 
         $this->reader = new OdsReader($this->getOdsOptions());
 
+        self::clearInstance();
+
         return $this;
     }
 
-    public static function createXlsx(string $file): self
-    {
-        return (new self)->openXlsx($file);
-    }
-
-    public function openXlsx(string $file): self
+    private function openXlsx(string $file): self
     {
         $this->path = $file;
 
         $this->reader = new XlsxReader($this->getXlsxOptions());
+
+        self::clearInstance();
 
         return $this;
     }
@@ -353,6 +349,6 @@ class SimpleExcelReader
     {
         $this->close();
 
-        self::$instance = \null;
+        self::clearInstance();
     }
 }

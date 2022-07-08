@@ -70,14 +70,13 @@ Reading an Excel file is identical to reading a CSV file. Just make sure that th
 
 **Important:**
 Because of changes in Openspout V4, options must be set before opening a reader or writer connection.
-Note the new function call openXXX when using options.
 
 ```php
-SimpleExcelReader::useDelimiter(';')->openCsv($pathToFile);
+SimpleExcelReader::useDelimiter(';')->create($pathToFile);
 ```
 
 ```php
-SimpleExcelReader::formatDates()->openXlsx($pathToFile);
+SimpleExcelReader::formatDates()->create($pathToFile);
 ```
 [Options information](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md)
 

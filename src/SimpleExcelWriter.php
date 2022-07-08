@@ -15,7 +15,7 @@ class SimpleExcelWriter
 {
     use SimpleExcelWriterOptions;
 
-    private static $instance;
+    private static ?SimpleExcelWriter $instance = \null;
 
     private WriterInterface $writer;
 
@@ -36,19 +36,28 @@ class SimpleExcelWriter
         return self::$instance;
     }
 
-    public static function create(string $file): self
+    private static function clearInstance(): void
+    {
+        self::$instance = \null;
+    }
+
+    public static function create(string $file, ?string $type = \null): self
     {
         $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
+        if ($type !== \null) {
+            $extension = strtolower($type);
+        }
+
         return match ($extension) {
-            'csv' => (new self)->openCsv($file),
-            'ods' => (new self)->openOds($file),
-            'xlsx' => (new self)->openXlsx($file),
+            'csv' => self::getInstance()->openCsv($file),
+            'ods' => self::getInstance()->openOds($file),
+            'xlsx' => self::getInstance()->openXlsx($file),
             default => throw new UnsupportedTypeException('No readers supporting the given type: '.$extension),
         };
     }
 
-    public function openCsv(string $file): self
+    private function openCsv(string $file): self
     {
         $this->path = $file;
 
@@ -56,15 +65,12 @@ class SimpleExcelWriter
 
         $this->writer->openToFile($file);
 
+        self::clearInstance();
+
         return $this;
     }
 
-    public static function createCsv(string $file): self
-    {
-        return (new self)->openCsv($file);
-    }
-
-    public function openOds(string $file): self
+    private function openOds(string $file): self
     {
         $this->path = $file;
 
@@ -72,15 +78,12 @@ class SimpleExcelWriter
 
         $this->writer->openToFile($file);
 
+        self::clearInstance();
+
         return $this;
     }
 
-    public static function createOds(string $file): self
-    {
-        return (new self)->openOds($file);
-    }
-
-    public function openXlsx(string $file): self
+    private function openXlsx(string $file): self
     {
         $this->path = $file;
 
@@ -88,12 +91,9 @@ class SimpleExcelWriter
 
         $this->writer->openToFile($file);
 
-        return $this;
-    }
+        self::clearInstance();
 
-    public static function createXlsx(string $file): self
-    {
-        return (new self)->openXlsx($file);
+        return $this;
     }
 
     public static function streamDownload(string $downloadName): self
@@ -103,6 +103,8 @@ class SimpleExcelWriter
         $writer = $simpleExcelWriter->getWriter();
 
         $writer->openToBrowser($downloadName);
+
+        self::clearInstance();
 
         return $simpleExcelWriter;
     }
@@ -193,6 +195,6 @@ class SimpleExcelWriter
     {
         $this->close();
 
-        self::$instance = \null;
+        self::clearInstance();
     }
 }
