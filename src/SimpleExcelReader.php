@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Spatie\SimpleExcel;
 
@@ -18,7 +17,7 @@ class SimpleExcelReader
 {
     use SimpleExcelReaderOptions;
 
-    private static ?SimpleExcelReader $instance = \null;
+    private static ?SimpleExcelReader $instance = null;
 
     protected string $path;
 
@@ -59,14 +58,14 @@ class SimpleExcelReader
 
     private static function clearInstance(): void
     {
-        self::$instance = \null;
+        self::$instance = null;
     }
 
-    public static function create(string $file, ?string $type = \null): self
+    public static function create(string $file, ?string $type = null): self
     {
         $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        if ($type !== \null) {
+        if ($type !== null) {
             $extension = strtolower($type);
         }
 

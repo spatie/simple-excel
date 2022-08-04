@@ -68,9 +68,6 @@ Reading an Excel file is identical to reading a CSV file. Just make sure that th
 
 #### Setting options for the file type
 
-**Important:**
-Because of changes in Openspout V4, options must be set before opening a reader or writer connection.
-
 ```php
 SimpleExcelReader::useDelimiter(';')->create($pathToFile);
 ```

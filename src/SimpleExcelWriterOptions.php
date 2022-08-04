@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Spatie\SimpleExcel;
 
 use OpenSpout\Writer\CSV\Options as CsvOptions;
@@ -20,7 +18,7 @@ trait SimpleExcelWriterOptions
 
     public static function withoutInlineStrings(): self
     {
-        self::$should_use_inline_strings = \false;
+        self::$should_use_inline_strings = false;
 
         return self::getInstance();
     }
@@ -34,7 +32,7 @@ trait SimpleExcelWriterOptions
 
     public static function withoutBom(): self
     {
-        self::$should_add_bom = \false;
+        self::$should_add_bom = false;
 
         return self::getInstance();
     }
@@ -54,7 +52,7 @@ trait SimpleExcelWriterOptions
         $options->SHOULD_ADD_BOM = self::$should_add_bom;
         $options->FLUSH_THRESHOLD = self::$flush_threshold;
 
-        $reset = new \OpenSpout\Writer\CSV\Options();
+        $reset = new CsvOptions();
         self::$field_delimiter = $reset->FIELD_DELIMITER;
         self::$field_enclosure = $reset->FIELD_ENCLOSURE;
         self::$should_add_bom = $reset->SHOULD_ADD_BOM;
@@ -68,7 +66,7 @@ trait SimpleExcelWriterOptions
         $options = new XlsxOptions();
         $options->SHOULD_USE_INLINE_STRINGS = self::$should_use_inline_strings;
 
-        $reset = new \OpenSpout\Writer\XLSX\Options();
+        $reset = new XlsxOptions();
         self::$should_use_inline_strings = $reset->SHOULD_USE_INLINE_STRINGS;
 
         return $options;

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Spatie\SimpleExcel;
 
@@ -74,7 +73,7 @@ trait SimpleExcelReaderOptions
         $options->ENCODING = self::$encoding;
 
         // Need to reset the static variables to defaults for next instance
-        $reset = new \OpenSpout\Reader\CSV\Options();
+        $reset = new CsvOptions();
         self::$should_preserve_empty_rows = $reset->SHOULD_PRESERVE_EMPTY_ROWS;
         self::$field_delimiter = $reset->FIELD_DELIMITER;
         self::$field_enclosure = $reset->FIELD_ENCLOSURE;
@@ -91,7 +90,7 @@ trait SimpleExcelReaderOptions
         $options->SHOULD_FORMAT_DATES = self::$should_format_dates;
 
         // Need to reset the static variables to defaults for next instance
-        $reset = new \OpenSpout\Reader\XLSX\Options();
+        $reset = new XlsxOptions();
         self::$should_preserve_empty_rows = $reset->SHOULD_PRESERVE_EMPTY_ROWS;
         self::$should_use_1904_dates = $reset->SHOULD_USE_1904_DATES;
         self::$should_format_dates = $reset->SHOULD_FORMAT_DATES;
@@ -102,8 +101,8 @@ trait SimpleExcelReaderOptions
     public function getOdsOptions(): OdsOptions
     {
         $options = new OdsOptions();
-        $options->SHOULD_PRESERVE_EMPTY_ROWS = $this->should_preserve_empty_rows;
-        $options->SHOULD_FORMAT_DATES = $this->should_format_dates;
+        $options->SHOULD_PRESERVE_EMPTY_ROWS = self::$should_preserve_empty_rows;
+        $options->SHOULD_FORMAT_DATES = self::$should_format_dates;
 
         return $options;
     }
