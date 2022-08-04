@@ -14,17 +14,17 @@ class SimpleExcelWriter
 {
     use SimpleExcelWriterOptions;
 
-    private static ?SimpleExcelWriter $instance = null;
+    protected static ?SimpleExcelWriter $instance = null;
 
-    private WriterInterface $writer;
+    protected WriterInterface $writer;
 
-    private string $path = '';
+    protected string $path = '';
 
-    private bool $processHeader = true;
+    protected bool $processHeader = true;
 
-    private bool $processingFirstRow = true;
+    protected bool $processingFirstRow = true;
 
-    private int $numberOfRows = 0;
+    protected int $numberOfRows = 0;
 
     public static function getInstance()
     {
@@ -35,7 +35,7 @@ class SimpleExcelWriter
         return self::$instance;
     }
 
-    private static function clearInstance(): void
+    protected static function clearInstance(): void
     {
         self::$instance = null;
     }
@@ -56,7 +56,7 @@ class SimpleExcelWriter
         };
     }
 
-    private function openCsv(string $file): self
+    protected function openCsv(string $file): self
     {
         $this->path = $file;
 
@@ -69,7 +69,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    private function openOds(string $file): self
+    protected function openOds(string $file): self
     {
         $this->path = $file;
 
@@ -82,7 +82,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    private function openXlsx(string $file): self
+    protected function openXlsx(string $file): self
     {
         $this->path = $file;
 

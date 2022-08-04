@@ -17,7 +17,7 @@ class SimpleExcelReader
 {
     use SimpleExcelReaderOptions;
 
-    private static ?SimpleExcelReader $instance = null;
+    protected static ?SimpleExcelReader $instance = null;
 
     protected string $path;
 
@@ -56,7 +56,7 @@ class SimpleExcelReader
         return self::$instance;
     }
 
-    private static function clearInstance(): void
+    protected static function clearInstance(): void
     {
         self::$instance = null;
     }
@@ -77,7 +77,7 @@ class SimpleExcelReader
         };
     }
 
-    private function openCsv(string $file): self
+    protected function openCsv(string $file): self
     {
         $this->path = $file;
 
@@ -88,7 +88,7 @@ class SimpleExcelReader
         return $this;
     }
 
-    private function openOds(string $file): self
+    protected function openOds(string $file): self
     {
         $this->path = $file;
 
@@ -99,7 +99,7 @@ class SimpleExcelReader
         return $this;
     }
 
-    private function openXlsx(string $file): self
+    protected function openXlsx(string $file): self
     {
         $this->path = $file;
 
