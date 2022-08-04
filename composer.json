@@ -21,6 +21,7 @@
         "openspout/openspout": "^4.6"
     },
     "require-dev": {
+        "pestphp/pest": "^1.21",
         "phpunit/phpunit": "^9.4",
         "spatie/phpunit-snapshot-assertions": "^4.0",
         "spatie/temporary-directory": "^1.2"
