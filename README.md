@@ -75,11 +75,12 @@ SimpleExcelReader::useDelimiter(';')->create($pathToFile);
 ```php
 SimpleExcelReader::formatDates()->create($pathToFile);
 ```
-[Options information](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md)
+
+You can view more info about the available options [in the OpenSpout docs](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md)
 
 #### Working with LazyCollections
 
-`getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
+The `getRows` method will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
 
 You'll find a list of methods you can use on a `LazyCollection` [in the Laravel documentation](https://laravel.com/docs/master/collections#the-enumerable-contract).
 
