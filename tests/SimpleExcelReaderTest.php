@@ -307,7 +307,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_allows_setting_the_reader_type_manually()
     {
-        $reader = SimpleExcelReader::create('php://input','csv');
+        $reader = SimpleExcelReader::create('php://input', 'csv');
 
         $this->assertInstanceOf(Reader::class, $reader->getReader());
     }
