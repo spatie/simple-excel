@@ -102,6 +102,39 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
+    public function it_can_read_headers_when_header_is_not_on_the_first_row()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('header-not-on-first-row.xlsx'))
+            ->headerOnRow(2)
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'firstname',
+            1 => 'lastname',
+        ], $headers);
+    }
+
+    /** @test */
+    public function it_can_read_content_when_header_is_not_on_the_first_row()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-not-on-first-row.xlsx'))
+            ->headerOnRow(2)
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'firstname' => 'Taylor',
+                'lastname' => 'Otwell',
+            ],
+            [
+                'firstname' => 'Adam',
+                'lastname' => 'Wathan',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
     public function it_can_ignore_the_headers()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
@@ -141,8 +174,8 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
-        $rows = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'))
-            ->useDelimiter(';')
+        $rows = SimpleExcelReader::useDelimiter(';')
+            ->create($this->getStubPath('alternative-delimiter.csv'))
             ->getRows()
             ->toArray();
 
@@ -274,7 +307,7 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_allows_setting_the_reader_type_manually()
     {
-        $reader = SimpleExcelReader::create('php://input', 'csv');
+        $reader = SimpleExcelReader::create('php://input','csv');
 
         $this->assertInstanceOf(Reader::class, $reader->getReader());
     }
@@ -419,8 +452,8 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_retrieve_rows_with_a_different_delimiter()
     {
-        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows-other-delimiter.csv'))
-            ->useDelimiter(';')
+        $rows = SimpleExcelReader::useDelimiter(';')
+            ->create($this->getStubPath('header-and-rows-other-delimiter.csv'))
             ->getRows()
             ->toArray();
 
@@ -441,8 +474,9 @@ class SimpleExcelReaderTest extends TestCase
     /** @test */
     public function it_can_retrieve_headers_with_a_different_delimiter()
     {
-        $headers = SimpleExcelReader::create($this->getStubPath('header-and-rows-other-delimiter.csv'))
-            ->useDelimiter(';')
+        $headers = SimpleExcelReader::useDelimiter(';')
+            ->useEnclosure('"')
+            ->create($this->getStubPath('header-and-rows-other-delimiter.csv'))
             ->getHeaders();
 
         $this->assertEquals([
@@ -501,7 +535,8 @@ class SimpleExcelReaderTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx'))
+
+        SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx', 'xlsx'))
             ->fromSheet(3)
             ->getHeaders();
     }

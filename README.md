@@ -66,13 +66,19 @@ $rows->each(function(array $rowProperties) {
 
 Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx`.
 
-#### Manually setting the file type
+#### Setting options for the file type
 
-You can pass the file type to the `create` method of `SimpleExcelReader` as the second, optional argument:
+**Important:**
+Because of changes in Openspout V4, options must be set before opening a reader or writer connection.
 
 ```php
-SimpleExcelReader::create($pathToFile, 'csv');
+SimpleExcelReader::useDelimiter(';')->create($pathToFile);
 ```
+
+```php
+SimpleExcelReader::formatDates()->create($pathToFile);
+```
+[Options information](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md)
 
 #### Working with LazyCollections
 
@@ -116,6 +122,40 @@ $headers = SimpleExcelReader::create($pathToCsv)->getHeaders();
 
 // $headers will contain
 // [ 'email', 'first_name' ]
+```
+
+#### Dealing with headers that are not on the first line
+
+If your file has headers that are not on the first line, you can use the `headerOnRow()` method
+to indicate the line at which the headers are present. Any data above this line
+will be discarded from the result.
+
+`headerOnRow` accepts the line number as an argument, starting at 0. Blank lines are not counted. 
+
+Since blank lines will not be counted, this method is mostly useful for files
+that include formatting above the actual dataset, which can be the case with Excel files.
+
+```csv
+This is my data sheet
+See worksheet 1 for the data, worksheet 2 for the graphs.
+
+
+
+email , firstname
+john@example.com,john
+jane@example.com,jane
+```
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->trimHeaderRow()
+    ->setHeaderRow(3)
+    ->getRows()
+    ->each(function(array $rowProperties) {
+       // in the first pass $rowProperties will contain
+       // ['email' => 'john@example', 'first_name' => 'john']
+});
 ```
 
 #### Trimming Header Row values
@@ -185,7 +225,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 #### Manually working with the reader object
 
-Under the hood this package uses the [box/spout](https://github.com/openspout/openspout) package. You can get to the underlying reader that implements `\OpenSpout\Reader\ReaderInterface` by calling the `getReader` method.
+Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. You can get to the underlying reader that implements `\OpenSpout\Reader\ReaderInterface` by calling the `getReader` method.
 
 ```php
 $reader = SimpleExcelReader::create($pathToCsv)->getReader();
@@ -244,10 +284,12 @@ Writing an Excel file is identical to writing a csv. Just make sure that the pat
 
 #### Manually setting the file type
 
-You can pass the file type to the `create` method of `SimpleExcelWriter` as the second, optional argument:
+You can call the create file method of `SimpleExcelWriter`:
 
 ```php
-SimpleExcelWriter::create('php://output', 'csv');
+SimpleExcelWriter::createCsv('php://output');
+
+SimpleExcelWriter::createXlsx('php://output');
 ```
 
 #### Streaming an Excel file to the browser
@@ -328,16 +370,38 @@ To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
 $writer->setHeaderStyle($style);
 ```
 
-For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/3.x/docs).
+For more information on styles head over to [the opensprout docs](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md).
 
 #### Using an alternative delimiter
 
 By default the `SimpleExcelReader` will assume that the delimiter is a `,`.
 
+[Options information](https://github.com/openspout/openspout/blob/4.x/docs/documentation.md)
+
 This is how you can use an alternative delimiter:
+```php
+use OpenSpout\Writer\CSV\Options;
+// Available options
+// FIELD_DELIMITER = ',';
+// FIELD_ENCLOSURE = '"';
+// SHOULD_ADD_BOM = true;
+// FLUSH_THRESHOLD = 500;
+
+$options = new Options();
+$options->FIELD_DELIMITER = ';';
+
+SimpleExcelWriter::createCsv($pathToCsv, $options);
+```
 
 ```php
-SimpleExcelWriter::create($pathToCsv)->useDelimiter(';');
+use OpenSpout\Writer\XLSX\Options;
+// Available options
+// SHOULD_USE_INLINE_STRINGS = true;
+
+$options = new Options();
+$options->SHOULD_USE_INLINE_STRINGS = false;
+
+SimpleExcelWriter::createXlsx($pathToCsv, $options);
 ```
 
 #### Getting the number of rows written
@@ -360,8 +424,10 @@ You can also disable adding a BOM to the start of the file. BOM must be disabled
 
 A BOM, or byte order mark, indicates a number of things for the file being written including the file being unicode as well as it's UTF encoding type.
 
+This is only available for CSV files.
+
 ```php
-SimpleExcelWriter::createWithoutBom($this->pathToCsv, $type);
+SimpleExcelWriter::createWithoutBom($this->pathToCsv);
 ```
 
 Additional information about BOM can be found [here](https://en.wikipedia.org/wiki/Byte_order_mark).

@@ -63,8 +63,8 @@ class SimpleExcelWriterTest extends TestCase
     /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
-        SimpleExcelWriter::create($this->pathToCsv)
-            ->useDelimiter(';')
+        SimpleExcelWriter::useDelimiter(';')
+            ->create($this->pathToCsv)
             ->addRow([
                 'first_name' => 'John',
                 'last_name' => 'Doe',
@@ -134,7 +134,8 @@ class SimpleExcelWriterTest extends TestCase
     /** @test */
     public function it_can_write_a_csv_without_bom()
     {
-        $writer = SimpleExcelWriter::createWithoutBom($this->pathToCsv)
+        SimpleExcelWriter::withoutBom()
+            ->create($this->pathToCsv)
             ->addRow([
                 'first_name' => 'Jane',
                 'last_name' => 'Doe',

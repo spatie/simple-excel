@@ -1,25 +1,30 @@
 <?php
+declare(strict_types=1);
 
 namespace Spatie\SimpleExcel;
 
 use Illuminate\Support\LazyCollection;
 use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
-use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
-use OpenSpout\Reader\Common\Creator\ReaderFactory;
-use OpenSpout\Reader\IteratorInterface;
+use OpenSpout\Common\Exception\UnsupportedTypeException;
+use OpenSpout\Reader\CSV\Reader as CsvReader;
+use OpenSpout\Reader\ODS\Reader as OdsReader;
 use OpenSpout\Reader\ReaderInterface;
+use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
+use OpenSpout\Reader\XLSX\Reader as XlsxReader;
 
 class SimpleExcelReader
 {
-    protected string $path;
+    use SimpleExcelReaderOptions;
 
-    protected string $type;
+    private static ?SimpleExcelReader $instance = \null;
+
+    protected string $path;
 
     protected ReaderInterface $reader;
 
-    protected IteratorInterface $rowIterator;
+    protected RowIteratorInterface $rowIterator;
 
     protected int $sheetNumber = 1;
 
@@ -35,26 +40,75 @@ class SimpleExcelReader
 
     protected ?array $headers = null;
 
+    protected int $headerOnRow = 0;
+
     protected int $skip = 0;
 
     protected int $limit = 0;
 
     protected bool $useLimit = false;
 
-    public static function create(string $file, string $type = '')
+    public static function getInstance(): self
     {
-        return new static($file, $type);
+        if (! is_object(self::$instance)) {
+            self::$instance = new static();
+        }
+
+        return self::$instance;
     }
 
-    public function __construct(string $path, string $type = '')
+    private static function clearInstance(): void
     {
-        $this->path = $path;
+        self::$instance = \null;
+    }
 
-        $this->type = $type;
+    public static function create(string $file, ?string $type = \null): self
+    {
+        $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-        $this->reader = $type ?
-            ReaderFactory::createFromType($type) :
-            ReaderEntityFactory::createReaderFromFile($this->path);
+        if ($type !== \null) {
+            $extension = strtolower($type);
+        }
+
+        return match ($extension) {
+            'csv' => self::getInstance()->openCsv($file),
+            'ods' => self::getInstance()->openOds($file),
+            'xlsx' => self::getInstance()->openXlsx($file),
+            default => throw new UnsupportedTypeException('No readers supporting the given type: '.$extension),
+        };
+    }
+
+    private function openCsv(string $file): self
+    {
+        $this->path = $file;
+
+        $this->reader = new CsvReader($this->getCsvOptions());
+
+        self::clearInstance();
+
+        return $this;
+    }
+
+    private function openOds(string $file): self
+    {
+        $this->path = $file;
+
+        $this->reader = new OdsReader($this->getOdsOptions());
+
+        self::clearInstance();
+
+        return $this;
+    }
+
+    private function openXlsx(string $file): self
+    {
+        $this->path = $file;
+
+        $this->reader = new XlsxReader($this->getXlsxOptions());
+
+        self::clearInstance();
+
+        return $this;
     }
 
     public function getPath(): string
@@ -62,23 +116,16 @@ class SimpleExcelReader
         return $this->path;
     }
 
+    public function headerOnRow(int $headerRow): self
+    {
+        $this->headerOnRow = $headerRow;
+
+        return $this;
+    }
+
     public function noHeaderRow(): self
     {
         $this->processHeader = false;
-
-        return $this;
-    }
-
-    public function useDelimiter(string $delimiter): self
-    {
-        $this->reader->setFieldDelimiter($delimiter);
-
-        return $this;
-    }
-
-    public function useFieldEnclosure(string $fieldEnclosure): self
-    {
-        $this->reader->setFieldEnclosure($fieldEnclosure);
 
         return $this;
     }
@@ -141,23 +188,18 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
-        /** @var \Box\Spout\Common\Entity\Row $firstRow */
-        $firstRow = $this->rowIterator->current();
-
-        if (is_null($firstRow)) {
-            $this->noHeaderRow();
-        }
+        $this->getHeaders();
 
         if ($this->processHeader) {
-            $this->headers = $this->processHeaderRow($firstRow->toArray());
-
             $this->rowIterator->next();
         }
+
 
         return LazyCollection::make(function () {
             while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
                 $this->rowIterator->next();
             }
+
             while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
                 $row = $this->rowIterator->current();
 
@@ -184,16 +226,24 @@ class SimpleExcelReader
 
         $this->rowIterator->rewind();
 
-        /** @var \Box\Spout\Common\Entity\Row $firstRow */
-        $firstRow = $this->rowIterator->current();
+        /** @var \OpenSpout\Common\Entity\Row|null $headerRow */
+        $headerRow = $this->rowIterator->current();
 
-        if (is_null($firstRow)) {
+        if ($this->headerOnRow > 0) {
+            $skip = $this->headerOnRow;
+            while ($skip--) {
+                $this->rowIterator->next();
+            }
+            $headerRow = $this->rowIterator->current();
+        }
+
+        if (is_null($headerRow)) {
             $this->noHeaderRow();
 
             return null;
         }
 
-        $this->headers = $this->processHeaderRow($firstRow->toArray());
+        $this->headers = $this->processHeaderRow($headerRow->toArray());
 
         return $this->headers;
     }
@@ -254,8 +304,14 @@ class SimpleExcelReader
         );
     }
 
+    /**
+     * @param \OpenSpout\Common\Entity\Row $row
+     *
+     * @return array<int,string>
+     */
     protected function getValueFromRow(Row $row): array
     {
+        /** @var array<int,string> $values */
         $values = $row->toArray();
         ksort($values);
 
@@ -292,5 +348,7 @@ class SimpleExcelReader
     public function __destruct()
     {
         $this->close();
+
+        self::clearInstance();
     }
 }

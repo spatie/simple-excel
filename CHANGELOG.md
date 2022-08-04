@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 2.1.0 - 2022-06-09
+
+### What's Changed
+
+- Implement headerOnRow method by @ArondeParon in https://github.com/spatie/simple-excel/pull/89
+
+### New Contributors
+
+- @ArondeParon made their first contribution in https://github.com/spatie/simple-excel/pull/89
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/2.0.0...2.1.0
+
 ## 2.0.0 - 2022-06-06
 
 - move from box/spout to openspout/openspout
