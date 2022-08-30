@@ -107,6 +107,16 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
+### Working with multiple sheet documents
+
+Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method.
+
+```php
+$rows = SimpleExcelReader::create($pathToXlsx)
+    ->fromSheet(3)
+    ->getRows();
+```
+
 #### Retrieving Header Row values
 
 If you would like to retrieve the header row as an array, you can use the `getHeaders()` method.
