@@ -154,7 +154,7 @@ jane@example.com,jane
 // $rows is an instance of Illuminate\Support\LazyCollection
 $rows = SimpleExcelReader::create($pathToCsv)
     ->trimHeaderRow()
-    ->setHeaderRow(3)
+    ->headerOnRow(3)
     ->getRows()
     ->each(function(array $rowProperties) {
        // in the first pass $rowProperties will contain
