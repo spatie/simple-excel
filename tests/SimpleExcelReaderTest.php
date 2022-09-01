@@ -267,6 +267,28 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
+    public function it_can_retrieve_the_original_headers_with_custom_headers()
+    {
+        $reader = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
+            ->setHeaders(['email_address', 'given_name', 'surname']);
+
+        $headers = $reader->getHeaders();
+        $originalHeaders = $reader->getOriginalHeaders();
+
+        $this->assertEquals([
+            0 => 'email_address',
+            1 => 'given_name',
+            2 => 'surname',
+        ], $headers);
+
+        $this->assertEquals([
+            0 => 'email',
+            1 => 'first_name',
+            2 => 'last_name',
+        ], $originalHeaders);
+    }
+
+    /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'))

@@ -223,6 +223,13 @@ class SimpleExcelReader
         return $this->headers;
     }
 
+    public function getOriginalHeaders(): ?array
+    {
+        $this->getHeaders();
+
+        return $this->headers;
+    }
+
     public function close()
     {
         $this->reader->close();

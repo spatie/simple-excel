@@ -140,6 +140,8 @@ $rows = SimpleExcelReader::create($pathToXlsx)
 
 If you would like to retrieve the header row as an array, you can use the `getHeaders()` method.
 
+If you have used `setHeaders()` to set custom headers, these will be returned instead of the actual headers in the file. To get the original headers from the file, use `getOriginalHeaders()`.
+
 ```php
 $headers = SimpleExcelReader::create($pathToCsv)->getHeaders();
 
