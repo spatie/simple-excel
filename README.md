@@ -92,9 +92,9 @@ SimpleExcelReader::create($pathToCsv)->getRows()
     });
 ```
 
-#### Reading a file without titles
+#### Reading a file without headers
 
-If the file you are reading does not contain a title row, then you should use the `noHeaderRow()` method.
+If the file you are reading does not contain a header row, then you should use the `noHeaderRow()` method.
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
@@ -107,6 +107,25 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
+#### Manually setting the headers
+
+If you would like to use a specific array of values for the headers, you can use the `setHeaders()` method.
+
+```php
+// $rows is an instance of Illuminate\Support\LazyCollection
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->setHeaders(['email_address', 'given_name'])
+    ->getRows()
+    ->each(function(array $rowProperties) {
+       // in the first pass $rowProperties will contain
+       // ['email_address' => 'john@example', 'given_name' => 'john']
+});
+```
+
+If your file already contains a header row, it will be ignored and replaced with your custom headers.
+
+If your file does not contain a header row, you should also use `noHeaderRow()`, and your headers will be used instead of numeric keys, as above.
+
 ### Working with multiple sheet documents
 
 Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method.
@@ -117,7 +136,7 @@ $rows = SimpleExcelReader::create($pathToXlsx)
     ->getRows();
 ```
 
-#### Retrieving Header Row values
+#### Retrieving header row values
 
 If you would like to retrieve the header row as an array, you can use the `getHeaders()` method.
 
@@ -162,7 +181,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
-#### Trimming Header Row values
+#### Trimming headers
 
 If the file you are reading contains a title row, but you need to trim additional characters on the title values, then you should use the `trimHeaderRow()` method.
 This functionality mimics the `trim` method, and the default characters it trims, matches that function.
