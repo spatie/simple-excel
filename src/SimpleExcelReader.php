@@ -37,6 +37,8 @@ class SimpleExcelReader
 
     protected int $headerOnRow = 0;
 
+    protected ?array $customHeaders = [];
+
     protected int $skip = 0;
 
     protected int $limit = 0;
@@ -80,7 +82,7 @@ class SimpleExcelReader
 
     public function setHeaders(array $headers): self
     {
-        $this->headers = $headers;
+        $this->customHeaders = $headers;
 
         return $this;
     }
@@ -178,12 +180,16 @@ class SimpleExcelReader
 
     public function getHeaders(): ?array
     {
-        if ($this->headers) {
-            return $this->headers;
+        if (! $this->processHeader) {
+            if ($this->customHeaders) {
+                return $this->customHeaders;
+            }
+
+            return null;
         }
 
-        if (! $this->processHeader) {
-            return null;
+        if ($this->headers) {
+            return $this->headers;
         }
 
         $sheet = $this->getSheet();
@@ -209,6 +215,10 @@ class SimpleExcelReader
         }
 
         $this->headers = $this->processHeaderRow($headerRow->toArray());
+
+        if ($this->customHeaders) {
+            return $this->customHeaders;
+        }
 
         return $this->headers;
     }
@@ -274,17 +284,19 @@ class SimpleExcelReader
         $values = $row->toArray();
         ksort($values);
 
-        if (! $this->headers) {
+        $headers = $this->customHeaders ?: $this->headers;
+
+        if (! $headers) {
             return $values;
         }
 
-        $values = array_slice($values, 0, count($this->headers));
+        $values = array_slice($values, 0, count($headers));
 
-        while (count($values) < count($this->headers)) {
+        while (count($values) < count($headers)) {
             $values[] = '';
         }
 
-        return array_combine($this->headers, $values);
+        return array_combine($headers, $values);
     }
 
     protected function getSheet(): SheetInterface
