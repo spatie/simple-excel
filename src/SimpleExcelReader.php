@@ -178,12 +178,12 @@ class SimpleExcelReader
 
     public function getHeaders(): ?array
     {
-        if (! $this->processHeader) {
-            return null;
-        }
-
         if ($this->headers) {
             return $this->headers;
+        }
+
+        if (! $this->processHeader) {
+            return null;
         }
 
         $sheet = $this->getSheet();
