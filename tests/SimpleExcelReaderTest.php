@@ -172,6 +172,51 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
+    public function it_can_set_custom_headers_without_header()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('rows-without-header.csv'))
+            ->noHeaderRow()
+            ->setHeaders(['email', 'first_name', 'last_name'])
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => 'doe',
+            ],
+            [
+                'email' => 'mary-jane@example.com',
+                'first_name' => 'mary jane',
+                'last_name' => 'doe',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
+    public function it_can_set_custom_headers_with_header()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
+            ->setHeaders(['email_address', 'given_name', 'surname'])
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email_address' => 'john@example.com',
+                'given_name' => 'john',
+                'surname' => 'doe',
+            ],
+            [
+                'email_address' => 'mary-jane@example.com',
+                'given_name' => 'mary jane',
+                'surname' => 'doe',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'))

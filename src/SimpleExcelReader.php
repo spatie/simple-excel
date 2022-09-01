@@ -78,6 +78,13 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function setHeaders(array $headers): self
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
     public function useDelimiter(string $delimiter): self
     {
         $this->reader->setFieldDelimiter($delimiter);
@@ -267,7 +274,7 @@ class SimpleExcelReader
         $values = $row->toArray();
         ksort($values);
 
-        if (! $this->processHeader) {
+        if (! $this->headers) {
             return $values;
         }
 
