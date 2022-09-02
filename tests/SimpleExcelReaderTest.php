@@ -172,6 +172,123 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
+    public function it_can_use_custom_headers_without_header()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('rows-without-header.csv'))
+            ->noHeaderRow()
+            ->useHeaders(['email', 'first_name', 'last_name'])
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email' => 'john@example.com',
+                'first_name' => 'john',
+                'last_name' => 'doe',
+            ],
+            [
+                'email' => 'mary-jane@example.com',
+                'first_name' => 'mary jane',
+                'last_name' => 'doe',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
+    public function it_can_use_custom_headers_with_header()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
+            ->useHeaders(['email_address', 'given_name', 'surname'])
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'email_address' => 'john@example.com',
+                'given_name' => 'john',
+                'surname' => 'doe',
+            ],
+            [
+                'email_address' => 'mary-jane@example.com',
+                'given_name' => 'mary jane',
+                'surname' => 'doe',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
+    public function it_can_use_custom_headers_with_header_on_row()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-not-on-first-row.xlsx'))
+            ->headerOnRow(2)
+            ->useHeaders(['first_name', 'last_name'])
+            ->getRows()
+            ->toArray();
+
+        $this->assertEquals([
+            [
+                'first_name' => 'Taylor',
+                'last_name' => 'Otwell',
+            ],
+            [
+                'first_name' => 'Adam',
+                'last_name' => 'Wathan',
+            ],
+        ], $rows);
+    }
+
+    /** @test */
+    public function it_can_retrieve_the_custom_headers_with_headers()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
+            ->useHeaders(['email_address', 'given_name', 'surname'])
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'email_address',
+            1 => 'given_name',
+            2 => 'surname',
+        ], $headers);
+    }
+
+    /** @test */
+    public function it_can_retrieve_the_custom_headers_without_headers()
+    {
+        $headers = SimpleExcelReader::create($this->getStubPath('rows-without-header.csv'))
+            ->noHeaderRow()
+            ->useHeaders(['email_address', 'given_name', 'surname'])
+            ->getHeaders();
+
+        $this->assertEquals([
+            0 => 'email_address',
+            1 => 'given_name',
+            2 => 'surname',
+        ], $headers);
+    }
+
+    /** @test */
+    public function it_can_retrieve_the_original_headers_with_custom_headers()
+    {
+        $reader = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))
+            ->useHeaders(['email_address', 'given_name', 'surname']);
+
+        $headers = $reader->getHeaders();
+        $originalHeaders = $reader->getOriginalHeaders();
+
+        $this->assertEquals([
+            0 => 'email_address',
+            1 => 'given_name',
+            2 => 'surname',
+        ], $headers);
+
+        $this->assertEquals([
+            0 => 'email',
+            1 => 'first_name',
+            2 => 'last_name',
+        ], $originalHeaders);
+    }
+
+    /** @test */
     public function it_can_use_an_alternative_delimiter()
     {
         $rows = SimpleExcelReader::create($this->getStubPath('alternative-delimiter.csv'))
