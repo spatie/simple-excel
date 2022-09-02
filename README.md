@@ -109,12 +109,12 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 #### Manually setting the headers
 
-If you would like to use a specific array of values for the headers, you can use the `setHeaders()` method.
+If you would like to use a specific array of values for the headers, you can use the `useHeaders()` method.
 
 ```php
 // $rows is an instance of Illuminate\Support\LazyCollection
 $rows = SimpleExcelReader::create($pathToCsv)
-    ->setHeaders(['email_address', 'given_name'])
+    ->useHeaders(['email_address', 'given_name'])
     ->getRows()
     ->each(function(array $rowProperties) {
        // in the first pass $rowProperties will contain
@@ -140,7 +140,7 @@ $rows = SimpleExcelReader::create($pathToXlsx)
 
 If you would like to retrieve the header row as an array, you can use the `getHeaders()` method.
 
-If you have used `setHeaders()` to set custom headers, these will be returned instead of the actual headers in the file. To get the original headers from the file, use `getOriginalHeaders()`.
+If you have used `useHeaders()` to set custom headers, these will be returned instead of the actual headers in the file. To get the original headers from the file, use `getOriginalHeaders()`.
 
 ```php
 $headers = SimpleExcelReader::create($pathToCsv)->getHeaders();

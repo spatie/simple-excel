@@ -80,7 +80,7 @@ class SimpleExcelReader
         return $this;
     }
 
-    public function setHeaders(array $headers): self
+    public function useHeaders(array $headers): self
     {
         $this->customHeaders = $headers;
 
