@@ -2,6 +2,19 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 2.2.0 - 2022-09-02
+
+### What's Changed
+
+- Documentation for fromSheet and headerOnRow by @dakira in https://github.com/spatie/simple-excel/pull/102
+- Ability to set custom headers (whether or not headers exist in the file) by @kitbs in https://github.com/spatie/simple-excel/pull/103
+
+### New Contributors
+
+- @kitbs made their first contribution in https://github.com/spatie/simple-excel/pull/103
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/2.1.0...2.2.0
+
 ## 2.1.0 - 2022-06-09
 
 ### What's Changed
