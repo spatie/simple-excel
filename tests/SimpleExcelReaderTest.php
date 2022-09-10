@@ -19,6 +19,16 @@ class SimpleExcelReaderTest extends TestCase
     }
 
     /** @test */
+    public function it_can_count_rows()
+    {
+        $rows = SimpleExcelReader::create($this->getStubPath('header-and-rows.csv'))->getRows();
+
+        $this->assertEquals(2, $rows->count());
+        $this->assertEquals(2, $rows->count());
+        $this->assertTrue($rows->isNotEmpty());
+    }
+
+    /** @test */
     public function it_can_getHeaders_with_an_empty_file()
     {
         $headers = SimpleExcelReader::create($this->getStubPath('empty.csv'))

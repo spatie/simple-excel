@@ -45,6 +45,8 @@ class SimpleExcelReader
 
     protected bool $useLimit = false;
 
+    protected ?int $headerRowKey = null;
+
     public static function create(string $file, string $type = '')
     {
         return new static($file, $type);
@@ -165,6 +167,8 @@ class SimpleExcelReader
         }
 
         return LazyCollection::make(function () {
+            $this->rewindRowIteratorToData();
+
             while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
                 $this->rowIterator->next();
             }
@@ -176,6 +180,21 @@ class SimpleExcelReader
                 $this->rowIterator->next();
             }
         });
+    }
+
+    private function rewindRowIteratorToData(): void
+    {
+        $lastKey = null;
+        $this->rowIterator->rewind();
+
+        while (
+            null !== $this->headerRowKey
+            && $lastKey !== $this->rowIterator->key()
+            && $this->headerRowKey >= $this->rowIterator->key()
+        ) {
+            $lastKey = $this->rowIterator->key();
+            $this->rowIterator->next();
+        }
     }
 
     public function getHeaders(): ?array
@@ -213,6 +232,8 @@ class SimpleExcelReader
 
             return null;
         }
+
+        $this->headerRowKey = $this->rowIterator->key();
 
         $this->headers = $this->processHeaderRow($headerRow->toArray());
 
