@@ -332,6 +332,26 @@ $writer = SimpleExcelWriter::streamDownload('your-export.xlsx')
     ->toBrowser();
 ```
 
+Make sure to call `flush()` if you're sending large streams to the browser
+
+```php
+$writer = SimpleExcelWriter::streamDownload('your-export.xlsx');
+
+foreach (range(1, 10_000) as $i) {
+    $writer->addRow([
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+    ]);
+    
+    if ($i % 1000 === 0) {
+        flush(); // Flush the buffer every 1000 rows
+    }
+}
+    
+$writer->toBrowser();
+```
+
+
 ### Writing multiple rows at once
 
 You can use `addRows` instead of `addRow` to add multiple rows at once.
