@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
 use OpenSpout\Reader\Common\Creator\ReaderFactory;
+use OpenSpout\Reader\CSV\Reader as CSVReader;
 use OpenSpout\Reader\IteratorInterface;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\SheetInterface;
@@ -89,7 +90,9 @@ class SimpleExcelReader
 
     public function useDelimiter(string $delimiter): self
     {
-        $this->reader->setFieldDelimiter($delimiter);
+        if ($this->reader instanceof CSVReader) {
+            $this->reader->setFieldDelimiter($delimiter);
+        }
 
         return $this;
     }
