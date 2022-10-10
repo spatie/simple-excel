@@ -1,5 +1,4 @@
 <?php
-
 namespace Spatie\SimpleExcel;
 
 use Illuminate\Support\LazyCollection;
@@ -14,36 +13,24 @@ use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
 {
+
     protected string $path;
-
     protected string $type;
-
     protected ReaderInterface $reader;
-
     protected IteratorInterface $rowIterator;
-
     protected int $sheetNumber = 1;
-
+    protected string $sheetName = "";
+    protected bool $searchSheetByName = false;
     protected bool $processHeader = true;
-
     protected bool $trimHeader = false;
-
     protected bool $headersToSnakeCase = false;
-
     protected ?string $trimHeaderCharacters = null;
-
     protected mixed $formatHeadersUsing = null;
-
     protected ?array $headers = null;
-
     protected int $headerOnRow = 0;
-
     protected ?array $customHeaders = [];
-
     protected int $skip = 0;
-
     protected int $limit = 0;
-
     protected bool $useLimit = false;
 
     public static function create(string $file, string $type = '')
@@ -150,7 +137,15 @@ class SimpleExcelReader
     {
         $this->sheetNumber = $sheetNumber;
         $this->headers = null;
+        $this->searchSheetByName = false;
+        return $this;
+    }
 
+    public function fromSheetName(string $sheetName): SimpleExcelReader
+    {
+        $this->searchSheetByName = true;
+        $this->sheetName = $sheetName;
+        $this->headers = null;
         return $this;
     }
 
@@ -168,22 +163,22 @@ class SimpleExcelReader
         }
 
         return LazyCollection::make(function () {
-            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
-                $this->rowIterator->next();
-            }
-            while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
-                $row = $this->rowIterator->current();
+                while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
+                    $this->rowIterator->next();
+                }
+                while ($this->rowIterator->valid() && (!$this->useLimit || $this->limit--)) {
+                    $row = $this->rowIterator->current();
 
-                yield $this->getValueFromRow($row);
+                    yield $this->getValueFromRow($row);
 
-                $this->rowIterator->next();
-            }
-        });
+                    $this->rowIterator->next();
+                }
+            });
     }
 
     public function getHeaders(): ?array
     {
-        if (! $this->processHeader) {
+        if (!$this->processHeader) {
             if ($this->customHeaders) {
                 return $this->customHeaders;
             }
@@ -273,7 +268,7 @@ class SimpleExcelReader
     {
         $arguments[] = $header;
 
-        if (! is_null($this->trimHeaderCharacters)) {
+        if (!is_null($this->trimHeaderCharacters)) {
             $arguments[] = $this->trimHeaderCharacters;
         }
 
@@ -296,7 +291,7 @@ class SimpleExcelReader
 
         $headers = $this->customHeaders ?: $this->headers;
 
-        if (! $headers) {
+        if (!$headers) {
             return $values;
         }
 
@@ -312,17 +307,33 @@ class SimpleExcelReader
     protected function getSheet(): SheetInterface
     {
         $this->reader->open($this->path);
+        $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
+        return $sheet;
+    }
 
+    protected function getActiveSheetByName(): SheetInterface
+    {
+        foreach ($this->reader->getSheetIterator() as $key => $sheet) {
+            if ($this->sheetName != "" && $this->sheetName === $sheet->getName()) {
+                break;
+            }
+        }
+        if ($this->sheetName != "" && $this->sheetName !== $sheet->getName()) {
+            throw new InvalidArgumentException("Sheet name {$this->sheetName} does not exist in {$this->path}.");
+        }
+        return $sheet;
+    }
+
+    protected function getActiveSheetByIndex(): SheetInterface
+    {
         foreach ($this->reader->getSheetIterator() as $key => $sheet) {
             if ($key === $this->sheetNumber) {
                 break;
             }
         }
-
         if ($this->sheetNumber !== $key) {
-            throw new InvalidArgumentException("Sheet {$key} does not exist in {$this->path}.");
+            throw new InvalidArgumentException("Sheet Index {$key} does not exist in {$this->path}.");
         }
-
         return $sheet;
     }
 

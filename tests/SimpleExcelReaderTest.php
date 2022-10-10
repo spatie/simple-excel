@@ -655,4 +655,30 @@ class SimpleExcelReaderTest extends TestCase
             ->fromSheet(3)
             ->getHeaders();
     }
+	
+	/** @test */
+	public function it_can_select_the_sheet_of_an_excel_file_by_name()
+	{
+		$reader = SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx'));
+
+        $this->assertEquals([
+            0 => 'firstname',
+            1 => 'lastname',
+        ], $reader->fromSheetName("sheet1")->getHeaders());
+
+        $this->assertEquals([
+            0 => 'contact',
+            1 => 'email',
+        ], $reader->fromSheetName("sheet2")->getHeaders());
+	}
+	
+    /** @test */
+    public function it_will_not_open_non_existing_sheets_by_name()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        SimpleExcelReader::create($this->getStubPath('multiple_sheets.xlsx'))
+            ->fromSheetName("sheetNotExists")
+            ->getHeaders();
+    }
 }
