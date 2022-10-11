@@ -128,11 +128,19 @@ If your file does not contain a header row, you should also use `noHeaderRow()`,
 
 ### Working with multiple sheet documents
 
-Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method.
+Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method to select by index.
 
 ```php
 $rows = SimpleExcelReader::create($pathToXlsx)
     ->fromSheet(3)
+    ->getRows();
+```
+
+With multiple spreadsheets, you can too select the sheet you want to use with the `fromSheetName()` method to select by name.
+
+```php
+$rows = SimpleExcelReader::create($pathToXlsx)
+    ->fromSheetName("sheet1")
     ->getRows();
 ```
 
