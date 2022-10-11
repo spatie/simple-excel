@@ -2,6 +2,20 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 2.3.0 - 2022-10-11
+
+### What's Changed
+
+- Use field delimiter only for csv reader by @dehbka in https://github.com/spatie/simple-excel/pull/111
+- Add function fromSheetName to read on specific spreadsheet name by @SpyBott in https://github.com/spatie/simple-excel/pull/117
+
+### New Contributors
+
+- @dehbka made their first contribution in https://github.com/spatie/simple-excel/pull/111
+- @SpyBott made their first contribution in https://github.com/spatie/simple-excel/pull/117
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/2.2.0...2.3.0
+
 ## 2.2.0 - 2022-09-02
 
 ### What's Changed
