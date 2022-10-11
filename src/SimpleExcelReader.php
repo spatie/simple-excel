@@ -13,7 +13,6 @@ use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
 {
-
     protected string $path;
     protected string $type;
     protected ReaderInterface $reader;
@@ -138,6 +137,7 @@ class SimpleExcelReader
         $this->sheetNumber = $sheetNumber;
         $this->headers = null;
         $this->searchSheetByName = false;
+
         return $this;
     }
 
@@ -146,6 +146,7 @@ class SimpleExcelReader
         $this->searchSheetByName = true;
         $this->sheetName = $sheetName;
         $this->headers = null;
+
         return $this;
     }
 
@@ -163,22 +164,22 @@ class SimpleExcelReader
         }
 
         return LazyCollection::make(function () {
-                while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
-                    $this->rowIterator->next();
-                }
-                while ($this->rowIterator->valid() && (!$this->useLimit || $this->limit--)) {
-                    $row = $this->rowIterator->current();
+            while ($this->rowIterator->valid() && $this->skip && $this->skip--) {
+                $this->rowIterator->next();
+            }
+            while ($this->rowIterator->valid() && (! $this->useLimit || $this->limit--)) {
+                $row = $this->rowIterator->current();
 
-                    yield $this->getValueFromRow($row);
+                yield $this->getValueFromRow($row);
 
-                    $this->rowIterator->next();
-                }
-            });
+                $this->rowIterator->next();
+            }
+        });
     }
 
     public function getHeaders(): ?array
     {
-        if (!$this->processHeader) {
+        if (! $this->processHeader) {
             if ($this->customHeaders) {
                 return $this->customHeaders;
             }
@@ -268,7 +269,7 @@ class SimpleExcelReader
     {
         $arguments[] = $header;
 
-        if (!is_null($this->trimHeaderCharacters)) {
+        if (! is_null($this->trimHeaderCharacters)) {
             $arguments[] = $this->trimHeaderCharacters;
         }
 
@@ -291,7 +292,7 @@ class SimpleExcelReader
 
         $headers = $this->customHeaders ?: $this->headers;
 
-        if (!$headers) {
+        if (! $headers) {
             return $values;
         }
 
@@ -308,6 +309,7 @@ class SimpleExcelReader
     {
         $this->reader->open($this->path);
         $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
+
         return $sheet;
     }
 
@@ -321,6 +323,7 @@ class SimpleExcelReader
         if ($this->sheetName != "" && $this->sheetName !== $sheet->getName()) {
             throw new InvalidArgumentException("Sheet name {$this->sheetName} does not exist in {$this->path}.");
         }
+
         return $sheet;
     }
 
@@ -334,6 +337,7 @@ class SimpleExcelReader
         if ($this->sheetNumber !== $key) {
             throw new InvalidArgumentException("Sheet Index {$key} does not exist in {$this->path}.");
         }
+
         return $sheet;
     }
 
