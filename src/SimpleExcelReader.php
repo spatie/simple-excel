@@ -17,6 +17,7 @@ class SimpleExcelReader
     protected string $type;
     protected ReaderInterface $reader;
     protected IteratorInterface $rowIterator;
+    protected bool $isStreamOpened = false;
     protected int $sheetNumber = 1;
     protected string $sheetName = "";
     protected bool $searchSheetByName = false;
@@ -114,6 +115,11 @@ class SimpleExcelReader
 
     public function getReader(): ReaderInterface
     {
+        if (! $this->isStreamOpened) {
+            $this->reader->open($this->path);
+            $this->isStreamOpened = true;
+        }
+
         return $this->reader;
     }
 
@@ -307,7 +313,11 @@ class SimpleExcelReader
 
     protected function getSheet(): SheetInterface
     {
-        $this->reader->open($this->path);
+        if (! $this->isStreamOpened) {
+            $this->reader->open($this->path);
+            $this->isStreamOpened = true;
+        }
+
         $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
 
         return $sheet;
