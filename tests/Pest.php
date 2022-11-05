@@ -1,3 +1,10 @@
 <?php
 
-uses(Spatie\SimpleExcel\Tests\TestCase::class)->in('.');
+uses(PHPUnit\Framework\TestCase::class)->in('.');
+
+// Functions
+
+function getStubPath(string $name): string
+{
+    return __DIR__ . "/stubs/{$name}";
+}
