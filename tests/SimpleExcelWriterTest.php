@@ -2,9 +2,9 @@
 
 use OpenSpout\Writer\CSV\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
-use Spatie\TemporaryDirectory\TemporaryDirectory;
-
 use function Spatie\Snapshots\assertMatchesFileSnapshot;
+
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
 beforeEach(function () {
     $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
