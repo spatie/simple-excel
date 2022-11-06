@@ -137,6 +137,24 @@ class SimpleExcelWriter
         $this->numberOfRows++;
     }
 
+    public function addNewSheetAndMakeItCurrent(?string $name)
+    {
+        $this->writer->addNewSheetAndMakeItCurrent();
+        $this->processingFirstRow = true;
+        if ($name) {
+            $this->nameCurrentSheet($name);
+        }
+
+        return $this;
+    }
+
+    public function nameCurrentSheet(string $name)
+    {
+        $this->writer->getCurrentSheet()->setName($name);
+
+        return $this;
+    }
+
     public function toBrowser()
     {
         $this->writer->close();
