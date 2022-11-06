@@ -1,174 +1,116 @@
 <?php
 
-namespace Spatie\SimpleExcel\Tests;
-
 use OpenSpout\Writer\CSV\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
-use Spatie\Snapshots\MatchesSnapshots;
+use function Spatie\Snapshots\assertMatchesFileSnapshot;
+
 use Spatie\TemporaryDirectory\TemporaryDirectory;
 
-class SimpleExcelWriterTest extends TestCase
-{
-    use MatchesSnapshots;
+beforeEach(function () {
+    $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
 
-    private TemporaryDirectory $temporaryDirectory;
+    $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
+});
 
-    private string $pathToCsv;
-    private string $pathToXlsx;
+it('can write a regular CSV', function () {
+    SimpleExcelWriter::create($this->pathToCsv)
+        ->addRow([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ])
+        ->addRow([
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+        ]);
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
 
-        $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
-
-        $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
-        $this->pathToXlsx = $this->temporaryDirectory->path('test.xlsx');
-    }
-
-    /** @test */
-    public function it_can_write_a_regular_csv()
-    {
-        SimpleExcelWriter::create($this->pathToCsv)
-            ->addRow([
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-            ])
-            ->addRow([
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-            ]);
-
-        $this->assertMatchesFileSnapshot($this->pathToCsv);
-    }
-
-    /** @test */
-    public function add_multiple_rows()
-    {
-        SimpleExcelWriter::create($this->pathToCsv)
-            ->addRows(
+test('add multiple rows', function () {
+    SimpleExcelWriter::create($this->pathToCsv)
+        ->addRows(
+            [
                 [
-                    [
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                    ],
-                    [
-                        'first_name' => 'Jane',
-                        'last_name' => 'Doe',
-                    ],
-                ]
-            );
+                    'first_name' => 'John',
+                    'last_name' => 'Doe',
+                ],
+                [
+                    'first_name' => 'Jane',
+                    'last_name' => 'Doe',
+                ],
+            ]
+        );
 
-        $this->assertMatchesFileSnapshot($this->pathToCsv);
-    }
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
 
-    /** @test */
-    public function it_can_use_an_alternative_delimiter()
-    {
-        SimpleExcelWriter::create($this->pathToCsv)
-            ->useDelimiter(';')
-            ->addRow([
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-            ])
-            ->addRow([
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-            ]);
+it('can use an alternative delimiter', function () {
+    SimpleExcelWriter::create($this->pathToCsv)
+        ->useDelimiter(';')
+        ->addRow([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ])
+        ->addRow([
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+        ]);
 
-        $this->assertMatchesFileSnapshot($this->pathToCsv);
-    }
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
 
-    /** @test */
-    public function it_can_write_a_csv_without_a_header()
-    {
-        SimpleExcelWriter::create($this->pathToCsv)
-            ->noHeaderRow()
-            ->addRow([
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-            ])
-            ->addRow([
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-            ]);
+it('can write a CSV without a header', function () {
+    SimpleExcelWriter::create($this->pathToCsv)
+        ->noHeaderRow()
+        ->addRow([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ])
+        ->addRow([
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+        ]);
 
-        $this->assertMatchesFileSnapshot($this->pathToCsv);
-    }
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
 
-    /** @test */
-    public function it_can_get_the_number_of_rows_written()
-    {
-        $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
-            ->addRow([
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-            ]);
+it('can get the number of rows written', function () {
+    $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
+        ->addRow([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ]);
 
-        $this->assertEquals(2, $writerWithAutomaticHeader->getNumberOfRows());
+    expect($writerWithAutomaticHeader->getNumberOfRows())->toEqual(2);
 
-        $writerWithoutAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
-            ->noHeaderRow()
-            ->addRow([
-                'first_name' => 'John',
-                'last_name' => 'Doe',
-            ]);
+    $writerWithoutAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
+        ->noHeaderRow()
+        ->addRow([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ]);
 
-        $this->assertEquals(1, $writerWithoutAutomaticHeader->getNumberOfRows());
-    }
+    expect($writerWithoutAutomaticHeader->getNumberOfRows())->toEqual(1);
+});
 
-    /** @test */
-    public function the_writer_can_get_the_path()
-    {
-        $writer = SimpleExcelWriter::create($this->pathToCsv);
+test('the writer can get the path', function () {
+    $writer = SimpleExcelWriter::create($this->pathToCsv);
 
-        $this->assertEquals($this->pathToCsv, $writer->getPath());
-    }
+    expect($writer->getPath())->toEqual($this->pathToCsv);
+});
 
-    /** @test */
-    public function it_allows_setting_the_writer_type_manually()
-    {
-        $writer = SimpleExcelWriter::create('php://output', 'csv');
+it('allows setting the writer type manually', function () {
+    $writer = SimpleExcelWriter::create('php://output', 'csv');
 
-        $this->assertInstanceOf(Writer::class, $writer->getWriter());
-    }
+    expect($writer->getWriter())->toBeInstanceOf(Writer::class);
+});
 
-    /** @test */
-    public function it_can_write_a_csv_without_bom()
-    {
-        $writer = SimpleExcelWriter::createWithoutBom($this->pathToCsv)
-            ->addRow([
-                'first_name' => 'Jane',
-                'last_name' => 'Doe',
-            ]);
+it('can write a CSV without bom', function () {
+    $writer = SimpleExcelWriter::createWithoutBom($this->pathToCsv)
+        ->addRow([
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+        ]);
 
-        $this->assertMatchesFileSnapshot($this->pathToCsv);
-    }
-
-    /** @test */
-    public function it_can_name_a_xlsx_sheet()
-    {
-        $writer = SimpleExcelWriter::create($this->pathToXlsx)
-                                   ->nameCurrentSheet('TestSheet');
-
-        $this->assertEquals('TestSheet', $writer->getWriter()->getCurrentSheet()->getName());
-    }
-
-    /** @test */
-    public function it_can_add_a_xlsx_sheet()
-    {
-        $writer = SimpleExcelWriter::create($this->pathToXlsx)
-                                   ->addNewSheetAndMakeItCurrent();
-
-        $this->assertEquals('Sheet2', $writer->getWriter()->getCurrentSheet()->getName());
-    }
-
-    /** @test */
-    public function it_can_add_and_name_a_xlsx_sheet()
-    {
-        $writer = SimpleExcelWriter::create($this->pathToXlsx)
-                                   ->addNewSheetAndMakeItCurrent('TestSheet');
-
-        $this->assertEquals('TestSheet', $writer->getWriter()->getCurrentSheet()->getName());
-    }
-}
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
