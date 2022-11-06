@@ -14,6 +14,7 @@ class SimpleExcelWriterTest extends TestCase
     private TemporaryDirectory $temporaryDirectory;
 
     private string $pathToCsv;
+    private string $pathToXlsx;
 
     public function setUp(): void
     {
@@ -22,6 +23,7 @@ class SimpleExcelWriterTest extends TestCase
         $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
 
         $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
+        $this->pathToXlsx = $this->temporaryDirectory->path('test.xlsx');
     }
 
     /** @test */
@@ -141,5 +143,32 @@ class SimpleExcelWriterTest extends TestCase
             ]);
 
         $this->assertMatchesFileSnapshot($this->pathToCsv);
+    }
+
+    /** @test */
+    public function it_can_name_a_xlsx_sheet()
+    {
+        $writer = SimpleExcelWriter::create($this->pathToXlsx)
+                                   ->nameCurrentSheet('TestSheet');
+
+        $this->assertEquals('TestSheet', $writer->getWriter()->getCurrentSheet()->getName());
+    }
+
+    /** @test */
+    public function it_can_add_a_xlsx_sheet()
+    {
+        $writer = SimpleExcelWriter::create($this->pathToXlsx)
+                                   ->addNewSheetAndMakeItCurrent();
+
+        $this->assertEquals('Sheet2', $writer->getWriter()->getCurrentSheet()->getName());
+    }
+
+    /** @test */
+    public function it_can_add_and_name_a_xlsx_sheet()
+    {
+        $writer = SimpleExcelWriter::create($this->pathToXlsx)
+                                   ->addNewSheetAndMakeItCurrent('TestSheet');
+
+        $this->assertEquals('TestSheet', $writer->getWriter()->getCurrentSheet()->getName());
     }
 }
