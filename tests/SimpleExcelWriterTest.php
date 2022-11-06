@@ -10,6 +10,7 @@ beforeEach(function () {
     $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
 
     $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
+    $this->pathToXlsx = $this->temporaryDirectory->path('test.xlsx');
 });
 
 it('can write a regular CSV', function () {
@@ -113,4 +114,27 @@ it('can write a CSV without bom', function () {
         ]);
 
     assertMatchesFileSnapshot($this->pathToCsv);
+});
+
+it('can name a xlsx sheet', function () {
+    $writer = SimpleExcelWriter::create($this->pathToXlsx)
+                               ->nameCurrentSheet('TestSheet');
+
+    expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
+});
+
+it('can name add a xlsx sheet', function () {
+    $writer = SimpleExcelWriter::create($this->pathToXlsx)
+                               ->addNewSheetAndMakeItCurrent();
+
+    expect(count($writer->getWriter()->getSheets()))->toEqual(2);
+    expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('Sheet2');
+});
+
+it('can name add and name a xlsx sheet', function () {
+    $writer = SimpleExcelWriter::create($this->pathToXlsx)
+                               ->addNewSheetAndMakeItCurrent('TestSheet');
+
+    expect(count($writer->getWriter()->getSheets()))->toEqual(2);
+    expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
 });
