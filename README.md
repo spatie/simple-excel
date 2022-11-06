@@ -423,6 +423,29 @@ $writer->setHeaderStyle($style);
 
 For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/3.x/docs).
 
+#### Creating an additional sheets
+
+By default, the writer will write to the first sheet. If you want to write to an additional sheet, you can use the `addNewSheetAndMakeItCurrent` method.
+
+```php
+$writer = SimpleExcelWriter::create($pathToXlsx);
+
+Posts::all()->each(function (Post $post) use ($writer) {
+    $writer->nameCurrentSheet($post->title);
+    
+    $post->comments->each(function (Comment $comment) use ($writer) {
+        $writer->addRow([
+            'comment' => $comment->comment,
+            'author' => $comment->author,
+        ]);
+    });
+    
+    if(!$post->is($posts->last())) {
+        $writer->addNewSheetAndMakeItCurrent();
+    }
+});
+```
+
 #### Using an alternative delimiter
 
 By default the `SimpleExcelReader` will assume that the delimiter is a `,`.
