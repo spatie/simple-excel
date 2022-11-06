@@ -123,7 +123,7 @@ it('can name a xlsx sheet', function () {
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
 });
 
-it('can name add a xlsx sheet', function () {
+it('can add a xlsx sheet', function () {
     $writer = SimpleExcelWriter::create($this->pathToXlsx)
                                ->addNewSheetAndMakeItCurrent();
 
@@ -131,7 +131,7 @@ it('can name add a xlsx sheet', function () {
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('Sheet2');
 });
 
-it('can name add and name a xlsx sheet', function () {
+it('can add and name a xlsx sheet', function () {
     $writer = SimpleExcelWriter::create($this->pathToXlsx)
                                ->addNewSheetAndMakeItCurrent('TestSheet');
 
