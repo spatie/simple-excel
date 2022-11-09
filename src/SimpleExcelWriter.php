@@ -144,7 +144,7 @@ class SimpleExcelWriter
      *
      * @return $this
      */
-    public function addNewSheetAndMakeItCurrent(?string $name= null): self
+    public function addNewSheetAndMakeItCurrent(?string $name = null): self
     {
         $this->writer->addNewSheetAndMakeItCurrent();
         $this->processingFirstRow = true;
