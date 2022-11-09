@@ -137,6 +137,38 @@ class SimpleExcelWriter
         $this->numberOfRows++;
     }
 
+    /**
+     * Add a new sheet to the workbook.
+     *
+     * @param  string|null  $name The name of the sheet. If null, the name will be "SheetX" where X is the sheet index.
+     *
+     * @return $this
+     */
+    public function addNewSheetAndMakeItCurrent(?string $name= null): self
+    {
+        $this->writer->addNewSheetAndMakeItCurrent();
+        $this->processingFirstRow = true;
+        if ($name) {
+            $this->nameCurrentSheet($name);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the name for the current sheet.
+     *
+     * @param  string  $name
+     *
+     * @return $this
+     */
+    public function nameCurrentSheet(string $name): self
+    {
+        $this->writer->getCurrentSheet()->setName($name);
+
+        return $this;
+    }
+
     public function toBrowser()
     {
         $this->writer->close();
