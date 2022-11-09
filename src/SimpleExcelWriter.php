@@ -118,10 +118,10 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addRows(iterable $rows)
+    public function addRows(iterable $rows, Style $style = null)
     {
         foreach ($rows as $row) {
-            $this->addRow($row);
+            $this->addRow($row, $style);
         }
 
         return $this;
