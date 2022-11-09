@@ -2,6 +2,22 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 2.4.0 - 2022-11-09
+
+### What's Changed
+
+- Refactor tests to Pest by @alexmanase in https://github.com/spatie/simple-excel/pull/123
+- Add optional styling when adding multiple rows to xslx by @chrisdicarlo in https://github.com/spatie/simple-excel/pull/122
+- Add new sheet to XLSX with Header-Row by @red-freak in https://github.com/spatie/simple-excel/pull/124
+
+### New Contributors
+
+- @alexmanase made their first contribution in https://github.com/spatie/simple-excel/pull/123
+- @chrisdicarlo made their first contribution in https://github.com/spatie/simple-excel/pull/122
+- @red-freak made their first contribution in https://github.com/spatie/simple-excel/pull/124
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/2.3.0...2.4.0
+
 ## 2.3.0 - 2022-10-11
 
 ### What's Changed
