@@ -311,7 +311,10 @@ John,Doe
 Jane,Doe
 ```
 
-#### Or manually set the header from array
+#### Manually set the header from array
+
+Instead of automatically let the package dedecting a header row, you can set it manually.
+
 ```php
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
