@@ -62,7 +62,7 @@ it('can use an alternative delimiter', function () {
 
 it('can write the header from array', function () {
     $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
-        ->addHeaderFromArray(['first_name', 'last_name'])
+        ->addHeader(['first_name', 'last_name'])
         ->addRow(['John', 'Doe']);
 
     expect($writerWithAutomaticHeader->getNumberOfRows())->toEqual(2);

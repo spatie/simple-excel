@@ -127,7 +127,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addHeaderFromArray(array $header): self
+    public function addHeader(array $header): self
     {
         $headerRow = WriterEntityFactory::createRowFromArray($header, $this->headerStyle);
 

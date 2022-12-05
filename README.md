@@ -311,6 +311,16 @@ John,Doe
 Jane,Doe
 ```
 
+#### Or manually set the header from aarray
+```php
+use Spatie\SimpleExcel\SimpleExcelWriter;
+
+$writer = SimpleExcelWriter::create($pathToCsv)
+    ->addHeader(['first_name', 'last_name'])
+    ->addRow(['John', 'Doe'])
+    ->addRow(['Jane', 'Doe'])
+```
+
 #### Writing an Excel file
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
