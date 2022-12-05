@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 2.5.0 - 2022-12-05
+
+### What's Changed
+
+- Added addHeaderFromArray method to the SimpleWriter by @bedus-creation in https://github.com/spatie/simple-excel/pull/125
+
+### New Contributors
+
+- @bedus-creation made their first contribution in https://github.com/spatie/simple-excel/pull/125
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/2.4.0...2.5.0
+
 ## 2.4.0 - 2022-11-09
 
 ### What's Changed
