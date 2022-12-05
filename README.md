@@ -311,7 +311,7 @@ John,Doe
 Jane,Doe
 ```
 
-#### Or manually set the header from aarray
+#### Or manually set the header from array
 ```php
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
