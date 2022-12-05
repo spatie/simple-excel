@@ -59,10 +59,8 @@ class SimpleExcelWriter
     {
         $this->path = $path;
 
-        $this->writer = $type
-            ?
-            WriterEntityFactory::createWriter($type)
-            :
+        $this->writer = $type ?
+            WriterEntityFactory::createWriter($type) :
             WriterEntityFactory::createWriterFromFile($this->path);
     }
 
@@ -99,7 +97,7 @@ class SimpleExcelWriter
     }
 
     /**
-     * @param \Box\Spout\Common\Entity\Row|array        $row
+     * @param \Box\Spout\Common\Entity\Row|array $row
      * @param \Box\Spout\Common\Entity\Style\Style|null $style
      */
     public function addRow($row, Style $style = null)
@@ -141,7 +139,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    protected function writeHeaderFromRow(array $row)
+    protected function writeHeaderFromRow(array $row): self
     {
         $headerValues = array_keys($row);
 
