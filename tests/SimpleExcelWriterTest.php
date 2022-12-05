@@ -60,6 +60,16 @@ it('can use an alternative delimiter', function () {
     assertMatchesFileSnapshot($this->pathToCsv);
 });
 
+it('can write the header from array', function () {
+    $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
+        ->addHeader(['first_name', 'last_name'])
+        ->addRow(['John', 'Doe']);
+
+    expect($writerWithAutomaticHeader->getNumberOfRows())->toEqual(2);
+
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
+
 it('can write a CSV without a header', function () {
     SimpleExcelWriter::create($this->pathToCsv)
         ->noHeaderRow()

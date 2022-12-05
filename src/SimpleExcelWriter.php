@@ -127,6 +127,18 @@ class SimpleExcelWriter
         return $this;
     }
 
+    public function addHeader(array $header): self
+    {
+        $headerRow = WriterEntityFactory::createRowFromArray($header, $this->headerStyle);
+
+        $this->writer->addRow($headerRow);
+        $this->numberOfRows++;
+
+        $this->processingFirstRow = false;
+
+        return $this;
+    }
+
     protected function writeHeaderFromRow(array $row)
     {
         $headerValues = array_keys($row);
