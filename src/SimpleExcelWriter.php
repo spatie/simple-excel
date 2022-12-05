@@ -26,7 +26,7 @@ class SimpleExcelWriter
 
         $writer = $simpleExcelWriter->getWriter();
 
-        if ( $configureWriter ) {
+        if ($configureWriter) {
             $configureWriter($writer);
         }
 
@@ -37,7 +37,7 @@ class SimpleExcelWriter
 
     public static function createWithoutBom(string $file, string $type = '')
     {
-        return static::create($file, $type, fn($writer) => $writer->setShouldAddBOM(false));
+        return static::create($file, $type, fn ($writer) => $writer->setShouldAddBOM(false));
     }
 
     public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null)
@@ -46,7 +46,7 @@ class SimpleExcelWriter
 
         $writer = $simpleExcelWriter->getWriter();
 
-        if ( $writerCallback ) {
+        if ($writerCallback) {
             $writerCallback($writer);
         }
 
@@ -87,7 +87,7 @@ class SimpleExcelWriter
     }
 
     /**
-     * @param \Box\Spout\Common\Entity\Style\Style $style
+     *  @param \Box\Spout\Common\Entity\Style\Style $style
      */
     public function setHeaderStyle($style)
     {
@@ -102,8 +102,8 @@ class SimpleExcelWriter
      */
     public function addRow($row, Style $style = null)
     {
-        if ( is_array($row) ) {
-            if ( $this->processHeader && $this->processingFirstRow ) {
+        if (is_array($row)) {
+            if ($this->processHeader && $this->processingFirstRow) {
                 $this->writeHeaderFromRow($row);
             }
 
@@ -111,18 +111,6 @@ class SimpleExcelWriter
         }
 
         $this->writer->addRow($row);
-        $this->numberOfRows++;
-
-        $this->processingFirstRow = false;
-
-        return $this;
-    }
-
-    public function addHeaderFromArray(array $header)
-    {
-        $headerRow = WriterEntityFactory::createRowFromArray($header, $this->headerStyle);
-
-        $this->writer->addRow($headerRow);
         $this->numberOfRows++;
 
         $this->processingFirstRow = false;
@@ -139,7 +127,19 @@ class SimpleExcelWriter
         return $this;
     }
 
-    protected function writeHeaderFromRow(array $row): self
+    public function addHeaderFromArray(array $header): self
+    {
+        $headerRow = WriterEntityFactory::createRowFromArray($header, $this->headerStyle);
+
+        $this->writer->addRow($headerRow);
+        $this->numberOfRows++;
+
+        $this->processingFirstRow = false;
+
+        return $this;
+    }
+
+    protected function writeHeaderFromRow(array $row)
     {
         $headerValues = array_keys($row);
 
@@ -152,7 +152,7 @@ class SimpleExcelWriter
     /**
      * Add a new sheet to the workbook.
      *
-     * @param string|null $name The name of the sheet. If null, the name will be "SheetX" where X is the sheet index.
+     * @param  string|null  $name The name of the sheet. If null, the name will be "SheetX" where X is the sheet index.
      *
      * @return $this
      */
@@ -160,7 +160,7 @@ class SimpleExcelWriter
     {
         $this->writer->addNewSheetAndMakeItCurrent();
         $this->processingFirstRow = true;
-        if ( $name ) {
+        if ($name) {
             $this->nameCurrentSheet($name);
         }
 
@@ -170,7 +170,7 @@ class SimpleExcelWriter
     /**
      * Sets the name for the current sheet.
      *
-     * @param string $name
+     * @param  string  $name
      *
      * @return $this
      */

@@ -2,13 +2,14 @@
 
 use OpenSpout\Writer\CSV\Writer;
 use Spatie\SimpleExcel\SimpleExcelWriter;
-use Spatie\TemporaryDirectory\TemporaryDirectory;
 use function Spatie\Snapshots\assertMatchesFileSnapshot;
 
-beforeEach(function () {
-    $this->temporaryDirectory = new TemporaryDirectory(__DIR__.'/temp');
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 
-    $this->pathToCsv  = $this->temporaryDirectory->path('test.csv');
+beforeEach(function () {
+    $this->temporaryDirectory = new TemporaryDirectory(__DIR__ . '/temp');
+
+    $this->pathToCsv = $this->temporaryDirectory->path('test.csv');
     $this->pathToXlsx = $this->temporaryDirectory->path('test.xlsx');
 });
 
@@ -16,11 +17,11 @@ it('can write a regular CSV', function () {
     SimpleExcelWriter::create($this->pathToCsv)
         ->addRow([
             'first_name' => 'John',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ])
         ->addRow([
             'first_name' => 'Jane',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ]);
 
     assertMatchesFileSnapshot($this->pathToCsv);
@@ -32,11 +33,11 @@ test('add multiple rows', function () {
             [
                 [
                     'first_name' => 'John',
-                    'last_name'  => 'Doe',
+                    'last_name' => 'Doe',
                 ],
                 [
                     'first_name' => 'Jane',
-                    'last_name'  => 'Doe',
+                    'last_name' => 'Doe',
                 ],
             ]
         );
@@ -49,26 +50,11 @@ it('can use an alternative delimiter', function () {
         ->useDelimiter(';')
         ->addRow([
             'first_name' => 'John',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ])
         ->addRow([
             'first_name' => 'Jane',
-            'last_name'  => 'Doe',
-        ]);
-
-    assertMatchesFileSnapshot($this->pathToCsv);
-});
-
-it('can write a CSV without a header', function () {
-    SimpleExcelWriter::create($this->pathToCsv)
-        ->noHeaderRow()
-        ->addRow([
-            'first_name' => 'John',
-            'last_name'  => 'Doe',
-        ])
-        ->addRow([
-            'first_name' => 'Jane',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ]);
 
     assertMatchesFileSnapshot($this->pathToCsv);
@@ -84,11 +70,26 @@ it('can write the header from array', function () {
     assertMatchesFileSnapshot($this->pathToCsv);
 });
 
+it('can write a CSV without a header', function () {
+    SimpleExcelWriter::create($this->pathToCsv)
+        ->noHeaderRow()
+        ->addRow([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ])
+        ->addRow([
+            'first_name' => 'Jane',
+            'last_name' => 'Doe',
+        ]);
+
+    assertMatchesFileSnapshot($this->pathToCsv);
+});
+
 it('can get the number of rows written', function () {
     $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
         ->addRow([
             'first_name' => 'John',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ]);
 
     expect($writerWithAutomaticHeader->getNumberOfRows())->toEqual(2);
@@ -97,7 +98,7 @@ it('can get the number of rows written', function () {
         ->noHeaderRow()
         ->addRow([
             'first_name' => 'John',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ]);
 
     expect($writerWithoutAutomaticHeader->getNumberOfRows())->toEqual(1);
@@ -119,7 +120,7 @@ it('can write a CSV without bom', function () {
     $writer = SimpleExcelWriter::createWithoutBom($this->pathToCsv)
         ->addRow([
             'first_name' => 'Jane',
-            'last_name'  => 'Doe',
+            'last_name' => 'Doe',
         ]);
 
     assertMatchesFileSnapshot($this->pathToCsv);
@@ -127,14 +128,14 @@ it('can write a CSV without bom', function () {
 
 it('can name a xlsx sheet', function () {
     $writer = SimpleExcelWriter::create($this->pathToXlsx)
-        ->nameCurrentSheet('TestSheet');
+                               ->nameCurrentSheet('TestSheet');
 
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
 });
 
 it('can add a xlsx sheet', function () {
     $writer = SimpleExcelWriter::create($this->pathToXlsx)
-        ->addNewSheetAndMakeItCurrent();
+                               ->addNewSheetAndMakeItCurrent();
 
     expect(count($writer->getWriter()->getSheets()))->toEqual(2);
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('Sheet2');
@@ -142,7 +143,7 @@ it('can add a xlsx sheet', function () {
 
 it('can add and name a xlsx sheet', function () {
     $writer = SimpleExcelWriter::create($this->pathToXlsx)
-        ->addNewSheetAndMakeItCurrent('TestSheet');
+                               ->addNewSheetAndMakeItCurrent('TestSheet');
 
     expect(count($writer->getWriter()->getSheets()))->toEqual(2);
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
