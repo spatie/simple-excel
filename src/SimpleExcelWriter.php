@@ -83,24 +83,41 @@ class SimpleExcelWriter
 
         $this->csvOptions = new CSVOptions();
 
+        $this->initWriter($path, $type);
+
+        $this->addOptionsToWriter($path, $type, $delimiter, $shouldAddBom);
+    }
+
+    protected function initWriter(string $path, string $type, ?CSVOptions $options = null): void
+    {
         $this->writer = ! empty($type) ?
-            WriterFactory::createFromType($type) :
-            WriterFactory::createFromFile($this->path);
+            WriterFactory::createFromType($type, $options) :
+            WriterFactory::createFromFile($path, $options);
+    }
 
-        if (($delimiter || $shouldAddBom) &&
-            $this->writer instanceof Writer) {
-            if ($delimiter) {
-                $this->csvOptions->FIELD_DELIMITER = $delimiter;
-            }
-
-            if ($shouldAddBom) {
-                $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
-            }
-
-            $this->writer = ! empty($type) ?
-                WriterFactory::createFromType($type, $this->csvOptions) :
-                WriterFactory::createFromFile($this->path, $this->csvOptions);
+    protected function addOptionsToWriter(
+        string $path,
+        string $type = '',
+        ?string $delimiter = null,
+        ?bool $shouldAddBom = null,
+    ): void {
+        if (! $delimiter && $shouldAddBom) {
+            return;
         }
+
+        if (! $this->writer instanceof Writer) {
+            return;
+        }
+
+        if ($delimiter) {
+            $this->csvOptions->FIELD_DELIMITER = $delimiter;
+        }
+
+        if ($shouldAddBom) {
+            $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
+        }
+
+        $this->initWriter($path, $type, $this->csvOptions);
     }
 
     public function getPath(): string
@@ -227,15 +244,6 @@ class SimpleExcelWriter
     public function close()
     {
         $this->writer->close();
-    }
-
-    public function useDelimiter(string $delimiter): self
-    {
-        if ($this->writer instanceof Writer) {
-            $this->csvOptions->FIELD_DELIMITER = $delimiter;
-        }
-
-        return $this;
     }
 
     public function __destruct()
