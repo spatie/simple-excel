@@ -83,7 +83,7 @@ class SimpleExcelWriter
 
         $this->csvOptions = new CSVOptions();
 
-        $this->writer = !empty($type) ?
+        $this->writer = ! empty($type) ?
             WriterFactory::createFromType($type) :
             WriterFactory::createFromFile($this->path);
 
@@ -97,7 +97,7 @@ class SimpleExcelWriter
                 $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
             }
 
-            $this->writer = !empty($type) ?
+            $this->writer = ! empty($type) ?
                 WriterFactory::createFromType($type, $this->csvOptions) :
                 WriterFactory::createFromFile($this->path, $this->csvOptions);
         }
