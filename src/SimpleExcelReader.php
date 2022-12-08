@@ -55,13 +55,7 @@ class SimpleExcelReader
 
     protected function setReader(): void
     {
-        $options = null;
-
-        if (isset($this->reader) &&
-            $this->reader instanceof CSVReader
-        ) {
-            $options = $this->csvOptions;
-        }
+        $options = $this->reader instanceof CSVReader ? $this->csvOptions : null;
 
         $this->reader = ! empty($this->type) ?
             ReaderFactory::createFromType($this->type, $options) :
