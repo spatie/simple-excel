@@ -47,8 +47,9 @@ test('add multiple rows', function () {
 });
 
 it('can use an alternative delimiter', function () {
-    SimpleExcelWriter::create($this->pathToCsv)
-        ->useDelimiter(';')
+    SimpleExcelWriter::create(
+        file: $this->pathToCsv,
+        delimiter: ';')
         ->addRow([
             'first_name' => 'John',
             'last_name' => 'Doe',
