@@ -4,11 +4,10 @@ namespace Spatie\SimpleExcel;
 use Illuminate\Support\LazyCollection;
 use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
-use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
 use OpenSpout\Reader\Common\Creator\ReaderFactory;
 use OpenSpout\Reader\CSV\Reader as CSVReader;
-use OpenSpout\Reader\IteratorInterface;
 use OpenSpout\Reader\ReaderInterface;
+use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
@@ -16,7 +15,7 @@ class SimpleExcelReader
     protected string $path;
     protected string $type;
     protected ReaderInterface $reader;
-    protected IteratorInterface $rowIterator;
+    protected RowIteratorInterface $rowIterator;
     protected int $sheetNumber = 1;
     protected string $sheetName = "";
     protected bool $searchSheetByName = false;
@@ -44,8 +43,8 @@ class SimpleExcelReader
         $this->type = $type;
 
         $this->reader = $type ?
-            ReaderFactory::createFromType($type) :
-            ReaderEntityFactory::createReaderFromFile($this->path);
+            ReaderFactory::createFromFileByMimeType($path) :
+            ReaderFactory::createFromFile($path);
     }
 
     public function getPath(): string
