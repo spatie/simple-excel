@@ -1,4 +1,5 @@
 <?php
+
 namespace Spatie\SimpleExcel;
 
 use Illuminate\Support\LazyCollection;

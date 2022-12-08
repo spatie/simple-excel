@@ -26,7 +26,7 @@ class ReaderFactory
     public static function createFromFile(
         string $path,
         CSVOptions|XLSXOptions|ODSOptions|null $options = null
-    ): ReaderInterface{
+    ): ReaderInterface {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
         return match ($extension) {
@@ -49,7 +49,7 @@ class ReaderFactory
         string $path,
         CSVOptions|XLSXOptions|ODSOptions|null $options = null
     ): ReaderInterface {
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             throw new IOException("Could not open {$path} for reading! File does not exist.");
         }
 
