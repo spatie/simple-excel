@@ -4,7 +4,7 @@ namespace Spatie\SimpleExcel;
 use Illuminate\Support\LazyCollection;
 use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
-use OpenSpout\Reader\Common\Creator\ReaderFactory;
+use OpenSpout\Reader\CSV\Options as CSVOptions;
 use OpenSpout\Reader\CSV\Reader as CSVReader;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\RowIteratorInterface;
@@ -30,6 +30,7 @@ class SimpleExcelReader
     protected int $skip = 0;
     protected int $limit = 0;
     protected bool $useLimit = false;
+    protected CSVOptions $csvOptions;
 
     public static function create(string $file, string $type = '')
     {
@@ -42,9 +43,28 @@ class SimpleExcelReader
 
         $this->type = $type;
 
-        $this->reader = $type ?
-            ReaderFactory::createFromFileByMimeType($path) :
-            ReaderFactory::createFromFile($path);
+        $this->csvOptions = new CSVOptions();
+
+        $this->reader = $this->type ?
+            ReaderFactory::createFromFileByMimeType($this->path) :
+            ReaderFactory::createFromFile($this->path);
+
+        $this->setReader();
+    }
+
+    protected function setReader(?CSVOptions $csvOptions = null): void
+    {
+        $options = null;
+
+        if (isset($this->reader) &&
+            $this->reader instanceof CSVReader
+        ) {
+            $options = $this->csvOptions;
+        }
+
+        $this->reader = $this->type ?
+            ReaderFactory::createFromFileByMimeType($this->path, $options) :
+            ReaderFactory::createFromFile($this->path, $options);
     }
 
     public function getPath(): string
@@ -76,7 +96,7 @@ class SimpleExcelReader
     public function useDelimiter(string $delimiter): self
     {
         if ($this->reader instanceof CSVReader) {
-            $this->reader->setFieldDelimiter($delimiter);
+            $this->csvOptions->FIELD_DELIMITER = $delimiter;
         }
 
         return $this;
@@ -84,7 +104,9 @@ class SimpleExcelReader
 
     public function useFieldEnclosure(string $fieldEnclosure): self
     {
-        $this->reader->setFieldEnclosure($fieldEnclosure);
+        if ($this->reader instanceof CSVReader) {
+            $this->csvOptions->FIELD_ENCLOSURE = $fieldEnclosure;
+        }
 
         return $this;
     }
@@ -306,6 +328,8 @@ class SimpleExcelReader
 
     protected function getSheet(): SheetInterface
     {
+        $this->setReader($this->csvOptions);
+
         $this->reader->open($this->path);
         $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
 
