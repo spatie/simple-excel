@@ -52,7 +52,7 @@ class SimpleExcelReader
         $this->setReader();
     }
 
-    protected function setReader(?CSVOptions $csvOptions = null): void
+    protected function setReader(): void
     {
         $options = null;
 
@@ -328,7 +328,7 @@ class SimpleExcelReader
 
     protected function getSheet(): SheetInterface
     {
-        $this->setReader($this->csvOptions);
+        $this->setReader();
 
         $this->reader->open($this->path);
         $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();

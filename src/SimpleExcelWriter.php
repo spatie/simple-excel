@@ -2,8 +2,10 @@
 
 namespace Spatie\SimpleExcel;
 
+use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Style;
-use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
+use OpenSpout\Writer\CSV\Options as CSVOptions;
+use OpenSpout\Writer\CSV\Writer;
 use OpenSpout\Writer\WriterInterface;
 
 class SimpleExcelWriter
@@ -18,11 +20,23 @@ class SimpleExcelWriter
 
     private int $numberOfRows = 0;
 
-    private $headerStyle = null;
+    private ?Style $headerStyle = null;
 
-    public static function create(string $file, string $type = '', callable $configureWriter = null)
-    {
-        $simpleExcelWriter = new static($file, $type);
+    protected CSVOptions $csvOptions;
+
+    public static function create(
+        string $file,
+        string $type = '',
+        callable $configureWriter = null,
+        ?string $delimiter = null,
+        ?bool $shouldAddBom = null,
+    ) {
+        $simpleExcelWriter = new static(
+            path: $file,
+            type: $type,
+            delimiter: $delimiter,
+            shouldAddBom: $shouldAddBom,
+        );
 
         $writer = $simpleExcelWriter->getWriter();
 
@@ -37,7 +51,11 @@ class SimpleExcelWriter
 
     public static function createWithoutBom(string $file, string $type = '')
     {
-        return static::create($file, $type, fn ($writer) => $writer->setShouldAddBOM(false));
+        return static::create(
+            file: $file,
+            type: $type,
+            shouldAddBom: false,
+        );
     }
 
     public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null)
@@ -55,13 +73,30 @@ class SimpleExcelWriter
         return $simpleExcelWriter;
     }
 
-    protected function __construct(string $path, string $type = '')
-    {
+    protected function __construct(
+        string $path,
+        string $type = '',
+        ?string $delimiter = null,
+        ?bool $shouldAddBom = null,
+    ) {
         $this->path = $path;
 
-        $this->writer = $type ?
-            WriterEntityFactory::createWriter($type) :
-            WriterEntityFactory::createWriterFromFile($this->path);
+        $this->csvOptions = new CSVOptions();
+
+        $this->writer = WriterFactory::createFromFile($path);
+
+        if (($delimiter || $shouldAddBom) &&
+            $this->writer instanceof Writer) {
+            if ($delimiter) {
+                $this->csvOptions->FIELD_DELIMITER = $delimiter;
+            }
+
+            if ($shouldAddBom) {
+                $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
+            }
+
+            $this->writer = WriterFactory::createFromFile($path, $this->csvOptions);
+        }
     }
 
     public function getPath(): string
@@ -86,10 +121,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    /**
-     *  @param \Box\Spout\Common\Entity\Style\Style $style
-     */
-    public function setHeaderStyle($style)
+    public function setHeaderStyle(Style $style)
     {
         $this->headerStyle = $style;
 
@@ -97,8 +129,8 @@ class SimpleExcelWriter
     }
 
     /**
-     * @param \Box\Spout\Common\Entity\Row|array $row
-     * @param \Box\Spout\Common\Entity\Style\Style|null $style
+     * @param \OpenSpout\Common\Entity\Row|array $row
+     * @param Style|null $style
      */
     public function addRow($row, Style $style = null)
     {
@@ -107,7 +139,7 @@ class SimpleExcelWriter
                 $this->writeHeaderFromRow($row);
             }
 
-            $row = WriterEntityFactory::createRowFromArray($row, $style);
+            $row = Row::fromValues($row, $style);
         }
 
         $this->writer->addRow($row);
@@ -129,7 +161,7 @@ class SimpleExcelWriter
 
     public function addHeader(array $header): self
     {
-        $headerRow = WriterEntityFactory::createRowFromArray($header, $this->headerStyle);
+        $headerRow = Row::fromValues($header, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
@@ -143,7 +175,7 @@ class SimpleExcelWriter
     {
         $headerValues = array_keys($row);
 
-        $headerRow = WriterEntityFactory::createRowFromArray($headerValues, $this->headerStyle);
+        $headerRow = Row::fromValues($headerValues, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
@@ -195,7 +227,9 @@ class SimpleExcelWriter
 
     public function useDelimiter(string $delimiter): self
     {
-        $this->writer->setFieldDelimiter($delimiter);
+        if ($this->writer instanceof Writer) {
+            $this->csvOptions->FIELD_DELIMITER = $delimiter;
+        }
 
         return $this;
     }
