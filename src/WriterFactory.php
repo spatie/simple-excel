@@ -11,6 +11,10 @@ use OpenSpout\Writer\WriterInterface;
 use OpenSpout\Writer\XLSX\Options as XLSXOptions;
 use OpenSpout\Writer\XLSX\Writer as XLSXWriter;
 
+/**
+ * @internal overwritten from openspout/openspout so we can pass Options to the Writer classes
+ * Original: \OpenSpout\Writer\Common\Creator\ReaderFactory
+ */
 class WriterFactory
 {
     /**
@@ -31,6 +35,18 @@ class WriterFactory
             'xlsx' => new XLSXWriter($options),
             'ods' => new ODSWriter($options),
             default => throw new UnsupportedTypeException('No writers supporting the given type: '.$extension),
+        };
+    }
+
+    public static function createFromType(
+        string $writerType,
+        CSVOptions|XLSXOptions|ODSOptions|null $options = null
+    ): WriterInterface {
+        return match ($writerType) {
+            'csv' => new CSVWriter($options),
+            'xlsx' => new XLSXWriter($options),
+            'ods' => new ODSWriter($options),
+            default => throw new UnsupportedTypeException('No writers supporting the given type: ' . $writerType),
         };
     }
 }

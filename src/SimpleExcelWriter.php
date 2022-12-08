@@ -83,7 +83,9 @@ class SimpleExcelWriter
 
         $this->csvOptions = new CSVOptions();
 
-        $this->writer = WriterFactory::createFromFile($path);
+        $this->writer = !empty($type) ?
+            WriterFactory::createFromType($type) :
+            WriterFactory::createFromFile($this->path);
 
         if (($delimiter || $shouldAddBom) &&
             $this->writer instanceof Writer) {
@@ -95,7 +97,9 @@ class SimpleExcelWriter
                 $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
             }
 
-            $this->writer = WriterFactory::createFromFile($path, $this->csvOptions);
+            $this->writer = !empty($type) ?
+                WriterFactory::createFromType($type, $this->csvOptions) :
+                WriterFactory::createFromFile($this->path, $this->csvOptions);
         }
     }
 
