@@ -47,7 +47,7 @@ class SimpleExcelReader
         $this->csvOptions = new CSVOptions();
 
         $this->reader = $this->type ?
-            ReaderFactory::createFromFileByMimeType($this->path) :
+            ReaderFactory::createFromType($this->type) :
             ReaderFactory::createFromFile($this->path);
 
         $this->setReader();
@@ -63,8 +63,8 @@ class SimpleExcelReader
             $options = $this->csvOptions;
         }
 
-        $this->reader = $this->type ?
-            ReaderFactory::createFromFileByMimeType($this->path, $options) :
+        $this->reader = !empty($this->type) ?
+            ReaderFactory::createFromType($this->type, $options) :
             ReaderFactory::createFromFile($this->path, $options);
     }
 

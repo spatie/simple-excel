@@ -12,8 +12,10 @@ use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\XLSX\Options as XLSXOptions;
 use OpenSpout\Reader\XLSX\Reader as XLSXReader;
 
-/** @original \OpenSpout\Reader\Common\Creator\ReaderFactory */
-/** Overwritten so we can pass Options to the Reader classes */
+/**
+ * @internal overwritten from openspout/openspout so we can pass Options to the Reader classes
+ * Original: \OpenSpout\Reader\Common\Creator\ReaderFactory
+ */
 class ReaderFactory
 {
     /**
@@ -60,6 +62,23 @@ class ReaderFactory
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => new XLSXReader($options),
             'application/vnd.oasis.opendocument.spreadsheet' => new ODSReader($options),
             default => throw new UnsupportedTypeException('No readers supporting the given type: '.$mime_type),
+        };
+    }
+
+    /**
+     * This creates an instance of the appropriate reader, given the type of the file to be read.
+     *
+     * @param string $readerType Type of the reader to instantiate
+     */
+    public static function createFromType(
+        string $readerType,
+        CSVOptions|XLSXOptions|ODSOptions|null $options = null
+    ): ReaderInterface {
+        return match ($readerType) {
+            'csv' => new CSVReader($options),
+            'xlsx' => new XLSXReader($options),
+            'ods' => new ODSReader($options),
+            default => throw new UnsupportedTypeException('No readers supporting the given type: ' . $readerType),
         };
     }
 }
