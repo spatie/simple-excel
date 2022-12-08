@@ -66,9 +66,12 @@ class ReaderFactory
     }
 
     /**
-     * This creates an instance of the appropriate reader, given the type of the file to be read.
+     * @deprecated use createFromFileByMimeType() or createFromFile() instead
      *
-     * @param string $readerType Type of the reader to instantiate
+     * @param string $readerType
+     * @param CSVOptions|XLSXOptions|ODSOptions|null $options
+     * @return ReaderInterface
+     * @throws UnsupportedTypeException
      */
     public static function createFromType(
         string $readerType,

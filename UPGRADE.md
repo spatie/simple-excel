@@ -27,16 +27,15 @@ To
  $writer = SimpleExcelWriter::create(file: $file, delimiter: ';');
 ```
 
-### Drop support for setting the type manually
+### Deprecate setting the type manually
 
-In v3 of this package it was possible to explicitly set the type. From now in this is not possible anymore
+In v4 of openspout/openspout it is no longer possible to explicitly set the type.
+We still have support for this, but we'll deprecate the method.
 
-Change
 ```php
 $reader = SimpleExcelReader::create('php://input', 'csv');
 ```
 
-To
 ```php
  $writer = SimpleExcelWriter::create('php://output', 'csv');
 ```
