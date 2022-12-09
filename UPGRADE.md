@@ -29,3 +29,16 @@ To
 ```php
  $writer = SimpleExcelWriter::create(file: $file, delimiter: ';');
 ```
+
+### Deprecated setting the type manually
+
+In v4 of openspout/openspout it is no longer possible to explicitly set the type.
+We still have support for this, but we'll deprecate the method.
+
+```php
+$reader = SimpleExcelReader::create('php://input', 'csv');
+```
+
+```php
+ $writer = SimpleExcelWriter::create('php://output', 'csv');
+```
