@@ -105,11 +105,11 @@ class SimpleExcelWriter
             return;
         }
 
-        if ($delimiter) {
+        if ($delimiter !== null) {
             $this->csvOptions->FIELD_DELIMITER = $delimiter;
         }
 
-        if ($shouldAddBom) {
+        if ($shouldAddBom !== null) {
             $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
         }
 
