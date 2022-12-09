@@ -6,7 +6,7 @@ All notable changes to `simple-excel` will be documented in this file
 
 ### What's Changed
 
-- V4 with PHP 8.2 support by @Nielsvanpach in https://github.com/spatie/simple-excel/pull/128
+- V3 with PHP 8.2 support by @Nielsvanpach in https://github.com/spatie/simple-excel/pull/128
 
 #### Most notable changes
 
