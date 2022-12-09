@@ -1,6 +1,6 @@
 # Upgrade guide
 
-## Upgrading from 3.x to 4.0
+## Upgrading from 2.x to 3.0
 
 
 ### Most notable changes
