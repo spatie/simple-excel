@@ -1,22 +1,20 @@
 <?php
+
 namespace Spatie\SimpleExcel;
 
 use Illuminate\Support\LazyCollection;
 use InvalidArgumentException;
 use OpenSpout\Common\Entity\Row;
-use OpenSpout\Reader\Common\Creator\ReaderEntityFactory;
-use OpenSpout\Reader\Common\Creator\ReaderFactory;
+use OpenSpout\Reader\CSV\Options as CSVOptions;
 use OpenSpout\Reader\CSV\Reader as CSVReader;
-use OpenSpout\Reader\IteratorInterface;
 use OpenSpout\Reader\ReaderInterface;
+use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
 {
-    protected string $path;
-    protected string $type;
     protected ReaderInterface $reader;
-    protected IteratorInterface $rowIterator;
+    protected RowIteratorInterface $rowIterator;
     protected int $sheetNumber = 1;
     protected string $sheetName = "";
     protected bool $searchSheetByName = false;
@@ -31,21 +29,31 @@ class SimpleExcelReader
     protected int $skip = 0;
     protected int $limit = 0;
     protected bool $useLimit = false;
+    protected CSVOptions $csvOptions;
 
-    public static function create(string $file, string $type = '')
+    public static function create(string $file, string $type = ''): static
     {
         return new static($file, $type);
     }
 
-    public function __construct(string $path, string $type = '')
+    public function __construct(protected string $path, protected string $type = '')
     {
-        $this->path = $path;
+        $this->csvOptions = new CSVOptions();
 
-        $this->type = $type;
+        $this->reader = $this->type ?
+            ReaderFactory::createFromType($this->type) :
+            ReaderFactory::createFromFile($this->path);
 
-        $this->reader = $type ?
-            ReaderFactory::createFromType($type) :
-            ReaderEntityFactory::createReaderFromFile($this->path);
+        $this->setReader();
+    }
+
+    protected function setReader(): void
+    {
+        $options = $this->reader instanceof CSVReader ? $this->csvOptions : null;
+
+        $this->reader = empty($this->type) ?
+            ReaderFactory::createFromFile($this->path, $options) :
+            ReaderFactory::createFromType($this->type, $options);
     }
 
     public function getPath(): string
@@ -77,7 +85,7 @@ class SimpleExcelReader
     public function useDelimiter(string $delimiter): self
     {
         if ($this->reader instanceof CSVReader) {
-            $this->reader->setFieldDelimiter($delimiter);
+            $this->csvOptions->FIELD_DELIMITER = $delimiter;
         }
 
         return $this;
@@ -85,7 +93,9 @@ class SimpleExcelReader
 
     public function useFieldEnclosure(string $fieldEnclosure): self
     {
-        $this->reader->setFieldEnclosure($fieldEnclosure);
+        if ($this->reader instanceof CSVReader) {
+            $this->csvOptions->FIELD_ENCLOSURE = $fieldEnclosure;
+        }
 
         return $this;
     }
@@ -229,11 +239,6 @@ class SimpleExcelReader
         return $this->headers;
     }
 
-    public function close()
-    {
-        $this->reader->close();
-    }
-
     protected function processHeaderRow(array $headers): array
     {
         if ($this->trimHeader) {
@@ -253,27 +258,19 @@ class SimpleExcelReader
 
     protected function convertHeaders(callable $callback, array $headers): array
     {
-        return array_map(function ($header) use ($callback) {
-            return call_user_func($callback, $header);
-        }, $headers);
-    }
-
-    public function headerRowFormatter(callable $callback)
-    {
-        $this->headerRowFormatter = $callback;
-
-        return $this;
+        return array_map(fn ($header) => $callback($header), $headers);
     }
 
     protected function trim(string $header): string
     {
+        $arguments = [];
         $arguments[] = $header;
 
         if (! is_null($this->trimHeaderCharacters)) {
             $arguments[] = $this->trimHeaderCharacters;
         }
 
-        return call_user_func_array('trim', $arguments);
+        return trim(...$arguments);
     }
 
     protected function toSnakeCase(string $header): string
@@ -307,14 +304,16 @@ class SimpleExcelReader
 
     protected function getSheet(): SheetInterface
     {
-        $this->reader->open($this->path);
-        $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
+        $this->setReader();
 
-        return $sheet;
+        $this->reader->open($this->path);
+
+        return ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
     }
 
     protected function getActiveSheetByName(): SheetInterface
     {
+        $sheet = null;
         foreach ($this->reader->getSheetIterator() as $key => $sheet) {
             if ($this->sheetName != "" && $this->sheetName === $sheet->getName()) {
                 break;
@@ -329,6 +328,8 @@ class SimpleExcelReader
 
     protected function getActiveSheetByIndex(): SheetInterface
     {
+        $key = null;
+        $sheet = null;
         foreach ($this->reader->getSheetIterator() as $key => $sheet) {
             if ($key === $this->sheetNumber) {
                 break;
@@ -339,6 +340,11 @@ class SimpleExcelReader
         }
 
         return $sheet;
+    }
+
+    public function close(): void
+    {
+        $this->reader->close();
     }
 
     public function __destruct()

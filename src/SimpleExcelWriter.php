@@ -2,15 +2,15 @@
 
 namespace Spatie\SimpleExcel;
 
+use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Style;
-use OpenSpout\Writer\Common\Creator\WriterEntityFactory;
+use OpenSpout\Writer\CSV\Options as CSVOptions;
+use OpenSpout\Writer\CSV\Writer;
 use OpenSpout\Writer\WriterInterface;
 
 class SimpleExcelWriter
 {
     private WriterInterface $writer;
-
-    private string $path = '';
 
     private bool $processHeader = true;
 
@@ -18,11 +18,23 @@ class SimpleExcelWriter
 
     private int $numberOfRows = 0;
 
-    private $headerStyle = null;
+    private ?Style $headerStyle = null;
 
-    public static function create(string $file, string $type = '', callable $configureWriter = null)
-    {
-        $simpleExcelWriter = new static($file, $type);
+    protected CSVOptions $csvOptions;
+
+    public static function create(
+        string $file,
+        string $type = '',
+        callable $configureWriter = null,
+        ?string $delimiter = null,
+        ?bool $shouldAddBom = null,
+    ): static {
+        $simpleExcelWriter = new static(
+            path: $file,
+            type: $type,
+            delimiter: $delimiter,
+            shouldAddBom: $shouldAddBom,
+        );
 
         $writer = $simpleExcelWriter->getWriter();
 
@@ -35,12 +47,16 @@ class SimpleExcelWriter
         return $simpleExcelWriter;
     }
 
-    public static function createWithoutBom(string $file, string $type = '')
+    public static function createWithoutBom(string $file, string $type = ''): static
     {
-        return static::create($file, $type, fn ($writer) => $writer->setShouldAddBOM(false));
+        return static::create(
+            file: $file,
+            type: $type,
+            shouldAddBom: false,
+        );
     }
 
-    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null)
+    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null): static
     {
         $simpleExcelWriter = new static($downloadName, $type);
 
@@ -55,13 +71,49 @@ class SimpleExcelWriter
         return $simpleExcelWriter;
     }
 
-    protected function __construct(string $path, string $type = '')
-    {
-        $this->path = $path;
+    protected function __construct(
+        private string $path,
+        string $type = '',
+        ?string $delimiter = null,
+        ?bool $shouldAddBom = null,
+    ) {
+        $this->csvOptions = new CSVOptions();
 
-        $this->writer = $type ?
-            WriterEntityFactory::createWriter($type) :
-            WriterEntityFactory::createWriterFromFile($this->path);
+        $this->initWriter($path, $type);
+
+        $this->addOptionsToWriter($path, $type, $delimiter, $shouldAddBom);
+    }
+
+    protected function initWriter(string $path, string $type, ?CSVOptions $options = null): void
+    {
+        $this->writer = empty($type) ?
+            WriterFactory::createFromFile($path, $options) :
+            WriterFactory::createFromType($type, $options);
+    }
+
+    protected function addOptionsToWriter(
+        string $path,
+        string $type = '',
+        ?string $delimiter = null,
+        ?bool $shouldAddBom = null,
+    ): void {
+        if (! $delimiter && $shouldAddBom) {
+            return;
+        }
+
+        if (! $this->writer instanceof Writer) {
+            return;
+        }
+
+        if ($delimiter !== null) {
+            $this->csvOptions->FIELD_DELIMITER = $delimiter;
+        }
+
+        if ($shouldAddBom !== null) {
+            $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
+        }
+
+        $this->initWriter($path, $type, $this->csvOptions);
     }
 
     public function getPath(): string
@@ -79,35 +131,28 @@ class SimpleExcelWriter
         return $this->numberOfRows;
     }
 
-    public function noHeaderRow()
+    public function noHeaderRow(): static
     {
         $this->processHeader = false;
 
         return $this;
     }
 
-    /**
-     *  @param \Box\Spout\Common\Entity\Style\Style $style
-     */
-    public function setHeaderStyle($style)
+    public function setHeaderStyle(Style $style): static
     {
         $this->headerStyle = $style;
 
         return $this;
     }
 
-    /**
-     * @param \Box\Spout\Common\Entity\Row|array $row
-     * @param \Box\Spout\Common\Entity\Style\Style|null $style
-     */
-    public function addRow($row, Style $style = null)
+    public function addRow(Row|array $row, Style $style = null): static
     {
         if (is_array($row)) {
             if ($this->processHeader && $this->processingFirstRow) {
                 $this->writeHeaderFromRow($row);
             }
 
-            $row = WriterEntityFactory::createRowFromArray($row, $style);
+            $row = Row::fromValues($row, $style);
         }
 
         $this->writer->addRow($row);
@@ -118,7 +163,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addRows(iterable $rows, Style $style = null)
+    public function addRows(iterable $rows, Style $style = null): static
     {
         foreach ($rows as $row) {
             $this->addRow($row, $style);
@@ -129,7 +174,7 @@ class SimpleExcelWriter
 
     public function addHeader(array $header): self
     {
-        $headerRow = WriterEntityFactory::createRowFromArray($header, $this->headerStyle);
+        $headerRow = Row::fromValues($header, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
@@ -139,11 +184,11 @@ class SimpleExcelWriter
         return $this;
     }
 
-    protected function writeHeaderFromRow(array $row)
+    protected function writeHeaderFromRow(array $row): void
     {
         $headerValues = array_keys($row);
 
-        $headerRow = WriterEntityFactory::createRowFromArray($headerValues, $this->headerStyle);
+        $headerRow = Row::fromValues($headerValues, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
@@ -169,10 +214,6 @@ class SimpleExcelWriter
 
     /**
      * Sets the name for the current sheet.
-     *
-     * @param  string  $name
-     *
-     * @return $this
      */
     public function nameCurrentSheet(string $name): self
     {
@@ -188,16 +229,9 @@ class SimpleExcelWriter
         exit;
     }
 
-    public function close()
+    public function close(): void
     {
         $this->writer->close();
-    }
-
-    public function useDelimiter(string $delimiter): self
-    {
-        $this->writer->setFieldDelimiter($delimiter);
-
-        return $this;
     }
 
     public function __destruct()
