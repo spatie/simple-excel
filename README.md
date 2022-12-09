@@ -317,13 +317,6 @@ $writer = SimpleExcelWriter::create($pathToCsv)
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
 
-#### Manually setting the file type
-
-You can pass the file type to the `create` method of `SimpleExcelWriter` as the second, optional argument:
-
-```php
-SimpleExcelWriter::create('php://output', 'csv');
-```
 
 #### Streaming an Excel file to the browser
 
