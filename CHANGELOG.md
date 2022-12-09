@@ -2,6 +2,26 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.0.0 - 2022-12-09
+
+### What's Changed
+
+- V4 with PHP 8.2 support by @Nielsvanpach in https://github.com/spatie/simple-excel/pull/128
+
+#### Most notable changes
+
+1. Add support for openspout/openspout v4
+2. Drop support for openspout/openspout v3
+3. Add type hinting
+4. Removed `useDelimiter` on SimpleExcelWriter
+5. Removed `headerRowFormatter` on SimpleExcelReader
+
+### New Contributors
+
+- @Nielsvanpach made their first contribution in https://github.com/spatie/simple-excel/pull/128
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/2.5.0...3.0.0
+
 ## 2.5.0 - 2022-12-05
 
 ### What's Changed
