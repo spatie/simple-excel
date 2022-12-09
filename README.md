@@ -448,7 +448,7 @@ By default the `SimpleExcelReader` will assume that the delimiter is a `,`.
 This is how you can use an alternative delimiter:
 
 ```php
-SimpleExcelWriter::create($pathToCsv)->useDelimiter(';');
+SimpleExcelWriter::create(file: $pathToCsv, delimiter: ';');
 ```
 
 #### Getting the number of rows written
