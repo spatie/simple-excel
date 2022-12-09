@@ -63,14 +63,6 @@ $rows->each(function(array $rowProperties) {
 
 Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx`.
 
-#### Manually setting the file type
-
-You can pass the file type to the `create` method of `SimpleExcelReader` as the second, optional argument:
-
-```php
-SimpleExcelReader::create($pathToFile, 'csv');
-```
-
 #### Working with LazyCollections
 
 `getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
