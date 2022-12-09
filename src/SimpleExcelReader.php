@@ -13,10 +13,6 @@ use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
 {
-    /**
-     * @var callable
-     */
-    public $headerRowFormatter;
     protected ReaderInterface $reader;
     protected RowIteratorInterface $rowIterator;
     protected int $sheetNumber = 1;
@@ -263,13 +259,6 @@ class SimpleExcelReader
     protected function convertHeaders(callable $callback, array $headers): array
     {
         return array_map(fn ($header) => $callback($header), $headers);
-    }
-
-    public function headerRowFormatter(callable $callback): static
-    {
-        $this->headerRowFormatter = $callback;
-
-        return $this;
     }
 
     protected function trim(string $header): string
