@@ -68,9 +68,6 @@ class ReaderFactory
     /**
      * @deprecated use createFromFileByMimeType() or createFromFile() instead
      *
-     * @param string $readerType
-     * @param CSVOptions|XLSXOptions|ODSOptions|null $options
-     * @return ReaderInterface
      * @throws UnsupportedTypeException
      */
     public static function createFromType(

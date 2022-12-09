@@ -41,9 +41,6 @@ class WriterFactory
     /**
      * @deprecated use createFromFile() instead
      *
-     * @param string $writerType
-     * @param CSVOptions|XLSXOptions|ODSOptions|null $options
-     * @return WriterInterface
      * @throws UnsupportedTypeException
      */
     public static function createFromType(

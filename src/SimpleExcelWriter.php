@@ -12,8 +12,6 @@ class SimpleExcelWriter
 {
     private WriterInterface $writer;
 
-    private string $path = '';
-
     private bool $processHeader = true;
 
     private bool $processingFirstRow = true;
@@ -30,7 +28,7 @@ class SimpleExcelWriter
         callable $configureWriter = null,
         ?string $delimiter = null,
         ?bool $shouldAddBom = null,
-    ) {
+    ): static {
         $simpleExcelWriter = new static(
             path: $file,
             type: $type,
@@ -49,7 +47,7 @@ class SimpleExcelWriter
         return $simpleExcelWriter;
     }
 
-    public static function createWithoutBom(string $file, string $type = '')
+    public static function createWithoutBom(string $file, string $type = ''): static
     {
         return static::create(
             file: $file,
@@ -58,7 +56,7 @@ class SimpleExcelWriter
         );
     }
 
-    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null)
+    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null): static
     {
         $simpleExcelWriter = new static($downloadName, $type);
 
@@ -74,13 +72,11 @@ class SimpleExcelWriter
     }
 
     protected function __construct(
-        string $path,
+        private string $path,
         string $type = '',
         ?string $delimiter = null,
         ?bool $shouldAddBom = null,
     ) {
-        $this->path = $path;
-
         $this->csvOptions = new CSVOptions();
 
         $this->initWriter($path, $type);
@@ -90,9 +86,9 @@ class SimpleExcelWriter
 
     protected function initWriter(string $path, string $type, ?CSVOptions $options = null): void
     {
-        $this->writer = ! empty($type) ?
-            WriterFactory::createFromType($type, $options) :
-            WriterFactory::createFromFile($path, $options);
+        $this->writer = empty($type) ?
+            WriterFactory::createFromFile($path, $options) :
+            WriterFactory::createFromType($type, $options);
     }
 
     protected function addOptionsToWriter(
@@ -135,25 +131,21 @@ class SimpleExcelWriter
         return $this->numberOfRows;
     }
 
-    public function noHeaderRow()
+    public function noHeaderRow(): static
     {
         $this->processHeader = false;
 
         return $this;
     }
 
-    public function setHeaderStyle(Style $style)
+    public function setHeaderStyle(Style $style): static
     {
         $this->headerStyle = $style;
 
         return $this;
     }
 
-    /**
-     * @param \OpenSpout\Common\Entity\Row|array $row
-     * @param Style|null $style
-     */
-    public function addRow($row, Style $style = null)
+    public function addRow(Row|array $row, Style $style = null): static
     {
         if (is_array($row)) {
             if ($this->processHeader && $this->processingFirstRow) {
@@ -171,7 +163,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addRows(iterable $rows, Style $style = null)
+    public function addRows(iterable $rows, Style $style = null): static
     {
         foreach ($rows as $row) {
             $this->addRow($row, $style);
@@ -192,7 +184,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    protected function writeHeaderFromRow(array $row)
+    protected function writeHeaderFromRow(array $row): void
     {
         $headerValues = array_keys($row);
 
@@ -222,10 +214,6 @@ class SimpleExcelWriter
 
     /**
      * Sets the name for the current sheet.
-     *
-     * @param  string  $name
-     *
-     * @return $this
      */
     public function nameCurrentSheet(string $name): self
     {
@@ -241,7 +229,7 @@ class SimpleExcelWriter
         exit;
     }
 
-    public function close()
+    public function close(): void
     {
         $this->writer->close();
     }

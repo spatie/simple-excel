@@ -7,15 +7,16 @@
 
 1. Add support for openspout/openspout v4
 2. Drop support for openspout/openspout v3
+3. Add type hinting
 
 ### Classes have been moved
 
 - `\Box\Spout\Common\Entity\Row` should be replaced with `\OpenSpout\Common\Entity\Row`
 - `\Box\Spout\Common\Entity\Style\Style` should be replaced with `OpenSpout\Common\Entity\Style\Style`
 
-### Remove `useDelimiter()`
+### Remove `useDelimiter()` on SimpleExcelWriter
 
-In v3 there was a method to set a delimiter. Now you should pass this as parameter.
+In v3 there was a method to set a delimiter. Now you should pass this as parameter to the constructor.
 
 Change
 ```php

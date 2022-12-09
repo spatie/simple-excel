@@ -13,8 +13,10 @@ use OpenSpout\Reader\SheetInterface;
 
 class SimpleExcelReader
 {
-    protected string $path;
-    protected string $type;
+    /**
+     * @var callable
+     */
+    public $headerRowFormatter;
     protected ReaderInterface $reader;
     protected RowIteratorInterface $rowIterator;
     protected int $sheetNumber = 1;
@@ -33,17 +35,13 @@ class SimpleExcelReader
     protected bool $useLimit = false;
     protected CSVOptions $csvOptions;
 
-    public static function create(string $file, string $type = '')
+    public static function create(string $file, string $type = ''): static
     {
         return new static($file, $type);
     }
 
-    public function __construct(string $path, string $type = '')
+    public function __construct(protected string $path, protected string $type = '')
     {
-        $this->path = $path;
-
-        $this->type = $type;
-
         $this->csvOptions = new CSVOptions();
 
         $this->reader = $this->type ?
@@ -57,9 +55,9 @@ class SimpleExcelReader
     {
         $options = $this->reader instanceof CSVReader ? $this->csvOptions : null;
 
-        $this->reader = ! empty($this->type) ?
-            ReaderFactory::createFromType($this->type, $options) :
-            ReaderFactory::createFromFile($this->path, $options);
+        $this->reader = empty($this->type) ?
+            ReaderFactory::createFromFile($this->path, $options) :
+            ReaderFactory::createFromType($this->type, $options);
     }
 
     public function getPath(): string
@@ -245,11 +243,6 @@ class SimpleExcelReader
         return $this->headers;
     }
 
-    public function close()
-    {
-        $this->reader->close();
-    }
-
     protected function processHeaderRow(array $headers): array
     {
         if ($this->trimHeader) {
@@ -269,12 +262,10 @@ class SimpleExcelReader
 
     protected function convertHeaders(callable $callback, array $headers): array
     {
-        return array_map(function ($header) use ($callback) {
-            return call_user_func($callback, $header);
-        }, $headers);
+        return array_map(fn ($header) => $callback($header), $headers);
     }
 
-    public function headerRowFormatter(callable $callback)
+    public function headerRowFormatter(callable $callback): static
     {
         $this->headerRowFormatter = $callback;
 
@@ -283,13 +274,14 @@ class SimpleExcelReader
 
     protected function trim(string $header): string
     {
+        $arguments = [];
         $arguments[] = $header;
 
         if (! is_null($this->trimHeaderCharacters)) {
             $arguments[] = $this->trimHeaderCharacters;
         }
 
-        return call_user_func_array('trim', $arguments);
+        return trim(...$arguments);
     }
 
     protected function toSnakeCase(string $header): string
@@ -326,13 +318,13 @@ class SimpleExcelReader
         $this->setReader();
 
         $this->reader->open($this->path);
-        $sheet = ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
 
-        return $sheet;
+        return ($this->searchSheetByName) ? $this->getActiveSheetByName() : $this->getActiveSheetByIndex();
     }
 
     protected function getActiveSheetByName(): SheetInterface
     {
+        $sheet = null;
         foreach ($this->reader->getSheetIterator() as $key => $sheet) {
             if ($this->sheetName != "" && $this->sheetName === $sheet->getName()) {
                 break;
@@ -347,6 +339,8 @@ class SimpleExcelReader
 
     protected function getActiveSheetByIndex(): SheetInterface
     {
+        $key = null;
+        $sheet = null;
         foreach ($this->reader->getSheetIterator() as $key => $sheet) {
             if ($key === $this->sheetNumber) {
                 break;
@@ -357,6 +351,11 @@ class SimpleExcelReader
         }
 
         return $sheet;
+    }
+
+    public function close(): void
+    {
+        $this->reader->close();
     }
 
     public function __destruct()
