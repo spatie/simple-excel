@@ -397,16 +397,16 @@ Jane,Doe
 Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
 
 ```php
-use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\CellAlignment;
+use OpenSpout\Common\Entity\Style\Style;
 
-$style = (new StyleBuilder())
+$style = (new Style())
    ->setFontBold()
    ->setFontSize(15)
    ->setFontColor(Color::BLUE)
    ->setShouldWrapText()
-   ->setBackgroundColor(Color::YELLOW)
-   ->build();
+   ->setBackgroundColor(Color::YELLOW);
 
 $writer->addRow(['values', 'of', 'the', 'row'], $style);
 ```
