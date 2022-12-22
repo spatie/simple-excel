@@ -394,19 +394,30 @@ Jane,Doe
 
 #### Adding layout
 
-Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
+Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `Style` builder that you can use to format rows. Styles can only be used on excel documents.
 
 ```php
 use OpenSpout\Common\Entity\Style\Color;
 use OpenSpout\Common\Entity\Style\CellAlignment;
 use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Common\Entity\Style\Border;
+use OpenSpout\Common\Entity\Style\BorderPart;
 
+/* Create a border around a cell */
+$border = new Border(
+        new BorderPart(Border::BOTTOM, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
+        new BorderPart(Border::LEFT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
+        new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
+        new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
+    );
+    
 $style = (new Style())
    ->setFontBold()
    ->setFontSize(15)
    ->setFontColor(Color::BLUE)
    ->setShouldWrapText()
-   ->setBackgroundColor(Color::YELLOW);
+   ->setBackgroundColor(Color::YELLOW)
+   ->setBorder($border);
 
 $writer->addRow(['values', 'of', 'the', 'row'], $style);
 ```
@@ -416,7 +427,7 @@ To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
 $writer->setHeaderStyle($style);
 ```
 
-For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/3.x/docs).
+For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/4.x/docs).
 
 #### Creating an additional sheets
 
