@@ -18,7 +18,7 @@
     "require": {
         "php": "^8.0",
         "openspout/openspout": "^4.8",
-        "illuminate/support": "^8.71|^9.0"
+        "illuminate/support": "^8.71|^9.0|^10.0"
     },
     "require-dev": {
         "pestphp/pest-plugin-laravel": "^1.3",
