@@ -2,6 +2,21 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.0.1 - 2023-01-17
+
+### What's Changed
+
+- Doc Correction : adding-layout by @jeremysalmon in https://github.com/spatie/simple-excel/pull/129
+- Doc Update : OpenSpout Doc Link from 3.x to 4.x and How to make border by @jeremysalmon in https://github.com/spatie/simple-excel/pull/130
+- add support for laravel 10 by @ankurk91 in https://github.com/spatie/simple-excel/pull/131
+
+### New Contributors
+
+- @jeremysalmon made their first contribution in https://github.com/spatie/simple-excel/pull/129
+- @ankurk91 made their first contribution in https://github.com/spatie/simple-excel/pull/131
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.0.0...3.0.1
+
 ## 3.0.0 - 2022-12-09
 
 ### What's Changed
