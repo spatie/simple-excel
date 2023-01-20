@@ -30,6 +30,33 @@ To
  $writer = SimpleExcelWriter::create(file: $file, delimiter: ';');
 ```
 
+### Replace StyleBuilder with Style
+
+In OpenSpout v4 the `StyleBuilder` is removed and integrated inside the `Style` class.
+
+Update code like this...
+
+```php
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+
+$builder = new StyleBuilder();
+$builder
+    ->setFontBold()
+    ->setFontName('Sans');
+```
+
+... to ...
+
+```php
+use OpenSpout\Common\Entity\Style\Style;
+
+$style = new Style();
+$style
+    ->setFontBold()
+    ->setFontName('Sans');
+```
+
 ### Deprecated setting the type manually
 
 In v4 of openspout/openspout it is no longer possible to explicitly set the type.
