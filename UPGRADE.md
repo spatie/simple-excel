@@ -31,27 +31,26 @@ To
 ```
 
 ### Replace StyleBuilder with Style
-In OpenSpout v4 the StyleBuilder is removed and integrated inside the style Class. Therefor you don't need to bld your style anymore.
 
-Change:
+In OpenSpout v4 the `StyleBuilder` is removed and integrated inside the `Style` class.
+
+Update code like this...
+
 ```php
-// imports
 use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 
-// Code
 $builder = new StyleBuilder();
 $builder
     ->setFontBold()
     ->setFontName('Sans');
 ```
 
-To:
+... to ...
+
 ```php
-// imports
 use OpenSpout\Common\Entity\Style\Style;
 
-// Code
 $style = new Style();
 $style
     ->setFontBold()
