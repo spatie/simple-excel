@@ -2,6 +2,20 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.1.0 - 2023-01-20
+
+### What's Changed
+
+- Updated Upgrade.md. For replace StyleBuilder to Style since its been … by @GekkeGlennDev in https://github.com/spatie/simple-excel/pull/134
+- Allow delimiter in streamDownload() by @lukasleitsch in https://github.com/spatie/simple-excel/pull/132
+
+### New Contributors
+
+- @GekkeGlennDev made their first contribution in https://github.com/spatie/simple-excel/pull/134
+- @lukasleitsch made their first contribution in https://github.com/spatie/simple-excel/pull/132
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.0.1...3.1.0
+
 ## 3.0.1 - 2023-01-17
 
 ### What's Changed
