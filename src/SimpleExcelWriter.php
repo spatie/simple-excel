@@ -56,9 +56,9 @@ class SimpleExcelWriter
         );
     }
 
-    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null): static
+    public static function streamDownload(string $downloadName, string $type = '', callable $writerCallback = null, ?string $delimiter = null): static
     {
-        $simpleExcelWriter = new static($downloadName, $type);
+        $simpleExcelWriter = new static($downloadName, $type, $delimiter);
 
         $writer = $simpleExcelWriter->getWriter();
 
