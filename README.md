@@ -1,7 +1,7 @@
 # Read and write simple Excel and CSV files
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/simple-excel/run-tests?label=tests)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/spatie/simple-excel/run-tests.yml?label=tests&branch=main)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
 
 This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure low memory usage, even when working with large files.
