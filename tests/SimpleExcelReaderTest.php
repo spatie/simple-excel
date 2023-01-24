@@ -1,7 +1,9 @@
 <?php
 
+use OpenSpout\Common\Exception\UnsupportedTypeException;
 use OpenSpout\Reader\CSV\Reader;
 use Spatie\SimpleExcel\SimpleExcelReader;
+use function Pest\testDirectory;
 
 it('can work with an empty field', function () {
     $actualCount = SimpleExcelReader::create(getStubPath('empty.csv'))
@@ -367,11 +369,16 @@ it('can call `first` on the collection twice', function () {
     expect([$firstRow, $firstRowAgain])->not->toBeNull();
 });
 
-it('allows setting the reader type manually', function () {
-    $reader = SimpleExcelReader::create('php://input', 'csv');
+it('allows setting the reader type from the mime type', function () {
+    $csvReader = SimpleExcelReader::create(testDirectory('stubs/header-and-rows.csv'),true);
 
-    expect($reader->getReader())->toBeInstanceOf(Reader::class);
+    expect($csvReader->getReader())->toBeInstanceOf(Reader::class);
 });
+
+it(
+    'fails to set the reader based on mime type for empty file',
+    fn () => SimpleExcelReader::create(testDirectory('stubs/empty.csv'),true)
+)->expectException(UnsupportedTypeException::class);
 
 it('can trim the header row names', function () {
     $rows = SimpleExcelReader::create(getStubPath('header-with-spaces.csv'))

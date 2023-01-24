@@ -31,17 +31,17 @@ class SimpleExcelReader
     protected bool $useLimit = false;
     protected CSVOptions $csvOptions;
 
-    public static function create(string $file, string $type = ''): static
+    public static function create(string $file, bool $useMimeType = false): static
     {
-        return new static($file, $type);
+        return new static($file, $useMimeType);
     }
 
-    public function __construct(protected string $path, protected string $type = '')
+    public function __construct(protected string $path, protected bool $useMimeType = false)
     {
         $this->csvOptions = new CSVOptions();
 
-        $this->reader = $this->type ?
-            ReaderFactory::createFromType($this->type) :
+        $this->reader = $this->useMimeType ?
+            ReaderFactory::createFromFileByMimeType($this->path) :
             ReaderFactory::createFromFile($this->path);
 
         $this->setReader();
@@ -51,9 +51,9 @@ class SimpleExcelReader
     {
         $options = $this->reader instanceof CSVReader ? $this->csvOptions : null;
 
-        $this->reader = empty($this->type) ?
-            ReaderFactory::createFromFile($this->path, $options) :
-            ReaderFactory::createFromType($this->type, $options);
+        $this->reader = $this->useMimeType ?
+            ReaderFactory::createFromFileByMimeType($this->path, $options) :
+            ReaderFactory::createFromFile($this->path, $options);
     }
 
     public function getPath(): string
