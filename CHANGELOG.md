@@ -2,6 +2,20 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.2.0 - 2023-03-13
+
+### What's Changed
+
+- Fix workflow badge in README by @nelson6e65 in https://github.com/spatie/simple-excel/pull/135
+- Allow `shouldAddBom` in `streamDownload` by @mariomka in https://github.com/spatie/simple-excel/pull/141
+
+### New Contributors
+
+- @nelson6e65 made their first contribution in https://github.com/spatie/simple-excel/pull/135
+- @mariomka made their first contribution in https://github.com/spatie/simple-excel/pull/141
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.1.0...3.2.0
+
 ## 3.1.0 - 2023-01-20
 
 ### What's Changed
