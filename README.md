@@ -429,6 +429,25 @@ $writer->setHeaderStyle($style);
 
 For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/4.x/docs).
 
+#### Setting column widths and row heights
+
+By accessing the underlying OpenSpout Writer you can set default column widths and row heights and change the width of specific columns.
+
+```php
+SimpleExcelWriter::create(
+    file: 'document.xlsx',
+    configureWriter: function ($writer) {
+        $options = $writer->getOptions;
+        $options->DEFAULT_COLUMN_WIDTH=25; // set default width
+        $options->DEFAULT_ROW_HEIGHT=15; // set default height
+        // set columns 1, 3 and 8 to width 40
+        $options->setColumnWidth(40, 1, 3, 8);
+        // set columns 9 through 12 to width 10
+        $options->setColumnWidthForRange(10, 9, 12);
+    }
+)
+```
+
 #### Creating an additional sheets
 
 By default, the writer will write to the first sheet. If you want to write to an additional sheet, you can use the `addNewSheetAndMakeItCurrent` method.
