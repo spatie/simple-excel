@@ -1,10 +1,104 @@
-# Read and write simple Excel and CSV files
+<a href="https://spatie.be/github-ad-click/simple-excel">
+<img
+    style="width: 100%; max-width: 100%;" alt="spatie-simple-excel"
+    src="https://github-ads.s3.eu-central-1.amazonaws.com/simple-excel.jpg?t=1" >
+</a>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/spatie/simple-excel/run-tests.yml?label=tests&branch=main)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
+<p align="center">
+    <a href="https://packagist.org/packages/spatie/simple-excel">
+        <img alt="Packagist" src="https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=for-the-badge&logo=packagist">
+    </a>
+    <a href="https://github.com/spatie/simple-excel/actions?query=workflow%3Arun-tests+branch%3Amain">
+        <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/spatie/simple-excel/run-tests.yml?style=for-the-badge&logo=github&label=tests">
+    </a>
+    <a href="https://packagist.org/packages/spatie/simple-excel">
+        <img alt="Downloads" src="https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=for-the-badge" >
+    </a>
+</p>
 
-This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure low memory usage, even when working with large files.
+----
+
+## Support us
+
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
+
+<hr style="background-color: #1bb5d0">
+
+# Spatie Simple Excel
+
+This package allows you to easily read and write simple Excel and CSV files.
+Behind the scenes generators are used to ensure low memory usage, even when working with large files.
+
+----
+
+- :fire: Great uses for **generators**
+- :brain: **Low memory usage** working with **large files**
+- :computer: **Read** simple **Excel** files
+- :computer: **Write** simple **Excel** files
+- :computer: **Read** simple **CSV** files
+- :computer: **Write** simple **CSV** files
+- :zap: Useful for **import** _(*)_
+- :zap: Useful for **export** _(*)_
+- :book: **Simplified** implementation
+- :muscle: Great features with **few lines**
+
+[*] _Example of implementation._
+
+Table of contents
+=================
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Reading a CSV](#reading-a-csv)
+    - [Reading an Excel file](#reading-an-excel-file)
+    - [Working with LazyCollections](#working-with-lazy-collections)
+    - [Reading a file without headers](#reading-a-file-without-headers)
+    - [Manually setting the headers](#manually-setting-the-headers)
+  - [Working with multiple sheet documents](#working-with-multiple-sheet-documents)
+    - [Retrieving header row values](#retrieving-header-row-values)
+    - [Dealing with headers that are not on the first line](#dealing-with-headers-that-are-not-on-the-first-line)
+    - [Trimming headers](#trimming-headers)
+    - [Convert headers to snake_case](#convert-headers-to-snake-case)
+    - [Manually formatting headers](#manually-formatting-headers)
+    - [Manually working with the reader object](#manually-working-with-the-reader-object)
+    - [Limiting the result set](#limiting-the-result-set)
+  - [Writing files](#writing-files)
+    - [Manually set the header from array](#manually-set-the-header-from-array)
+    - [Writing an Excel file](#writing-an-excel-file)
+    - [Streaming an Excel file to the browser](#streaming-an-excel-file-to-the-browser)
+  - [Writing multiple rows at once](#writing-multiple-rows-at-once)
+    - [Writing a file without titles](#writing-a-file-without-titles)
+    - [Adding layout](#adding-layout)
+    - [Setting column widths and row heights](#setting-column-widths-and-row-heights)
+    - [Creating an additional sheets](#creating-an-additional-sheets)
+    - [Using an alternative delimiter](#using-an-alternative-delimiter)
+    - [Getting the number of rows written](#getting-the-number-of-rows-written)
+    - [Disable BOM](#disable-bom)
+    - [Manually working with the writer object](#manually-working-with-the-writer-object)
+- [Testing](#testing)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
+- [Security](#security)
+- [Postcardware](#postcardware)
+- [Credits](#credits)
+- [Alternatives](#alternatives)
+- [License](#license)
+
+<hr style="background-color: #1bb5d0">
+
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require spatie/simple-excel
+```
+
+## Usage
 
 Here's an example on how to read an Excel or CSV.
 
@@ -18,24 +112,6 @@ SimpleExcelReader::create($pathToFile)->getRows()
 ```
 
 If `$pathToFile` ends with `.csv` a CSV file is assumed. If it ends with `.xlsx`, an Excel file is assumed.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/simple-excel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/simple-excel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
-```bash
-composer require spatie/simple-excel
-```
-
-## Usage
 
 ### Reading a CSV
 
@@ -152,7 +228,7 @@ If your file has headers that are not on the first line, you can use the `header
 to indicate the line at which the headers are present. Any data above this line
 will be discarded from the result.
 
-`headerOnRow` accepts the line number as an argument, starting at 0. Blank lines are not counted. 
+`headerOnRow` accepts the line number as an argument, starting at 0. Blank lines are not counted.
 
 Since blank lines will not be counted, this method is mostly useful for files
 that include formatting above the actual dataset, which can be the case with Excel files.
@@ -345,12 +421,12 @@ foreach (range(1, 10_000) as $i) {
         'first_name' => 'John',
         'last_name' => 'Doe',
     ]);
-    
+
     if ($i % 1000 === 0) {
         flush(); // Flush the buffer every 1000 rows
     }
 }
-    
+
 $writer->toBrowser();
 ```
 
@@ -410,7 +486,7 @@ $border = new Border(
         new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
         new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
     );
-    
+
 $style = (new Style())
    ->setFontBold()
    ->setFontSize(15)
@@ -457,14 +533,14 @@ $writer = SimpleExcelWriter::create($pathToXlsx);
 
 Posts::all()->each(function (Post $post) use ($writer) {
     $writer->nameCurrentSheet($post->title);
-    
+
     $post->comments->each(function (Comment $comment) use ($writer) {
         $writer->addRow([
             'comment' => $comment->comment,
             'author' => $comment->author,
         ]);
     });
-    
+
     if(!$post->is($posts->last())) {
         $writer->addNewSheetAndMakeItCurrent();
     }
@@ -515,13 +591,13 @@ Under the hood this package uses the [openspout/openspout](https://github.com/op
 $writer = SimpleExcelWriter::create($pathToCsv)->getWriter();
 ```
 
-### Testing
+## Testing
 
 ``` bash
 composer test
 ```
 
-### Changelog
+## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
@@ -529,7 +605,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
 
-### Security
+## Security
 
 If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
