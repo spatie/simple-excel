@@ -18,6 +18,8 @@
 
 ----
 
+## [Table of contents - Docs 📑:](#table-of-contents)
+
 ## Support us
 
 
