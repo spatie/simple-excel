@@ -51,46 +51,46 @@ Behind the scenes generators are used to ensure low memory usage, even when work
 Table of contents
 =================
 
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Reading a CSV](#reading-a-csv)
-    - [Reading an Excel file](#reading-an-excel-file)
-    - [Working with LazyCollections](#working-with-lazy-collections)
-    - [Reading a file without headers](#reading-a-file-without-headers)
-    - [Manually setting the headers](#manually-setting-the-headers)
-  - [Working with multiple sheet documents](#working-with-multiple-sheet-documents)
-    - [Retrieving header row values](#retrieving-header-row-values)
-    - [Dealing with headers that are not on the first line](#dealing-with-headers-that-are-not-on-the-first-line)
-    - [Trimming headers](#trimming-headers)
-    - [Convert headers to snake_case](#convert-headers-to-snake-case)
-    - [Manually formatting headers](#manually-formatting-headers)
-    - [Manually working with the reader object](#manually-working-with-the-reader-object)
-    - [Limiting the result set](#limiting-the-result-set)
-  - [Writing files](#writing-files)
-    - [Manually set the header from array](#manually-set-the-header-from-array)
-    - [Writing an Excel file](#writing-an-excel-file)
-    - [Streaming an Excel file to the browser](#streaming-an-excel-file-to-the-browser)
-  - [Writing multiple rows at once](#writing-multiple-rows-at-once)
-    - [Writing a file without titles](#writing-a-file-without-titles)
-    - [Adding layout](#adding-layout)
-    - [Setting column widths and row heights](#setting-column-widths-and-row-heights)
-    - [Creating an additional sheets](#creating-an-additional-sheets)
-    - [Using an alternative delimiter](#using-an-alternative-delimiter)
-    - [Getting the number of rows written](#getting-the-number-of-rows-written)
-    - [Disable BOM](#disable-bom)
-    - [Manually working with the writer object](#manually-working-with-the-writer-object)
-- [Testing](#testing)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [Security](#security)
-- [Postcardware](#postcardware)
-- [Credits](#credits)
-- [Alternatives](#alternatives)
-- [License](#license)
+- [Installation](#installation-)
+- [Usage](#usage-)
+  - [Reading a CSV](#reading-a-csv-)
+    - [Reading an Excel file](#reading-an-excel-file-)
+    - [Working with LazyCollections](#working-with-lazycollections-)
+    - [Reading a file without headers](#reading-a-file-without-headers-)
+    - [Manually setting the headers](#manually-setting-the-headers-)
+  - [Working with multiple sheet documents](#working-with-multiple-sheet-documents-)
+    - [Retrieving header row values](#retrieving-header-row-values-)
+    - [Dealing with headers that are not on the first line](#dealing-with-headers-that-are-not-on-the-first-line-)
+    - [Trimming headers](#trimming-headers-)
+    - [Convert headers to snake_case](#convert-headers-to-snake_case-)
+    - [Manually formatting headers](#manually-formatting-headers-)
+    - [Manually working with the reader object](#manually-working-with-the-reader-object-)
+    - [Limiting the result set](#limiting-the-result-set-)
+  - [Writing files](#writing-files-)
+    - [Manually set the header from array](#manually-set-the-header-from-array-)
+    - [Writing an Excel file](#writing-an-excel-file-)
+    - [Streaming an Excel file to the browser](#streaming-an-excel-file-to-the-browser-)
+  - [Writing multiple rows at once](#writing-multiple-rows-at-once-)
+    - [Writing a file without titles](#writing-a-file-without-titles-)
+    - [Adding layout](#adding-layout-)
+    - [Setting column widths and row heights](#setting-column-widths-and-row-heights-)
+    - [Creating an additional sheets](#creating-an-additional-sheets-)
+    - [Using an alternative delimiter](#using-an-alternative-delimiter-)
+    - [Getting the number of rows written](#getting-the-number-of-rows-written-)
+    - [Disable BOM](#disable-bom-)
+    - [Manually working with the writer object](#manually-working-with-the-writer-object-)
+- [Testing](#testing-)
+- [Changelog](#changelog-)
+- [Contributing](#contributing-)
+- [Security](#security-)
+- [Postcardware](#postcardware-)
+- [Credits](#credits-)
+- [Alternatives](#alternatives-)
+- [License](#license-)
 
 <hr style="background-color: #1bb5d0">
 
-## Installation
+## Installation [^](#table-of-contents)
 
 You can install the package via composer:
 
@@ -98,7 +98,7 @@ You can install the package via composer:
 composer require spatie/simple-excel
 ```
 
-## Usage
+## Usage [^](#table-of-contents)
 
 Here's an example on how to read an Excel or CSV.
 
@@ -113,7 +113,7 @@ SimpleExcelReader::create($pathToFile)->getRows()
 
 If `$pathToFile` ends with `.csv` a CSV file is assumed. If it ends with `.xlsx`, an Excel file is assumed.
 
-### Reading a CSV
+### Reading a CSV [^](#table-of-contents)
 
 Imagine you have a CSV with this content.
 
@@ -135,11 +135,11 @@ $rows->each(function(array $rowProperties) {
 });
 ```
 
-#### Reading an Excel file
+#### Reading an Excel file [^](#table-of-contents)
 
 Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx`.
 
-#### Working with LazyCollections
+#### Working with LazyCollections [^](#table-of-contents)
 
 `getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
 
@@ -157,7 +157,7 @@ SimpleExcelReader::create($pathToCsv)->getRows()
     });
 ```
 
-#### Reading a file without headers
+#### Reading a file without headers [^](#table-of-contents)
 
 If the file you are reading does not contain a header row, then you should use the `noHeaderRow()` method.
 
@@ -172,7 +172,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
-#### Manually setting the headers
+#### Manually setting the headers [^](#table-of-contents)
 
 If you would like to use a specific array of values for the headers, you can use the `useHeaders()` method.
 
@@ -191,7 +191,7 @@ If your file already contains a header row, it will be ignored and replaced with
 
 If your file does not contain a header row, you should also use `noHeaderRow()`, and your headers will be used instead of numeric keys, as above.
 
-### Working with multiple sheet documents
+### Working with multiple sheet documents [^](#table-of-contents)
 
 Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method to select by index.
 
@@ -209,7 +209,7 @@ $rows = SimpleExcelReader::create($pathToXlsx)
     ->getRows();
 ```
 
-#### Retrieving header row values
+#### Retrieving header row values [^](#table-of-contents)
 
 If you would like to retrieve the header row as an array, you can use the `getHeaders()` method.
 
@@ -222,7 +222,7 @@ $headers = SimpleExcelReader::create($pathToCsv)->getHeaders();
 // [ 'email', 'first_name' ]
 ```
 
-#### Dealing with headers that are not on the first line
+#### Dealing with headers that are not on the first line [^](#table-of-contents)
 
 If your file has headers that are not on the first line, you can use the `headerOnRow()` method
 to indicate the line at which the headers are present. Any data above this line
@@ -256,7 +256,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 });
 ```
 
-#### Trimming headers
+#### Trimming headers [^](#table-of-contents)
 
 If the file you are reading contains a title row, but you need to trim additional characters on the title values, then you should use the `trimHeaderRow()` method.
 This functionality mimics the `trim` method, and the default characters it trims, matches that function.
@@ -282,7 +282,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
 
 `trimHeaderRow()` additionally accepts a param to specify what characters to trim. This param can utilize the same functionality allowed by the trim function's `$characters` definition including a range of characters.
 
-#### Convert headers to snake_case
+#### Convert headers to snake_case [^](#table-of-contents)
 
 If you would like all the headers to be converted to snake_case, use the the `headersToSnakeCase()` method.
 
@@ -302,7 +302,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
     });
 ```
 
-#### Manually formatting headers
+#### Manually formatting headers [^](#table-of-contents)
 
 You can use a custom formatter to change the headers using the `formatHeadersUsing` method and passing a closure.
 
@@ -321,7 +321,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
     });
 ```
 
-#### Manually working with the reader object
+#### Manually working with the reader object [^](#table-of-contents)
 
 Under the hood this package uses the [box/spout](https://github.com/openspout/openspout) package. You can get to the underlying reader that implements `\OpenSpout\Reader\ReaderInterface` by calling the `getReader` method.
 
@@ -329,7 +329,7 @@ Under the hood this package uses the [box/spout](https://github.com/openspout/op
 $reader = SimpleExcelReader::create($pathToCsv)->getReader();
 ```
 
-#### Limiting the result set
+#### Limiting the result set [^](#table-of-contents)
 
 The `take` method allows you to specify a limit on how many rows should be returned.
 
@@ -350,7 +350,7 @@ $rows = SimpleExcelReader::create($pathToCsv)
     ->getRows();
 ```
 
-### Writing files
+### Writing files [^](#table-of-contents)
 
 Here's how you can write a CSV file:
 
@@ -376,7 +376,7 @@ John,Doe
 Jane,Doe
 ```
 
-#### Manually set the header from array
+#### Manually set the header from array [^](#table-of-contents)
 
 Instead of automatically let the package dedecting a header row, you can set it manually.
 
@@ -389,12 +389,12 @@ $writer = SimpleExcelWriter::create($pathToCsv)
     ->addRow(['Jane', 'Doe'])
 ```
 
-#### Writing an Excel file
+#### Writing an Excel file [^](#table-of-contents)
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
 
 
-#### Streaming an Excel file to the browser
+#### Streaming an Excel file to the browser [^](#table-of-contents)
 
 Instead of writing a file to disk, you can stream it directly to the browser.
 
@@ -431,7 +431,7 @@ $writer->toBrowser();
 ```
 
 
-### Writing multiple rows at once
+### Writing multiple rows at once [^](#table-of-contents)
 
 You can use `addRows` instead of `addRow` to add multiple rows at once.
 
@@ -449,7 +449,7 @@ $writer = SimpleExcelWriter::streamDownload('your-export.xlsx')
     ]);
 ```
 
-#### Writing a file without titles
+#### Writing a file without titles [^](#table-of-contents)
 
 If the file you are writing should not have a title row added automatically, then you should use the `noHeaderRow()` method.
 
@@ -468,7 +468,7 @@ This will output:
 Jane,Doe
 ```
 
-#### Adding layout
+#### Adding layout [^](#table-of-contents)
 
 Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `Style` builder that you can use to format rows. Styles can only be used on excel documents.
 
@@ -505,7 +505,7 @@ $writer->setHeaderStyle($style);
 
 For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/4.x/docs).
 
-#### Setting column widths and row heights
+#### Setting column widths and row heights [^](#table-of-contents)
 
 By accessing the underlying OpenSpout Writer you can set default column widths and row heights and change the width of specific columns.
 
@@ -524,7 +524,7 @@ SimpleExcelWriter::create(
 )
 ```
 
-#### Creating an additional sheets
+#### Creating an additional sheets [^](#table-of-contents)
 
 By default, the writer will write to the first sheet. If you want to write to an additional sheet, you can use the `addNewSheetAndMakeItCurrent` method.
 
@@ -547,7 +547,7 @@ Posts::all()->each(function (Post $post) use ($writer) {
 });
 ```
 
-#### Using an alternative delimiter
+#### Using an alternative delimiter [^](#table-of-contents)
 
 By default the `SimpleExcelReader` will assume that the delimiter is a `,`.
 
@@ -557,7 +557,7 @@ This is how you can use an alternative delimiter:
 SimpleExcelWriter::create(file: $pathToCsv, delimiter: ';');
 ```
 
-#### Getting the number of rows written
+#### Getting the number of rows written [^](#table-of-contents)
 
 You can get the number of rows that are written. This number includes the automatically added header row.
 
@@ -571,7 +571,7 @@ $writerWithAutomaticHeader = SimpleExcelWriter::create($this->pathToCsv)
 $writerWithAutomaticHeader->getNumberOfRows(); // returns 2
 ```
 
-#### Disable BOM
+#### Disable BOM [^](#table-of-contents)
 
 You can also disable adding a BOM to the start of the file. BOM must be disabled on create and cannot be disabled after creation of the writer.
 
@@ -583,7 +583,7 @@ SimpleExcelWriter::createWithoutBom($this->pathToCsv, $type);
 
 Additional information about BOM can be found [here](https://en.wikipedia.org/wiki/Byte_order_mark).
 
-#### Manually working with the writer object
+#### Manually working with the writer object [^](#table-of-contents)
 
 Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. You can get to the underlying writer that implements `\OpenSpout\Reader\WriterInterface` by calling the `getWriter` method.
 
@@ -591,25 +591,25 @@ Under the hood this package uses the [openspout/openspout](https://github.com/op
 $writer = SimpleExcelWriter::create($pathToCsv)->getWriter();
 ```
 
-## Testing
+## Testing [^](#table-of-contents)
 
 ``` bash
 composer test
 ```
 
-## Changelog
+## Changelog [^](#table-of-contents)
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
+## Contributing [^](#table-of-contents)
 
 Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
 
-## Security
+## Security [^](#table-of-contents)
 
 If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
-## Postcardware
+## Postcardware [^](#table-of-contents)
 
 You're free to use this package, but if it makes it to your production environment we highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using.
 
@@ -617,16 +617,16 @@ Our address is: Spatie, Kruikstraat 22, 2018 Antwerp, Belgium.
 
 We publish all received postcards [on our company website](https://spatie.be/en/opensource/postcards).
 
-## Credits
+## Credits [^](#table-of-contents)
 
 - [Freek Van der Herten](https://github.com/freekmurze)
 - [All Contributors](../../contributors)
 
-## Alternatives
+## Alternatives [^](#table-of-contents)
 
 - [PhpSpreadsheet](https://phpspreadsheet.readthedocs.io/en/latest/)
 - [laravel-excel](https://laravel-excel.com)
 
-## License
+## License [^](#table-of-contents)
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
