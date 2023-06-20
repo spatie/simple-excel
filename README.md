@@ -632,3 +632,37 @@ We publish all received postcards [on our company website](https://spatie.be/en/
 ## License [^](#table-of-contents)
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+----
+
+<a href="https://spatie.be/github-ad-click/simple-excel">
+<img
+    style="width: 100%; max-width: 100%;" alt="spatie-simple-excel"
+    src="https://github-ads.s3.eu-central-1.amazonaws.com/simple-excel.jpg?t=1" >
+</a>
+
+<p align="center">
+    <a href="https://packagist.org/packages/spatie/simple-excel">
+        <img alt="Packagist" src="https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=for-the-badge&logo=packagist">
+    </a>
+    <a href="https://github.com/spatie/simple-excel/actions?query=workflow%3Arun-tests+branch%3Amain">
+        <img alt="Tests Passing" src="https://img.shields.io/github/actions/workflow/status/spatie/simple-excel/run-tests.yml?style=for-the-badge&logo=github&label=tests">
+    </a>
+    <a href="https://packagist.org/packages/spatie/simple-excel">
+        <img alt="Downloads" src="https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=for-the-badge" >
+    </a>
+</p>
+
+
+----
+
+## [Table of contents - Docs 📑:](#table-of-contents)
+
+## Support us
+
+
+We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
+
+We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+
+----
