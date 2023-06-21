@@ -437,7 +437,7 @@ By accessing the underlying OpenSpout Writer you can set default column widths a
 SimpleExcelWriter::create(
     file: 'document.xlsx',
     configureWriter: function ($writer) {
-        $options = $writer->getOptions;
+        $options = $writer->getOptions();
         $options->DEFAULT_COLUMN_WIDTH=25; // set default width
         $options->DEFAULT_ROW_HEIGHT=15; // set default height
         // set columns 1, 3 and 8 to width 40
