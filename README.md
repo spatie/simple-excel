@@ -316,7 +316,12 @@ $writer = SimpleExcelWriter::create($pathToCsv)
 #### Writing an Excel file
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
+One other thing to be aware of when writing an Excel file is that the file doesn't get written until the instance of `SimpleExcelWriter` is garbage collected.
+That's when the `close` method is called. The `close` method is what finalizes writing the file to disk. If you need to access the file before the instance is garbage collected you will need to call the `close` method first.
 
+```php
+$writer->close();
+```
 
 #### Streaming an Excel file to the browser
 
