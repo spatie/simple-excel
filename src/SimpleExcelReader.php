@@ -4,6 +4,8 @@ namespace Spatie\SimpleExcel;
 
 use Illuminate\Support\LazyCollection;
 use InvalidArgumentException;
+use OpenSpout\Common\Entity\Cell;
+use OpenSpout\Common\Entity\Cell\FormulaCell;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Reader\CSV\Options as CSVOptions;
 use OpenSpout\Reader\CSV\Reader as CSVReader;
@@ -21,6 +23,7 @@ class SimpleExcelReader
     protected bool $processHeader = true;
     protected bool $trimHeader = false;
     protected bool $headersToSnakeCase = false;
+    protected bool $parseFormulas = true;
     protected ?string $trimHeaderCharacters = null;
     protected mixed $formatHeadersUsing = null;
     protected ?array $headers = null;
@@ -118,6 +121,13 @@ class SimpleExcelReader
     public function headersToSnakeCase(): self
     {
         $this->headersToSnakeCase = true;
+
+        return $this;
+    }
+
+    public function keepFormulas()
+    {
+        $this->parseFormulas = false;
 
         return $this;
     }
@@ -284,7 +294,12 @@ class SimpleExcelReader
 
     protected function getValueFromRow(Row $row): array
     {
-        $values = $row->toArray();
+        $values = array_map(function (Cell $cell) {
+            return $cell instanceof FormulaCell && $this->parseFormulas
+                ? $cell->getComputedValue()
+                : $cell->getValue();
+        }, $row->getCells());
+
         ksort($values);
 
         $headers = $this->customHeaders ?: $this->headers;

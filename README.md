@@ -115,7 +115,7 @@ If your file already contains a header row, it will be ignored and replaced with
 
 If your file does not contain a header row, you should also use `noHeaderRow()`, and your headers will be used instead of numeric keys, as above.
 
-### Working with multiple sheet documents
+#### Working with multiple sheet documents
 
 Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method to select by index.
 
@@ -271,6 +271,16 @@ The `skip` method allows you to define which row to start reading data from. In 
 $rows = SimpleExcelReader::create($pathToCsv)
     ->skip(10)
     ->take(5)
+    ->getRows();
+```
+
+#### Reading cells that contain formulas
+
+Normally, cells containing formulas are parsed and their computed value will be returned. If you want to keep the actual formula as a string, you can use the `keepFormulas` method.
+
+```php
+$rows = SimpleExcelReader::create($pathToXlsx)
+    ->keepFormulas()
     ->getRows();
 ```
 
