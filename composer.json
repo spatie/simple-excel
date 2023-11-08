@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "openspout/openspout": "^4.19",
         "illuminate/support": "^8.71|^9.0|^10.0"
     },
