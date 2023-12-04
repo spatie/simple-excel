@@ -1,7 +1,10 @@
+
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
+
 # Read and write simple Excel and CSV files
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/spatie/simple-excel/run-tests.yml?label=tests&branch=main)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/spatie/simple-excel/run-tests?label=tests)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/simple-excel.svg?style=flat-square)](https://packagist.org/packages/spatie/simple-excel)
 
 This package allows you to easily read and write simple Excel and CSV files. Behind the scenes generators are used to ensure low memory usage, even when working with large files.
@@ -63,6 +66,14 @@ $rows->each(function(array $rowProperties) {
 
 Reading an Excel file is identical to reading a CSV file. Just make sure that the path given to the `create` method of `SimpleExcelReader` ends with `xlsx`.
 
+#### Manually setting the file type
+
+You can pass the file type to the `create` method of `SimpleExcelReader` as the second, optional argument:
+
+```php
+SimpleExcelReader::create($pathToFile, 'csv');
+```
+
 #### Working with LazyCollections
 
 `getRows` will return an instance of [`Illuminate\Support\LazyCollection`](https://laravel.com/docs/master/collections#lazy-collections). This class is part of the Laravel framework. Behind the scenes generators are used, so memory usage will be low, even for large files.
@@ -115,7 +126,7 @@ If your file already contains a header row, it will be ignored and replaced with
 
 If your file does not contain a header row, you should also use `noHeaderRow()`, and your headers will be used instead of numeric keys, as above.
 
-#### Working with multiple sheet documents
+### Working with multiple sheet documents
 
 Excel files can include multiple spreadsheets. You can select the sheet you want to use with the `fromSheet()` method to select by index.
 
@@ -274,16 +285,6 @@ $rows = SimpleExcelReader::create($pathToCsv)
     ->getRows();
 ```
 
-#### Reading cells that contain formulas
-
-Normally, cells containing formulas are parsed and their computed value will be returned. If you want to keep the actual formula as a string, you can use the `keepFormulas` method.
-
-```php
-$rows = SimpleExcelReader::create($pathToXlsx)
-    ->keepFormulas()
-    ->getRows();
-```
-
 ### Writing files
 
 Here's how you can write a CSV file:
@@ -326,11 +327,13 @@ $writer = SimpleExcelWriter::create($pathToCsv)
 #### Writing an Excel file
 
 Writing an Excel file is identical to writing a csv. Just make sure that the path given to the `create` method of `SimpleExcelWriter` ends with `xlsx`.
-One other thing to be aware of when writing an Excel file is that the file doesn't get written until the instance of `SimpleExcelWriter` is garbage collected.
-That's when the `close` method is called. The `close` method is what finalizes writing the file to disk. If you need to access the file before the instance is garbage collected you will need to call the `close` method first.
+
+#### Manually setting the file type
+
+You can pass the file type to the `create` method of `SimpleExcelWriter` as the second, optional argument:
 
 ```php
-$writer->close();
+SimpleExcelWriter::create('php://output', 'csv');
 ```
 
 #### Streaming an Excel file to the browser
@@ -409,30 +412,19 @@ Jane,Doe
 
 #### Adding layout
 
-Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `Style` builder that you can use to format rows. Styles can only be used on excel documents.
+Under the hood this package uses the [openspout/openspout](https://github.com/openspout/openspout) package. That package contains a `StyleBuilder` that you can use to format rows. Styles can only be used on excel documents.
 
 ```php
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use OpenSpout\Common\Entity\Style\Color;
-use OpenSpout\Common\Entity\Style\CellAlignment;
-use OpenSpout\Common\Entity\Style\Style;
-use OpenSpout\Common\Entity\Style\Border;
-use OpenSpout\Common\Entity\Style\BorderPart;
 
-/* Create a border around a cell */
-$border = new Border(
-        new BorderPart(Border::BOTTOM, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::LEFT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
-    );
-    
-$style = (new Style())
+$style = (new StyleBuilder())
    ->setFontBold()
    ->setFontSize(15)
    ->setFontColor(Color::BLUE)
    ->setShouldWrapText()
    ->setBackgroundColor(Color::YELLOW)
-   ->setBorder($border);
+   ->build();
 
 $writer->addRow(['values', 'of', 'the', 'row'], $style);
 ```
@@ -442,26 +434,7 @@ To style your HeaderRow simply call the `setHeaderStyle($style)` Method.
 $writer->setHeaderStyle($style);
 ```
 
-For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/4.x/docs).
-
-#### Setting column widths and row heights
-
-By accessing the underlying OpenSpout Writer you can set default column widths and row heights and change the width of specific columns.
-
-```php
-SimpleExcelWriter::create(
-    file: 'document.xlsx',
-    configureWriter: function ($writer) {
-        $options = $writer->getOptions();
-        $options->DEFAULT_COLUMN_WIDTH=25; // set default width
-        $options->DEFAULT_ROW_HEIGHT=15; // set default height
-        // set columns 1, 3 and 8 to width 40
-        $options->setColumnWidth(40, 1, 3, 8);
-        // set columns 9 through 12 to width 10
-        $options->setColumnWidthForRange(10, 9, 12);
-    }
-)
-```
+For more information on styles head over to [the Spout docs](https://github.com/openspout/openspout/tree/3.x/docs).
 
 #### Creating an additional sheets
 
@@ -493,7 +466,7 @@ By default the `SimpleExcelReader` will assume that the delimiter is a `,`.
 This is how you can use an alternative delimiter:
 
 ```php
-SimpleExcelWriter::create(file: $pathToCsv, delimiter: ';');
+SimpleExcelWriter::create($pathToCsv)->useDelimiter(';');
 ```
 
 #### Getting the number of rows written
