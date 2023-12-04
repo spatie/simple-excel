@@ -6,3 +6,4 @@ coverage
 .phpunit.result.cache
 tests/temp
 .php-cs-fixer.cache
+.idea/*
