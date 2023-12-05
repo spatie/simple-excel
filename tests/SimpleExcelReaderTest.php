@@ -590,6 +590,18 @@ it('can select the sheet of an excel file by name', function () {
     ]);
 });
 
+it('Can check if a sheet exists by name', function () {
+    $reader = SimpleExcelReader::create(getStubPath('multiple_sheets.xlsx'));
+
+    expect($reader->hasSheet("sheet1"))->toBeTrue();
+});
+
+it('Can check if a sheet doesn\'t exists by name', function () {
+    $reader = SimpleExcelReader::create(getStubPath('multiple_sheets.xlsx'));
+
+    expect($reader->hasSheet("sheet0"))->toBeFalse();
+});
+
 it('will not open non-existing sheets by name', function () {
     SimpleExcelReader::create(getStubPath('multiple_sheets.xlsx'))
         ->fromSheetName("sheetNotExists")
