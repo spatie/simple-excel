@@ -152,7 +152,7 @@ class SimpleExcelReader
         return $this;
     }
 
-    public function hasSheet(string $sheetName) : bool
+    public function hasSheet(string $sheetName): bool
     {
         $this->setReader();
 
@@ -163,6 +163,7 @@ class SimpleExcelReader
                 return true;
             }
         }
+
         return false;
     }
 
