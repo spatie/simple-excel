@@ -152,6 +152,20 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function hasSheet(string $sheetName) : bool
+    {
+        $this->setReader();
+
+        $this->reader->open($this->path);
+
+        foreach ($this->reader->getSheetIterator() as $sheet) {
+            if ($sheetName != "" && $sheetName === $sheet->getName()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function fromSheet(int $sheetNumber): SimpleExcelReader
     {
         $this->sheetNumber = $sheetNumber;
