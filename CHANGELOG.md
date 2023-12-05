@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.3.0 - 2023-12-05
+
+### What's Changed
+
+* Add the option to check if a sheet exists by name by @pascallieverse in https://github.com/spatie/simple-excel/pull/158
+
+### New Contributors
+
+* @pascallieverse made their first contribution in https://github.com/spatie/simple-excel/pull/158
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.2.1...3.3.0
+
 ## 3.2.1 - 2023-11-09
 
 ### What's Changed
