@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.4.0 - 2024-03-04
+
+### What's Changed
+
+* Laravel 11.x Compatibility by @laravel-shift in https://github.com/spatie/simple-excel/pull/164
+
+### New Contributors
+
+* @laravel-shift made their first contribution in https://github.com/spatie/simple-excel/pull/164
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.3.0...3.4.0
+
 ## 3.3.0 - 2023-12-05
 
 ### What's Changed
