@@ -20,6 +20,8 @@ class SimpleExcelWriter
 
     private ?Style $headerStyle = null;
 
+    private ?Style $rowStyle = null;
+
     protected CSVOptions $csvOptions;
 
     public static function create(
@@ -150,6 +152,13 @@ class SimpleExcelWriter
         return $this;
     }
 
+    public function setRowStyle(Style $style): static
+    {
+        $this->rowStyle = $style;
+
+        return $this;
+    }
+
     public function addRow(Row|array $row, Style $style = null): static
     {
         if (is_array($row)) {
@@ -157,7 +166,7 @@ class SimpleExcelWriter
                 $this->writeHeaderFromRow($row);
             }
 
-            $row = Row::fromValues($row, $style);
+            $row = Row::fromValues($row, $style ?? $this->rowStyle);
         }
 
         $this->writer->addRow($row);
