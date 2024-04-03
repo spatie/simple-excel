@@ -103,6 +103,15 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function useEncoding(string $encoding): self
+    {
+        if ($this->reader instanceof CSVReader) {
+            $this->csvOptions->ENCODING = $encoding;
+        }
+
+        return $this;
+    }
+
     public function trimHeaderRow(string $characters = null): self
     {
         $this->trimHeader = true;
