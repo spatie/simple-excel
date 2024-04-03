@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.5.0 - 2024-04-03
+
+### What's Changed
+
+* Add useEncoding to SimpleExcelReader by @aminevg in https://github.com/spatie/simple-excel/pull/167
+
+### New Contributors
+
+* @aminevg made their first contribution in https://github.com/spatie/simple-excel/pull/167
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.4.0...3.5.0
+
 ## 3.4.0 - 2024-03-04
 
 ### What's Changed
