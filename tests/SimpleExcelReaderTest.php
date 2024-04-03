@@ -607,3 +607,14 @@ it('will not open non-existing sheets by name', function () {
         ->fromSheetName("sheetNotExists")
         ->getHeaders();
 })->throws(InvalidArgumentException::class);
+
+it('can use a custom encoding', function () {
+    $rows = SimpleExcelReader::create(getStubPath('shift-jis-encoding.csv'))
+        ->useEncoding('SHIFT_JIS')
+        ->getRows()
+        ->toArray();
+
+    expect($rows)->toEqual([
+        ['お名前' => '太郎', 'お名前（フリガナ）' => 'タロウ'],
+    ]);
+});
