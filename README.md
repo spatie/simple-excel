@@ -376,6 +376,41 @@ foreach (range(1, 10_000) as $i) {
 $writer->toBrowser();
 ```
 
+You could also use a callback.
+
+```php
+use Spatie\SimpleExcel\SimpleExcelWriter;
+use OpenSpout\Common\Entity\Row;
+
+$writer = SimpleExcelWriter::streamDownload('user-list.xlsx', function ($writerCallback, $downloadName) {
+    
+    $writerCallback->openToBrowser($downloadName);
+
+    $writerCallback->addRow(Row::fromValues([
+        'first_name' => 'First Name',
+        'last_name' => 'Last Name',
+    ]));
+
+    $writerCallback->addRow(Row::fromValues([
+        'first_name' => 'Rakib',
+        'last_name' => 'Hossain',
+    ]));
+
+    foreach (range(1, 10_000) as $i) {
+        $writerCallback->addRow(Row::fromValues([
+            'first_name' => 'Rakib',
+            'last_name' => 'Hossain',
+        ]));
+
+        if ($i % 1000 === 0) {
+            flush();
+        }
+    }
+});
+
+$writer->toBrowser();
+```
+
 
 ### Writing multiple rows at once
 
