@@ -68,10 +68,10 @@ class SimpleExcelWriter
         $writer = $simpleExcelWriter->getWriter();
 
         if ($writerCallback) {
-            $writerCallback($writer);
+            $writerCallback($writer, $downloadName);
+        } else {
+            $writer->openToBrowser($downloadName);
         }
-
-        $writer->openToBrowser($downloadName);
 
         return $simpleExcelWriter;
     }
