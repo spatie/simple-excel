@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.6.0 - 2024-04-24
+
+### What's Changed
+
+* CSV stream callback fixed by @rakibhoossain in https://github.com/spatie/simple-excel/pull/170
+
+### New Contributors
+
+* @rakibhoossain made their first contribution in https://github.com/spatie/simple-excel/pull/170
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.5.0...3.6.0
+
 ## 3.5.0 - 2024-04-03
 
 ### What's Changed
