@@ -376,13 +376,13 @@ foreach (range(1, 10_000) as $i) {
 $writer->toBrowser();
 ```
 
-Stream download using callback function
+You could also use a callback.
 
 ```php
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use OpenSpout\Common\Entity\Row;
 
-$writer = SimpleExcelWriter::streamDownload(downloadName: 'user-list.xlsx', writerCallback: function ($writerCallback, $downloadName) {
+$writer = SimpleExcelWriter::streamDownload('user-list.xlsx', function ($writerCallback, $downloadName) {
     
     $writerCallback->openToBrowser($downloadName);
 
