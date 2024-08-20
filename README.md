@@ -319,7 +319,7 @@ Jane,Doe
 
 #### Manually set the header from array
 
-Instead of automatically let the package dedecting a header row, you can set it manually.
+Instead of letting the package automatically detect a header row, you can set it manually.
 
 ```php
 use Spatie\SimpleExcel\SimpleExcelWriter;
