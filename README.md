@@ -133,11 +133,11 @@ $rows = SimpleExcelReader::create($pathToXlsx)
     ->getRows();
 ```
 
-if you want to check if a sheet exists, you can use the `sheetExists()` method.
+If you want to check if a sheet exists, use the `hasSheet()` method.
 
 ```php  
-$sheetExists = SimpleExcelReader::create($pathToXlsx)
-    ->sheetExists("sheet1");
+$hasSheet = SimpleExcelReader::create($pathToXlsx)
+    ->hasSheet("sheet1");
 ```
 
 #### Retrieving header row values
