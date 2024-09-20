@@ -120,7 +120,7 @@ class SimpleExcelReader
         return $this;
     }
 
-    public function preserveDateFormatting(): self
+    public function preserveDateTimeFormatting(): self
     {
         if ($this->reader instanceof XLSXReader) {
             $this->xlsxOptions->SHOULD_FORMAT_DATES = true;

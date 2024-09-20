@@ -628,7 +628,7 @@ it('can preserve date formatting', function () {
     expect($defaultDates[1])->toBeInstanceOf(DateTimeImmutable::class);
 
     $formattedDates = $reader
-        ->preserveDateFormatting()
+        ->preserveDateTimeFormatting()
         ->getRows()
         ->pluck('created_at')
         ->toArray();
