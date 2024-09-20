@@ -120,6 +120,24 @@ class SimpleExcelReader
         return $this;
     }
 
+    public function preserveDateFormatting(): self
+    {
+        if ($this->reader instanceof XLSXReader) {
+            $this->xlsxOptions->SHOULD_FORMAT_DATES = true;
+        }
+
+        return $this;
+    }
+
+    public function preserveEmptyRows(): self
+    {
+        if ($this->reader instanceof XLSXReader) {
+            $this->xlsxOptions->SHOULD_PRESERVE_EMPTY_ROWS = true;
+        }
+
+        return $this;
+    }
+
     public function trimHeaderRow(string $characters = null): self
     {
         $this->trimHeader = true;
