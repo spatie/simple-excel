@@ -135,7 +135,7 @@ $rows = SimpleExcelReader::create($pathToXlsx)
 
 If you want to check if a sheet exists, use the `hasSheet()` method.
 
-```php  
+```php
 $hasSheet = SimpleExcelReader::create($pathToXlsx)
     ->hasSheet("sheet1");
 ```
@@ -159,7 +159,7 @@ If your file has headers that are not on the first line, you can use the `header
 to indicate the line at which the headers are present. Any data above this line
 will be discarded from the result.
 
-`headerOnRow` accepts the line number as an argument, starting at 0. Blank lines are not counted. 
+`headerOnRow` accepts the line number as an argument, starting at 0. Blank lines are not counted.
 
 Since blank lines will not be counted, this method is mostly useful for files
 that include formatting above the actual dataset, which can be the case with Excel files.
@@ -291,6 +291,26 @@ $rows = SimpleExcelReader::create($pathToXlsx)
     ->getRows();
 ```
 
+#### Preserve date formatting
+
+By default, when reading a spreadsheet with dates or times, the values are returned as `DateTimeImmutable` objects. To return a formatted date (e.g., “9/20/2024”) instead, use the `preserveDateTimeFormatting` method. The date format will match what’s specified in the spreadsheet.
+
+```php
+$rows = SimpleExcelReader::create($pathToXlsx)
+    ->preserveDateTimeFormatting()
+    ->getRows();
+```
+
+#### Preserve empty rows
+
+You can preserve empty rows by using the `preserveEmptyRows` method.
+
+```php
+$rows = SimpleExcelReader::create($pathToXlsx)
+    ->preserveEmptyRows()
+    ->getRows();
+```
+
 ### Writing files
 
 Here's how you can write a CSV file:
@@ -367,12 +387,12 @@ foreach (range(1, 10_000) as $i) {
         'first_name' => 'John',
         'last_name' => 'Doe',
     ]);
-    
+
     if ($i % 1000 === 0) {
         flush(); // Flush the buffer every 1000 rows
     }
 }
-    
+
 $writer->toBrowser();
 ```
 
@@ -383,7 +403,7 @@ use Spatie\SimpleExcel\SimpleExcelWriter;
 use OpenSpout\Common\Entity\Row;
 
 $writer = SimpleExcelWriter::streamDownload('user-list.xlsx', function ($writerCallback, $downloadName) {
-    
+
     $writerCallback->openToBrowser($downloadName);
 
     $writerCallback->addRow(Row::fromValues([
@@ -467,7 +487,7 @@ $border = new Border(
         new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
         new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
     );
-    
+
 $style = (new Style())
    ->setFontBold()
    ->setFontSize(15)
@@ -514,14 +534,14 @@ $writer = SimpleExcelWriter::create($pathToXlsx);
 
 Posts::all()->each(function (Post $post) use ($writer) {
     $writer->nameCurrentSheet($post->title);
-    
+
     $post->comments->each(function (Comment $comment) use ($writer) {
         $writer->addRow([
             'comment' => $comment->comment,
             'author' => $comment->author,
         ]);
     });
-    
+
     if(!$post->is($posts->last())) {
         $writer->addNewSheetAndMakeItCurrent();
     }
