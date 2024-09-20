@@ -12,6 +12,8 @@ use OpenSpout\Reader\CSV\Reader as CSVReader;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
+use OpenSpout\Reader\XLSX\Reader as XLSXReader;
+use OpenSpout\Reader\XLSX\Options as XLSXOptions;
 
 class SimpleExcelReader
 {
@@ -33,6 +35,7 @@ class SimpleExcelReader
     protected int $limit = 0;
     protected bool $useLimit = false;
     protected CSVOptions $csvOptions;
+    protected XLSXOptions $xlsxOptions;
 
     public static function create(string $file, string $type = ''): static
     {
@@ -42,6 +45,7 @@ class SimpleExcelReader
     public function __construct(protected string $path, protected string $type = '')
     {
         $this->csvOptions = new CSVOptions();
+        $this->xlsxOptions = new XLSXOptions();
 
         $this->reader = $this->type ?
             ReaderFactory::createFromType($this->type) :
@@ -52,7 +56,11 @@ class SimpleExcelReader
 
     protected function setReader(): void
     {
-        $options = $this->reader instanceof CSVReader ? $this->csvOptions : null;
+        $options = match (true) {
+            $this->reader instanceof CSVReader => $this->csvOptions,
+            $this->reader instanceof XLSXReader => $this->xlsxOptions,
+            default => null,
+        };
 
         $this->reader = empty($this->type) ?
             ReaderFactory::createFromFile($this->path, $options) :
