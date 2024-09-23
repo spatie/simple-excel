@@ -12,8 +12,8 @@ use OpenSpout\Reader\CSV\Reader as CSVReader;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
-use OpenSpout\Reader\XLSX\Reader as XLSXReader;
 use OpenSpout\Reader\XLSX\Options as XLSXOptions;
+use OpenSpout\Reader\XLSX\Reader as XLSXReader;
 
 class SimpleExcelReader
 {
