@@ -618,3 +618,28 @@ it('can use a custom encoding', function () {
         ['お名前' => '太郎', 'お名前（フリガナ）' => 'タロウ'],
     ]);
 });
+
+it('can preserve date formatting', function () {
+    $reader = SimpleExcelReader::create(getStubPath('formatted_dates.xlsx'));
+
+    $defaultDates = $reader->getRows()->pluck('created_at')->Toarray();
+
+    expect($defaultDates[0])->toBeInstanceOf(DateTimeImmutable::class);
+    expect($defaultDates[1])->toBeInstanceOf(DateTimeImmutable::class);
+
+    $formattedDates = $reader
+        ->preserveDateTimeFormatting()
+        ->getRows()
+        ->pluck('created_at')
+        ->toArray();
+
+    expect($formattedDates[0])->toEqual('9/20/2024');
+    expect($formattedDates[1])->toEqual('9/19/2024');
+});
+
+it('can preserve empty rows', function () {
+    $reader = SimpleExcelReader::create(getStubPath('empty_rows.xlsx'));
+
+    expect($reader->getRows()->count())->toBe(2);
+    expect($reader->preserveEmptyRows()->getRows()->count())->toBe(3);
+});
