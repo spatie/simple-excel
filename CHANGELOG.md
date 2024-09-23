@@ -2,6 +2,22 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.7.0 - 2024-09-23
+
+### What's Changed
+
+* Improve the wording and fix a typo about automatically detecting headers. by @timmch in https://github.com/spatie/simple-excel/pull/174
+* Fix README sheetExists() should be hasSheet() by @damonzocp in https://github.com/spatie/simple-excel/pull/175
+* Add XLSX option helpers to SimpleExcelReader by @brodos in https://github.com/spatie/simple-excel/pull/178
+
+### New Contributors
+
+* @timmch made their first contribution in https://github.com/spatie/simple-excel/pull/174
+* @damonzocp made their first contribution in https://github.com/spatie/simple-excel/pull/175
+* @brodos made their first contribution in https://github.com/spatie/simple-excel/pull/178
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.6.0...3.7.0
+
 ## 3.6.0 - 2024-04-24
 
 ### What's Changed
