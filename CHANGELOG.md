@@ -2,6 +2,19 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.7.1 - 2024-12-16
+
+### What's Changed
+
+* Update documentation on how to use custom delimiter by @pikant in https://github.com/spatie/simple-excel/pull/179
+* Fix deprecation warning for PHP 8.4 implicit nullable parameter by @hmazter in https://github.com/spatie/simple-excel/pull/180
+
+### New Contributors
+
+* @pikant made their first contribution in https://github.com/spatie/simple-excel/pull/179
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.7.0...3.7.1
+
 ## 3.7.0 - 2024-09-23
 
 ### What's Changed
