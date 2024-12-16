@@ -25,7 +25,7 @@ class SimpleExcelWriter
     public static function create(
         string $file,
         string $type = '',
-        callable $configureWriter = null,
+        ?callable $configureWriter = null,
         ?string $delimiter = null,
         ?bool $shouldAddBom = null,
     ): static {
@@ -59,7 +59,7 @@ class SimpleExcelWriter
     public static function streamDownload(
         string $downloadName,
         string $type = '',
-        callable $writerCallback = null,
+        ?callable $writerCallback = null,
         ?string $delimiter = null,
         ?bool $shouldAddBom = null,
     ): static {
@@ -148,7 +148,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addRow(Row|array $row, Style $style = null): static
+    public function addRow(Row|array $row, ?Style $style = null): static
     {
         if (is_array($row)) {
             if ($this->processHeader && $this->processingFirstRow) {
@@ -166,7 +166,7 @@ class SimpleExcelWriter
         return $this;
     }
 
-    public function addRows(iterable $rows, Style $style = null): static
+    public function addRows(iterable $rows, ?Style $style = null): static
     {
         foreach ($rows as $row) {
             $this->addRow($row, $style);
