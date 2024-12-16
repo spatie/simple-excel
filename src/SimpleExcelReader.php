@@ -138,7 +138,7 @@ class SimpleExcelReader
         return $this;
     }
 
-    public function trimHeaderRow(string $characters = null): self
+    public function trimHeaderRow(?string $characters = null): self
     {
         $this->trimHeader = true;
         $this->trimHeaderCharacters = $characters;
