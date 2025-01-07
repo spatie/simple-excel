@@ -47,7 +47,7 @@ class SimpleExcelReader
         $this->csvOptions = new CSVOptions();
         $this->xlsxOptions = new XLSXOptions();
 
-        $this->reader = ReaderFactory::createFromFile($this->path);
+        $this->reader = ReaderFactory::createFromFileByMimeType($this->path);
 
         $this->setReader();
     }
@@ -60,7 +60,7 @@ class SimpleExcelReader
             default => null,
         };
 
-        $this->reader = ReaderFactory::createFromFile($this->path, $options);
+        $this->reader = ReaderFactory::createFromFileByMimeType($this->path, $options);
     }
 
     public function getPath(): string
