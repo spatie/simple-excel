@@ -64,21 +64,4 @@ class ReaderFactory
             default => throw new UnsupportedTypeException('No readers supporting the given type: '.$mime_type),
         };
     }
-
-    /**
-     * @deprecated use createFromFileByMimeType() or createFromFile() instead
-     *
-     * @throws UnsupportedTypeException
-     */
-    public static function createFromType(
-        string $readerType,
-        CSVOptions|XLSXOptions|ODSOptions|null $options = null
-    ): ReaderInterface {
-        return match ($readerType) {
-            'csv' => new CSVReader($options),
-            'xlsx' => new XLSXReader($options),
-            'ods' => new ODSReader($options),
-            default => throw new UnsupportedTypeException('No readers supporting the given type: ' . $readerType),
-        };
-    }
 }
