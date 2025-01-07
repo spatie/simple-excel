@@ -37,19 +37,17 @@ class SimpleExcelReader
     protected CSVOptions $csvOptions;
     protected XLSXOptions $xlsxOptions;
 
-    public static function create(string $file, string $type = ''): static
+    public static function create(string $file): static
     {
-        return new static($file, $type);
+        return new static($file);
     }
 
-    public function __construct(protected string $path, protected string $type = '')
+    public function __construct(protected string $path)
     {
         $this->csvOptions = new CSVOptions();
         $this->xlsxOptions = new XLSXOptions();
 
-        $this->reader = $this->type ?
-            ReaderFactory::createFromType($this->type) :
-            ReaderFactory::createFromFile($this->path);
+        $this->reader = ReaderFactory::createFromFile($this->path);
 
         $this->setReader();
     }
@@ -62,9 +60,7 @@ class SimpleExcelReader
             default => null,
         };
 
-        $this->reader = empty($this->type) ?
-            ReaderFactory::createFromFile($this->path, $options) :
-            ReaderFactory::createFromType($this->type, $options);
+        $this->reader = ReaderFactory::createFromFile($this->path, $options);
     }
 
     public function getPath(): string
