@@ -3,7 +3,6 @@
 namespace Spatie\SimpleExcel;
 
 use OpenSpout\Common\Exception\IOException;
-use OpenSpout\Common\Exception\UnsupportedTypeException;
 use OpenSpout\Reader\CSV\{Options as CSVOptions, Reader as CSVReader};
 use OpenSpout\Reader\ODS\{Options as ODSOptions, Reader as ODSReader};
 use OpenSpout\Reader\ReaderInterface;
@@ -15,6 +14,22 @@ use OpenSpout\Reader\XLSX\{Options as XLSXOptions, Reader as XLSXReader};
  */
 class ReaderFactory
 {
+    use SpreadsheetFactoryTrait;
+
+    private const FILE_EXTENSION_MAP = [
+        'csv' => CSVReader::class,
+        'xlsx' => XLSXReader::class,
+        'ods' => ODSReader::class,
+    ];
+
+    private const MIME_TYPE_MAP = [
+        'application/csv' => CSVReader::class,
+        'text/csv' => CSVReader::class,
+        'text/plain' => CSVReader::class,
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => XLSXReader::class,
+        'application/vnd.oasis.opendocument.spreadsheet' => ODSReader::class,
+    ];
+
     /**
      * Creates a reader by file extension.
      *
@@ -28,12 +43,12 @@ class ReaderFactory
     ): ReaderInterface {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
-        return match ($extension) {
-            'csv' => new CSVReader($options),
-            'xlsx' => new XLSXReader($options),
-            'ods' => new ODSReader($options),
-            default => throw new UnsupportedTypeException('No readers supporting the given type: '.$extension),
-        };
+        return self::resolveFromType(
+            $extension,
+            self::FILE_EXTENSION_MAP,
+            $options,
+            "No readers supporting the given type: {$extension}"
+        );
     }
 
     /**
@@ -52,14 +67,17 @@ class ReaderFactory
             throw new IOException("Could not open {$path} for reading! File does not exist.");
         }
 
-        $mime_type = mime_content_type($path);
+        $mimeType = mime_content_type($path);
+        if ($mimeType === false) {
+            throw new IOException("Could not determine mime type for {$path}");
+        }
 
-        return match ($mime_type) {
-            'application/csv', 'text/csv', 'text/plain' => new CSVReader($options),
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => new XLSXReader($options),
-            'application/vnd.oasis.opendocument.spreadsheet' => new ODSReader($options),
-            default => throw new UnsupportedTypeException('No readers supporting the given type: '.$mime_type),
-        };
+        return self::resolveFromType(
+            $mimeType,
+            self::MIME_TYPE_MAP,
+            $options,
+            "No readers supporting the given type: {$mimeType}"
+        );
     }
 
     /**
@@ -71,11 +89,11 @@ class ReaderFactory
         string $readerType,
         CSVOptions|XLSXOptions|ODSOptions|null $options = null
     ): ReaderInterface {
-        return match ($readerType) {
-            'csv' => new CSVReader($options),
-            'xlsx' => new XLSXReader($options),
-            'ods' => new ODSReader($options),
-            default => throw new UnsupportedTypeException('No readers supporting the given type: ' . $readerType),
-        };
+        return self::resolveFromType(
+            strtolower($readerType),
+            self::FILE_EXTENSION_MAP,
+            $options,
+            "No readers supporting the given type: {$readerType}"
+        );
     }
 }

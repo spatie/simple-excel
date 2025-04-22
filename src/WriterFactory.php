@@ -2,7 +2,6 @@
 
 namespace Spatie\SimpleExcel;
 
-use OpenSpout\Common\Exception\UnsupportedTypeException;
 use OpenSpout\Writer\CSV\{Options as CSVOptions, Writer as CSVWriter};
 use OpenSpout\Writer\ODS\{Options as ODSOptions, Writer as ODSWriter};
 use OpenSpout\Writer\WriterInterface;
@@ -14,6 +13,14 @@ use OpenSpout\Writer\XLSX\{Options as XLSXOptions, Writer as XLSXWriter};
  */
 class WriterFactory
 {
+    use SpreadsheetFactoryTrait;
+
+    private const FILE_EXTENSION_MAP = [
+        'csv' => CSVWriter::class,
+        'xlsx' => XLSXWriter::class,
+        'ods' => ODSWriter::class,
+    ];
+
     /**
      * This creates an instance of the appropriate writer, given the extension of the file to be written.
      *
@@ -23,16 +30,16 @@ class WriterFactory
      */
     public static function createFromFile(
         string $path,
-        CSVOptions|XLSXOptions|ODSOptions|null $options = null,
+        CSVOptions|XLSXOptions|ODSOptions|null $options = null
     ): WriterInterface {
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
-        return match ($extension) {
-            'csv' => new CSVWriter($options),
-            'xlsx' => new XLSXWriter($options),
-            'ods' => new ODSWriter($options),
-            default => throw new UnsupportedTypeException('No writers supporting the given type: '.$extension),
-        };
+        return self::resolveFromType(
+            $extension,
+            self::FILE_EXTENSION_MAP,
+            $options,
+            "No writers supporting the given type: {$extension}"
+        );
     }
 
     /**
@@ -44,11 +51,11 @@ class WriterFactory
         string $writerType,
         CSVOptions|XLSXOptions|ODSOptions|null $options = null
     ): WriterInterface {
-        return match ($writerType) {
-            'csv' => new CSVWriter($options),
-            'xlsx' => new XLSXWriter($options),
-            'ods' => new ODSWriter($options),
-            default => throw new UnsupportedTypeException('No writers supporting the given type: ' . $writerType),
-        };
+        return self::resolveFromType(
+            strtolower($writerType),
+            self::FILE_EXTENSION_MAP,
+            $options,
+            "No writers supporting the given type: {$writerType}"
+        );
     }
 }
