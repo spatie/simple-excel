@@ -4,13 +4,10 @@ namespace Spatie\SimpleExcel;
 
 use OpenSpout\Common\Exception\IOException;
 use OpenSpout\Common\Exception\UnsupportedTypeException;
-use OpenSpout\Reader\CSV\Options as CSVOptions;
-use OpenSpout\Reader\CSV\Reader as CSVReader;
-use OpenSpout\Reader\ODS\Options as ODSOptions;
-use OpenSpout\Reader\ODS\Reader as ODSReader;
+use OpenSpout\Reader\CSV\{Options as CSVOptions, Reader as CSVReader};
+use OpenSpout\Reader\ODS\{Options as ODSOptions, Reader as ODSReader};
 use OpenSpout\Reader\ReaderInterface;
-use OpenSpout\Reader\XLSX\Options as XLSXOptions;
-use OpenSpout\Reader\XLSX\Reader as XLSXReader;
+use OpenSpout\Reader\XLSX\{Options as XLSXOptions, Reader as XLSXReader};
 
 /**
  * @internal overwritten from openspout/openspout so we can pass Options to the Reader classes

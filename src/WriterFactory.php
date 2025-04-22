@@ -3,13 +3,10 @@
 namespace Spatie\SimpleExcel;
 
 use OpenSpout\Common\Exception\UnsupportedTypeException;
-use OpenSpout\Writer\CSV\Options as CSVOptions;
-use OpenSpout\Writer\CSV\Writer as CSVWriter;
-use OpenSpout\Writer\ODS\Options as ODSOptions;
-use OpenSpout\Writer\ODS\Writer as ODSWriter;
+use OpenSpout\Writer\CSV\{Options as CSVOptions, Writer as CSVWriter};
+use OpenSpout\Writer\ODS\{Options as ODSOptions, Writer as ODSWriter};
 use OpenSpout\Writer\WriterInterface;
-use OpenSpout\Writer\XLSX\Options as XLSXOptions;
-use OpenSpout\Writer\XLSX\Writer as XLSXWriter;
+use OpenSpout\Writer\XLSX\{Options as XLSXOptions, Writer as XLSXWriter};
 
 /**
  * @internal overwritten from openspout/openspout so we can pass Options to the Writer classes
