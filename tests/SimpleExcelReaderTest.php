@@ -643,3 +643,18 @@ it('can preserve empty rows', function () {
     expect($reader->getRows()->count())->toBe(2);
     expect($reader->preserveEmptyRows()->getRows()->count())->toBe(3);
 });
+
+it('can count and take rows', function () {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.csv'));
+
+    $lazyCollection = $reader->getRows();
+
+    expect($lazyCollection->count())->toBe(2);
+    expect($lazyCollection->take(1)->all())->toEqual([
+        [
+            'email' => 'john@example.com',
+            'first_name' => 'john',
+            'last_name' => 'doe',
+        ],
+    ]);
+});
