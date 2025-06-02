@@ -244,6 +244,12 @@ class SimpleExcelReader
 
                 $this->rowIterator->next();
             }
+            $this->rowIterator->rewind();
+
+            if ($this->processHeader) {
+                $this->getHeaders();
+                $this->rowIterator->next();
+            }
         });
     }
 
