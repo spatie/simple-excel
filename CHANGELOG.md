@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.7.3 - 2025-06-02
+
+### What's Changed
+
+* Rewind iterator after use by @dododedodonl in https://github.com/spatie/simple-excel/pull/186
+
+### New Contributors
+
+* @dododedodonl made their first contribution in https://github.com/spatie/simple-excel/pull/186
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.7.2...3.7.3
+
 ## 3.7.2 - 2025-02-14
 
 ### What's Changed
