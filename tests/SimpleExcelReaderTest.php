@@ -18,8 +18,8 @@ it('can `getHeaders` with an empty file', function () {
     expect($headers)->toBeNull();
 });
 
-it('can work with an file that has headers', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can work with an file that has headers', function (string $extension) {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->getRows()
         ->toArray();
 
@@ -35,7 +35,7 @@ it('can work with an file that has headers', function () {
             'last_name' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can work with a file that has only headers', function () {
     $actualCount = SimpleExcelReader::create(getStubPath('only-header.csv'))
@@ -71,8 +71,8 @@ it('can work with a file where the row is too short', function () {
     ])->toEqual($rows);
 });
 
-it('can retrieve the headers', function () {
-    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can retrieve the headers', function (string $extension) {
+    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->getHeaders();
 
     expect($headers)->toEqual([
@@ -80,7 +80,7 @@ it('can retrieve the headers', function () {
         1 => 'first_name',
         2 => 'last_name',
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can read headers when header is not on the first row', function () {
     $headers = SimpleExcelReader::create(getStubPath('header-not-on-first-row.xlsx'))
@@ -111,8 +111,8 @@ it('can read content when header is not on the first row', function () {
     ]);
 });
 
-it('can ignore the headers', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can ignore the headers', function (string $extension) {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->noHeaderRow()
         ->getRows()
         ->toArray();
@@ -134,15 +134,15 @@ it('can ignore the headers', function () {
             2 => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
-it("doesn't return headers when headers are ignored", function () {
-    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it("doesn't return headers when headers are ignored", function (string $extension) {
+    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->noHeaderRow()
         ->getHeaders();
 
     expect($headers)->toBeNull();
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can use custom headers without header', function () {
     $rows = SimpleExcelReader::create(getStubPath('rows-without-header.csv'))
@@ -165,8 +165,8 @@ it('can use custom headers without header', function () {
     ]);
 });
 
-it('can use custom headers with header', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can use custom headers with header', function (string $extension) {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->useHeaders(['email_address', 'given_name', 'surname'])
         ->getRows()
         ->toArray();
@@ -183,7 +183,7 @@ it('can use custom headers with header', function () {
             'surname' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can use custom headers with header on row', function () {
     $rows = SimpleExcelReader::create(getStubPath('header-not-on-first-row.xlsx'))
@@ -204,8 +204,8 @@ it('can use custom headers with header on row', function () {
     ]);
 });
 
-it('can retrieve the custom header with headers', function () {
-    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can retrieve the custom header with headers', function (string $extension) {
+    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->useHeaders(['email_address', 'given_name', 'surname'])
         ->getHeaders();
 
@@ -214,7 +214,7 @@ it('can retrieve the custom header with headers', function () {
         1 => 'given_name',
         2 => 'surname',
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can retrieve the custom headers without headers', function () {
     $headers = SimpleExcelReader::create(getStubPath('rows-without-header.csv'))
@@ -229,8 +229,8 @@ it('can retrieve the custom headers without headers', function () {
     ]);
 });
 
-it('can retrieve the original headers with custom headers', function () {
-    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can retrieve the original headers with custom headers', function (string $extension) {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->useHeaders(['email_address', 'given_name', 'surname']);
 
     $headers = $reader->getHeaders();
@@ -247,7 +247,7 @@ it('can retrieve the original headers with custom headers', function () {
         1 => 'first_name',
         2 => 'last_name',
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can user an alternative delimiter', function () {
     $rows = SimpleExcelReader::create(getStubPath('alternative-delimiter.csv'))
@@ -293,8 +293,8 @@ it(
     }
 );
 
-it('can use an offset', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can use an offset', function (string $extension) {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->skip(1)
         ->getRows()
         ->toArray();
@@ -306,10 +306,10 @@ it('can use an offset', function () {
             'last_name' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
-it('can take a limit', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can take a limit', function (string $extension) {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->take(1)
         ->getRows()
         ->toArray();
@@ -321,18 +321,18 @@ it('can take a limit', function () {
             'last_name' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
-it('can call `getRows` twice', function () {
-    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.csv'));
+it('can call `getRows` twice', function (string $extension) {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension));
     $firstRow = $reader->getRows()->first();
     $firstRowAgain = $reader->getRows()->first();
 
     expect([$firstRow, $firstRowAgain])->not->toBeNull();
-});
+})->with(['csv', 'ods', 'xlsx']);
 
-it('can call `getRows` after `getHeaders`', function () {
-    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.csv'));
+it('can call `getRows` after `getHeaders`', function (string $extension) {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension));
 
     $headers = $reader->getHeaders();
 
@@ -356,16 +356,16 @@ it('can call `getRows` after `getHeaders`', function () {
             'last_name' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
-it('can call `first` on the collection twice', function () {
-    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.csv'));
+it('can call `first` on the collection twice', function (string $extension) {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension));
     $rowCollection = $reader->getRows();
     $firstRow = $rowCollection->first();
     $firstRowAgain = $rowCollection->first();
 
     expect([$firstRow, $firstRowAgain])->not->toBeNull();
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('allows setting the reader type manually', function () {
     $reader = SimpleExcelReader::create('php://input', 'csv');
@@ -460,8 +460,8 @@ it('can retrieve headers converted to snake case', function () {
     ]);
 });
 
-it('can use custom header row formatter', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can use custom header row formatter', function (string $extension) {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->formatHeadersUsing(function ($header) {
             return $header . '_suffix';
         })
@@ -480,10 +480,10 @@ it('can use custom header row formatter', function () {
             'last_name_suffix' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
-it('can retrieve headers with a custom formatter', function () {
-    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+it('can retrieve headers with a custom formatter', function (string $extension) {
+    $headers = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension))
         ->formatHeadersUsing(function ($header) {
             return $header . '_suffix';
         })
@@ -494,7 +494,7 @@ it('can retrieve headers with a custom formatter', function () {
         1 => 'first_name_suffix',
         2 => 'last_name_suffix',
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
 
 it('can retrieve rows with a different delimiter', function () {
     $rows = SimpleExcelReader::create(getStubPath('header-and-rows-other-delimiter.csv'))
