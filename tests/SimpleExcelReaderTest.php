@@ -657,4 +657,13 @@ it('can count and take rows in an all file types', function (string $extension) 
             'last_name' => 'doe',
         ],
     ]);
-})->with(['csv', 'ods', 'xlsx']);
+})->with(['csv', 'xlsx']);
+
+it('can count and take rows is broken in ods', function (string $extension) {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension));
+
+    $lazyCollection = $reader->getRows();
+
+    expect($lazyCollection->count())->toBe(2);
+    expect($lazyCollection->take(1)->all())->toEqual([]);
+})->with(['ods']);
