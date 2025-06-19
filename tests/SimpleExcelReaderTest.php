@@ -644,8 +644,8 @@ it('can preserve empty rows', function () {
     expect($reader->preserveEmptyRows()->getRows()->count())->toBe(3);
 });
 
-it('can count and take rows', function () {
-    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.csv'));
+it('can count and take rows in an all file types', function (string $extension) {
+    $reader = SimpleExcelReader::create(getStubPath('header-and-rows.'.$extension));
 
     $lazyCollection = $reader->getRows();
 
@@ -657,4 +657,4 @@ it('can count and take rows', function () {
             'last_name' => 'doe',
         ],
     ]);
-});
+})->with(['csv', 'ods', 'xlsx']);
