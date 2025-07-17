@@ -9,6 +9,7 @@ use OpenSpout\Common\Entity\Cell\FormulaCell;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Reader\CSV\Options as CSVOptions;
 use OpenSpout\Reader\CSV\Reader as CSVReader;
+use OpenSpout\Reader\Exception\IteratorNotRewindableException;
 use OpenSpout\Reader\ReaderInterface;
 use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
@@ -244,11 +245,16 @@ class SimpleExcelReader
 
                 $this->rowIterator->next();
             }
-            $this->rowIterator->rewind();
 
-            if ($this->processHeader) {
-                $this->getHeaders();
-                $this->rowIterator->next();
+            try {
+                $this->rowIterator->rewind();
+
+                if ($this->processHeader) {
+                    $this->getHeaders();
+                    $this->rowIterator->next();
+                }
+            } catch (IteratorNotRewindableException) {
+                // Iterator is not rewindable, ignore this exception
             }
         });
     }
