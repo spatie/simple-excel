@@ -2,6 +2,20 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.8.0 - 2025-07-17
+
+### What's Changed
+
+* fix package name from box to openspout by @nyanlynnhtut in https://github.com/spatie/simple-excel/pull/187
+* Bump openspout/openspout to v4.30.1 by @pjkellar in https://github.com/spatie/simple-excel/pull/190
+
+### New Contributors
+
+* @nyanlynnhtut made their first contribution in https://github.com/spatie/simple-excel/pull/187
+* @pjkellar made their first contribution in https://github.com/spatie/simple-excel/pull/190
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.7.3...3.8.0
+
 ## 3.7.3 - 2025-06-02
 
 ### What's Changed
