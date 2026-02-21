@@ -1,8 +1,6 @@
 name: run-tests
 
-on:
-  - push
-  - pull_request
+on: [push, pull_request]
 
 jobs:
   test:
@@ -12,14 +10,21 @@ jobs:
       fail-fast: true
       matrix:
         php: [8.5, 8.4, 8.3]
-        laravel: ['11.*', '12.*']
-        dependency-version: [prefer-lowest, prefer-stable]
+        laravel: ['13.*', '12.*', '11.*']
+        stability: [prefer-stable]
+        include:
+          - laravel: 13.*
+            testbench: 11.*
+          - laravel: 12.*
+            testbench: 10.*
+          - laravel: 11.*
+            testbench: 9.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -30,8 +35,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
         run: vendor/bin/pest
