@@ -114,7 +114,7 @@ test('the writer can get the path', function () {
 });
 
 it('allows setting the writer type manually', function () {
-    $writer = SimpleExcelWriter::create('php://output', 'csv');
+    $writer = SimpleExcelWriter::create($this->pathToCsv, 'csv');
 
     expect($writer->getWriter())->toBeInstanceOf(Writer::class);
 });
