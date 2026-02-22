@@ -2,6 +2,13 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.9.0 - 2026-02-22
+
+- Add Laravel 13 support
+- Add PHP 8.5 to test matrix
+- Remove deprecated PHPUnit attributes
+- Update test dependencies
+
 ## 3.8.1 - 2025-09-24
 
 ### What's Changed
