@@ -2,6 +2,18 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.10.0 - 2026-06-15
+
+### What's Changed
+
+* Add trimValues() and formatValuesUsing() to the reader by @mhodge in https://github.com/spatie/simple-excel/pull/195
+
+### New Contributors
+
+* @mhodge made their first contribution in https://github.com/spatie/simple-excel/pull/195
+
+**Full Changelog**: https://github.com/spatie/simple-excel/compare/3.9.0...3.10.0
+
 ## 3.9.0 - 2026-02-22
 
 - Add Laravel 13 support
