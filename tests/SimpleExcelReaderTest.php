@@ -573,12 +573,12 @@ it('can format values when there is no header row', function () {
         ->noHeaderRow()
         ->trimValues()
         ->getRows()
-        ->first();
+        ->toArray();
 
     expect($rows)->toEqual([
-        0 => 'email',
-        1 => 'first_name',
-        2 => 'last_name',
+        ['email', 'first_name', 'last_name'],
+        ['john@example.com', 'john', 'doe'],
+        ['mary-jane@example.com', 'mary jane', 'doe'],
     ]);
 });
 
