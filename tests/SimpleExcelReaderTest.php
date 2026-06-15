@@ -496,6 +496,103 @@ it('can retrieve headers with a custom formatter', function () {
     ]);
 });
 
+it('can trim whitespace from values', function () {
+    $rows = SimpleExcelReader::create(getStubPath('values-with-spaces.csv'))
+        ->trimValues()
+        ->getRows()
+        ->toArray();
+
+    expect($rows)->toEqual([
+        [
+            'email' => 'john@example.com',
+            'first_name' => 'john',
+            'last_name' => 'doe',
+        ],
+        [
+            'email' => 'mary-jane@example.com',
+            'first_name' => 'mary jane',
+            'last_name' => 'doe',
+        ],
+    ]);
+});
+
+it('can trim values with custom characters', function () {
+    $rows = SimpleExcelReader::create(getStubPath('padded-values.csv'))
+        ->trimValues('*')
+        ->getRows()
+        ->first();
+
+    expect($rows)->toEqual([
+        'email' => 'john@example.com',
+        'first_name' => 'john',
+    ]);
+});
+
+it('can format values using a callback', function () {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+        ->formatValuesUsing(fn ($value) => strtoupper($value))
+        ->getRows()
+        ->first();
+
+    expect($rows)->toEqual([
+        'email' => 'JOHN@EXAMPLE.COM',
+        'first_name' => 'JOHN',
+        'last_name' => 'DOE',
+    ]);
+});
+
+it('passes the header key to the value formatter', function () {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows.csv'))
+        ->formatValuesUsing(fn ($value, $key) => $key === 'email' ? strtoupper($value) : $value)
+        ->getRows()
+        ->first();
+
+    expect($rows)->toEqual([
+        'email' => 'JOHN@EXAMPLE.COM',
+        'first_name' => 'john',
+        'last_name' => 'doe',
+    ]);
+});
+
+it('can trim and format values together', function () {
+    $rows = SimpleExcelReader::create(getStubPath('values-with-spaces.csv'))
+        ->trimValues()
+        ->formatValuesUsing(fn ($value) => strtoupper($value))
+        ->getRows()
+        ->first();
+
+    expect($rows)->toEqual([
+        'email' => 'JOHN@EXAMPLE.COM',
+        'first_name' => 'JOHN',
+        'last_name' => 'DOE',
+    ]);
+});
+
+it('can format values when there is no header row', function () {
+    $rows = SimpleExcelReader::create(getStubPath('values-with-spaces.csv'))
+        ->noHeaderRow()
+        ->trimValues()
+        ->getRows()
+        ->first();
+
+    expect($rows)->toEqual([
+        0 => 'email',
+        1 => 'first_name',
+        2 => 'last_name',
+    ]);
+});
+
+it('does not trim non-string values', function () {
+    $dates = SimpleExcelReader::create(getStubPath('formatted_dates.xlsx'))
+        ->trimValues()
+        ->getRows()
+        ->pluck('created_at')
+        ->toArray();
+
+    expect($dates[0])->toBeInstanceOf(DateTimeImmutable::class);
+    expect($dates[1])->toBeInstanceOf(DateTimeImmutable::class);
+});
+
 it('can retrieve rows with a different delimiter', function () {
     $rows = SimpleExcelReader::create(getStubPath('header-and-rows-other-delimiter.csv'))
         ->useDelimiter(';')

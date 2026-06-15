@@ -260,6 +260,46 @@ $rows = SimpleExcelReader::create($pathToCsv)
     });
 ```
 
+#### Trimming and formatting values
+
+Just like you can clean up header names, you can clean up the data values themselves. This is handy when importing files where cells contain stray whitespace or need to be normalized.
+
+Use `trimValues()` to strip whitespace from every value.
+
+```csv
+email,first_name
+  john@example.com  ,  john
+jane@example.com,jane
+```
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->trimValues()
+    ->getRows()
+    ->each(function(array $rowProperties) {
+       // in the first pass $rowProperties will contain
+       // ['email' => 'john@example.com', 'first_name' => 'john']
+    });
+```
+
+Like `trim`, `trimValues()` accepts an optional argument specifying which characters to trim. This argument is a *set of characters* stripped from both ends of each value (exactly like PHP's [`trim`](https://www.php.net/manual/en/function.trim.php)), **not** a suffix. For example, `trimValues('*')` removes any leading or trailing `*` from every value. Be careful with letters: `trimValues('.com')` would also turn `Tom` into `T`.
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->trimValues('*')
+    ->getRows();
+```
+
+For full control, use `formatValuesUsing()` and pass a closure. The closure receives the value and its header key, so you can normalize values per column. Non-string values (such as dates read from an Excel file) are passed through untouched by `trimValues()`, but your own closure is responsible for handling them.
+
+```php
+$rows = SimpleExcelReader::create($pathToCsv)
+    ->formatValuesUsing(function ($value, $key) {
+        return $key === 'email' ? strtolower($value) : $value;
+    })
+    ->getRows();
+```
+
 #### Manually working with the reader object
 
 Under the hood this package uses the [openspout/spout](https://github.com/openspout/openspout) package. You can get to the underlying reader that implements `\OpenSpout\Reader\ReaderInterface` by calling the `getReader` method.
