@@ -26,6 +26,9 @@ class SimpleExcelReader
     protected bool $trimHeader = false;
     protected bool $headersToSnakeCase = false;
     protected bool $parseFormulas = true;
+    protected bool $trimValues = false;
+    protected ?string $trimValueCharacters = null;
+    protected mixed $formatValuesUsing = null;
     protected ?string $trimHeaderCharacters = null;
     protected mixed $formatHeadersUsing = null;
     protected ?array $headers = null;
@@ -156,6 +159,21 @@ class SimpleExcelReader
     public function headersToSnakeCase(): self
     {
         $this->headersToSnakeCase = true;
+
+        return $this;
+    }
+
+    public function trimValues(?string $characters = null): self
+    {
+        $this->trimValues = true;
+        $this->trimValueCharacters = $characters;
+
+        return $this;
+    }
+
+    public function formatValuesUsing(callable $callback): self
+    {
+        $this->formatValuesUsing = $callback;
 
         return $this;
     }
@@ -376,7 +394,7 @@ class SimpleExcelReader
         $headers = $this->customHeaders ?: $this->headers;
 
         if (! $headers) {
-            return $values;
+            return $this->processValues($values);
         }
 
         $values = array_slice($values, 0, count($headers));
@@ -385,7 +403,33 @@ class SimpleExcelReader
             $values[] = '';
         }
 
-        return array_combine($headers, $values);
+        return $this->processValues(array_combine($headers, $values));
+    }
+
+    protected function processValues(array $values): array
+    {
+        if ($this->trimValues) {
+            $values = array_map([$this, 'trimValue'], $values);
+        }
+
+        if ($this->formatValuesUsing) {
+            $keys = array_keys($values);
+            $formatted = array_map($this->formatValuesUsing, array_values($values), $keys);
+            $values = array_combine($keys, $formatted);
+        }
+
+        return $values;
+    }
+
+    protected function trimValue(mixed $value): mixed
+    {
+        if (! is_string($value)) {
+            return $value;
+        }
+
+        return is_null($this->trimValueCharacters)
+            ? trim($value)
+            : trim($value, $this->trimValueCharacters);
     }
 
     protected function getSheet(): SheetInterface
