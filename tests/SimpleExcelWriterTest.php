@@ -151,3 +151,30 @@ it('can add and name a xlsx sheet', function () {
     expect(count($writer->getWriter()->getSheets()))->toEqual(2);
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
 });
+
+it('preserves header and row styles in xlsx exports', function () {
+    $style = new \OpenSpout\Common\Entity\Style\Style();
+    $style = method_exists($style, 'withFontBold')
+        ? $style->withFontBold(true)
+        : $style->setFontBold();
+
+    $writer = SimpleExcelWriter::create($this->pathToXlsx)
+        ->setHeaderStyle($style)
+        ->addRow(['name' => 'Jane'], $style);
+    $writer->close();
+
+    $zip = new \ZipArchive();
+    $zip->open($this->pathToXlsx);
+    $sheet = simplexml_load_string($zip->getFromName('xl/worksheets/sheet1.xml'));
+    $styles = simplexml_load_string($zip->getFromName('xl/styles.xml'));
+    $zip->close();
+
+    foreach ($sheet->sheetData->row as $row) {
+        $styleIndex = (int) $row->c['s'];
+        $fontIndex = (int) $styles->cellXfs->xf[$styleIndex]['fontId'];
+        expect(isset($styles->fonts->font[$fontIndex]->b))->toBeTrue();
+    }
+
+    expect(\Spatie\SimpleExcel\SimpleExcelReader::create($this->pathToXlsx)->getRows()->all())
+        ->toBe([['name' => 'Jane']]);
+});

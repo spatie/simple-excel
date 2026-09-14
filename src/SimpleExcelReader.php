@@ -70,6 +70,17 @@ class SimpleExcelReader
             ReaderFactory::createFromType($this->type, $options);
     }
 
+    protected function withOption(CSVOptions|XLSXOptions $options, string $name, mixed $value): CSVOptions|XLSXOptions
+    {
+        if ((new \ReflectionClass($options))->isReadOnly()) {
+            return new ($options::class)(...array_replace(get_object_vars($options), [$name => $value]));
+        }
+
+        $options->{$name} = $value;
+
+        return $options;
+    }
+
     public function getPath(): string
     {
         return $this->path;
@@ -99,7 +110,7 @@ class SimpleExcelReader
     public function useDelimiter(string $delimiter): self
     {
         if ($this->reader instanceof CSVReader) {
-            $this->csvOptions->FIELD_DELIMITER = $delimiter;
+            $this->csvOptions = $this->withOption($this->csvOptions, 'FIELD_DELIMITER', $delimiter);
         }
 
         return $this;
@@ -108,7 +119,7 @@ class SimpleExcelReader
     public function useFieldEnclosure(string $fieldEnclosure): self
     {
         if ($this->reader instanceof CSVReader) {
-            $this->csvOptions->FIELD_ENCLOSURE = $fieldEnclosure;
+            $this->csvOptions = $this->withOption($this->csvOptions, 'FIELD_ENCLOSURE', $fieldEnclosure);
         }
 
         return $this;
@@ -117,7 +128,7 @@ class SimpleExcelReader
     public function useEncoding(string $encoding): self
     {
         if ($this->reader instanceof CSVReader) {
-            $this->csvOptions->ENCODING = $encoding;
+            $this->csvOptions = $this->withOption($this->csvOptions, 'ENCODING', $encoding);
         }
 
         return $this;
@@ -126,7 +137,7 @@ class SimpleExcelReader
     public function preserveDateTimeFormatting(): self
     {
         if ($this->reader instanceof XLSXReader) {
-            $this->xlsxOptions->SHOULD_FORMAT_DATES = true;
+            $this->xlsxOptions = $this->withOption($this->xlsxOptions, 'SHOULD_FORMAT_DATES', true);
         }
 
         return $this;
@@ -135,7 +146,7 @@ class SimpleExcelReader
     public function preserveEmptyRows(): self
     {
         if ($this->reader instanceof XLSXReader) {
-            $this->xlsxOptions->SHOULD_PRESERVE_EMPTY_ROWS = true;
+            $this->xlsxOptions = $this->withOption($this->xlsxOptions, 'SHOULD_PRESERVE_EMPTY_ROWS', true);
         }
 
         return $this;
@@ -387,7 +398,7 @@ class SimpleExcelReader
             return $cell instanceof FormulaCell && $this->parseFormulas
                 ? $cell->getComputedValue()
                 : $cell->getValue();
-        }, $row->getCells());
+        }, method_exists($row, 'getCells') ? $row->getCells() : $row->cells);
 
         ksort($values);
 

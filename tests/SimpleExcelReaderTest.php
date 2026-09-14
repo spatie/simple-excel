@@ -766,3 +766,14 @@ it('can count and take rows', function () {
         ],
     ]);
 });
+
+it('keeps csv options when setting another option', function () {
+    $rows = SimpleExcelReader::create(getStubPath('header-and-rows-other-delimiter.csv'))
+        ->useDelimiter(';')
+        ->useEncoding('UTF-8')
+        ->useFieldEnclosure('"')
+        ->getRows()
+        ->all();
+
+    expect($rows)->toBe(SimpleExcelReader::create(getStubPath('header-and-rows.csv'))->getRows()->all());
+});

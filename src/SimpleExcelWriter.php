@@ -2,6 +2,7 @@
 
 namespace Spatie\SimpleExcel;
 
+use OpenSpout\Common\Entity\Cell;
 use OpenSpout\Common\Entity\Row;
 use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\CSV\Options as CSVOptions;
@@ -108,12 +109,18 @@ class SimpleExcelWriter
             return;
         }
 
-        if ($delimiter !== null) {
-            $this->csvOptions->FIELD_DELIMITER = $delimiter;
-        }
-
-        if ($shouldAddBom !== null) {
-            $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
+        if ((new \ReflectionClass(CSVOptions::class))->isReadOnly()) {
+            $this->csvOptions = new CSVOptions(
+                FIELD_DELIMITER: $delimiter ?? $this->csvOptions->FIELD_DELIMITER,
+                SHOULD_ADD_BOM: $shouldAddBom ?? $this->csvOptions->SHOULD_ADD_BOM,
+            );
+        } else {
+            if ($delimiter !== null) {
+                $this->csvOptions->FIELD_DELIMITER = $delimiter;
+            }
+            if ($shouldAddBom !== null) {
+                $this->csvOptions->SHOULD_ADD_BOM = $shouldAddBom;
+            }
         }
 
         $this->initWriter($path, $type, $this->csvOptions);
@@ -155,7 +162,7 @@ class SimpleExcelWriter
                 $this->writeHeaderFromRow($row);
             }
 
-            $row = Row::fromValues($row, $style);
+            $row = $this->createRow($row, $style);
         }
 
         $this->writer->addRow($row);
@@ -164,6 +171,18 @@ class SimpleExcelWriter
         $this->processingFirstRow = false;
 
         return $this;
+    }
+
+    protected function createRow(array $values, ?Style $style): Row
+    {
+        if (! method_exists(Row::class, 'getCells')) {
+            return new Row(array_map(
+                static fn (mixed $value): Cell => Cell::fromValue($value, $style),
+                array_values($values),
+            ));
+        }
+
+        return Row::fromValues($values, $style);
     }
 
     public function addRows(iterable $rows, ?Style $style = null): static
@@ -177,7 +196,7 @@ class SimpleExcelWriter
 
     public function addHeader(array $header): self
     {
-        $headerRow = Row::fromValues($header, $this->headerStyle);
+        $headerRow = $this->createRow($header, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
@@ -191,7 +210,7 @@ class SimpleExcelWriter
     {
         $headerValues = array_keys($row);
 
-        $headerRow = Row::fromValues($headerValues, $this->headerStyle);
+        $headerRow = $this->createRow($headerValues, $this->headerStyle);
 
         $this->writer->addRow($headerRow);
         $this->numberOfRows++;
