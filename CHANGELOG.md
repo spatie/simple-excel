@@ -2,6 +2,26 @@
 
 All notable changes to `simple-excel` will be documented in this file
 
+## 3.11.0 - 2026-10-19
+
+### What is new
+
+- Add OpenSpout 5 support alongside OpenSpout 4.30, including immutable reader options, styled XLSX rows, and cell access compatibility (#196).
+- Modernize test tooling to Pest 4/5 and PHPUnit 12/13 while retaining PHP 8.3–8.5 support.
+- Strengthen CSV option and XLSX style regression coverage and make formatting a read-only PR check.
+
+### Compatibility
+
+The Simple Excel wrapper API and minimum PHP version are unchanged. OpenSpout 5 requires PHP 8.4 or newer.
+
+Consumers using OpenSpout classes directly must follow the API of their installed major: OpenSpout 5 uses immutable styles/options and does not merge explicit cell styles with the fallback style. To retain OpenSpout 4 APIs, explicitly require `openspout/openspout:^4.30`. See the README compatibility section and the [OpenSpout upgrade guide](https://github.com/openspout/openspout/blob/5.x/UPGRADE.md).
+
+### Validation
+
+All 15 PR CI checks passed, covering nine PHP/Illuminate combinations, five OpenSpout combinations, and styling. All 14 local test matrix combinations passed with 71 tests and 155 assertions each.
+
+**Full changelog:** https://github.com/spatie/simple-excel/compare/3.10.0...3.11.0
+
 ## 3.10.0 - 2026-06-15
 
 ### What's Changed
