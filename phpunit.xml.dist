@@ -10,6 +10,7 @@
     executionOrder="random"
     failOnWarning="true"
     failOnRisky="true"
+    failOnIncomplete="true"
     failOnEmptyTestSuite="true"
     beStrictAboutOutputDuringTests="true"
 >

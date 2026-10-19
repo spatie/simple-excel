@@ -35,6 +35,21 @@ You can install the package via composer:
 composer require spatie/simple-excel
 ```
 
+### OpenSpout compatibility
+
+This package supports OpenSpout 4.30 and 5. Composer selects a compatible version for your PHP runtime; OpenSpout 5 requires PHP 8.4 or newer.
+
+If you use OpenSpout classes directly, including `Style`, `Row`, or options obtained through `getWriter()`, follow the API of your installed OpenSpout major. OpenSpout 5 uses immutable options and styles, and explicit cell styles replace rather than merge with the writer's fallback style. See the [OpenSpout upgrade guide](https://github.com/openspout/openspout/blob/5.x/UPGRADE.md).
+
+The style and writer configuration examples below use OpenSpout 4. To keep using those APIs when updating dependencies, require `openspout/openspout:^4.30` explicitly. On OpenSpout 5, create styles using constructor arguments or immutable `with...` methods, for example:
+
+```php
+use OpenSpout\Common\Entity\Style\Style;
+
+$style = (new Style())->withFontBold(true)->withFontSize(15);
+$writer->addRow(['values', 'of', 'the', 'row'], $style);
+```
+
 ## Usage
 
 ### Reading a CSV

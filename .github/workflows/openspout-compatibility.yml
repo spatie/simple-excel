@@ -1,0 +1,32 @@
+name: OpenSpout compatibility
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.3'
+            openspout: '4.30.0'
+          - php: '8.4'
+            openspout: '^4.30'
+          - php: '8.4'
+            openspout: '5.0.0'
+          - php: '8.4'
+            openspout: '^5.0'
+          - php: '8.5'
+            openspout: '^5.0'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, xmlreader, xmlwriter, zip, mbstring
+          coverage: none
+      - name: Install dependencies
+        run: composer update --with="openspout/openspout:${{ matrix.openspout }}" --prefer-dist --no-interaction
+      - name: Run tests
+        run: php vendor/bin/pest
