@@ -1,6 +1,6 @@
-name: Check & fix styling
+name: Check styling
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
     style:
@@ -8,14 +8,17 @@ jobs:
 
         steps:
             -   name: Checkout code
-                uses: actions/checkout@v3
+                uses: actions/checkout@v7
 
-            -   name: Run PHP CS Fixer
-                uses: docker://oskarstark/php-cs-fixer-ga
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
                 with:
-                    args: --config=.php-cs-fixer.dist.php --allow-risky=yes
+                    php-version: '8.3'
+                    extensions: dom, xmlreader, xmlwriter, zip, mbstring
+                    coverage: none
 
-            -   name: Commit changes
-                uses: stefanzweifel/git-auto-commit-action@v4
-                with:
-                    commit_message: Fix styling
+            -   name: Install dependencies
+                run: composer update --prefer-dist --no-interaction
+
+            -   name: Check styling
+                run: composer format -- --dry-run --diff

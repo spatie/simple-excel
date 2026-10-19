@@ -8,6 +8,7 @@ use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\CSV\Options as CSVOptions;
 use OpenSpout\Writer\CSV\Writer;
 use OpenSpout\Writer\WriterInterface;
+use ReflectionClass;
 
 class SimpleExcelWriter
 {
@@ -109,7 +110,7 @@ class SimpleExcelWriter
             return;
         }
 
-        if ((new \ReflectionClass(CSVOptions::class))->isReadOnly()) {
+        if ((new ReflectionClass(CSVOptions::class))->isReadOnly()) {
             $this->csvOptions = new CSVOptions(
                 FIELD_DELIMITER: $delimiter ?? $this->csvOptions->FIELD_DELIMITER,
                 SHOULD_ADD_BOM: $shouldAddBom ?? $this->csvOptions->SHOULD_ADD_BOM,
@@ -173,6 +174,10 @@ class SimpleExcelWriter
         return $this;
     }
 
+    /**
+     * @param array<array-key, mixed> $values
+     * @param Style|null $style
+     */
     protected function createRow(array $values, ?Style $style): Row
     {
         if (! method_exists(Row::class, 'getCells')) {

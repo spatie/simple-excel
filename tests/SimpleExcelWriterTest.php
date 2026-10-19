@@ -1,6 +1,8 @@
 <?php
 
+use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Writer\CSV\Writer;
+use Spatie\SimpleExcel\SimpleExcelReader;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 
 use function Spatie\Snapshots\assertMatchesFileSnapshot;
@@ -14,7 +16,7 @@ beforeEach(function () {
     $this->pathToXlsx = $this->temporaryDirectory->path('test.xlsx');
 });
 
-it('can write a regular CSV', function () {
+it('can write a regular csv', function () {
     SimpleExcelWriter::create($this->pathToCsv)
         ->addRow([
             'first_name' => 'John',
@@ -73,7 +75,7 @@ it('can write the header from array', function () {
     assertMatchesFileSnapshot($this->pathToCsv);
 });
 
-it('can write a CSV without a header', function () {
+it('can write a csv without a header', function () {
     SimpleExcelWriter::create($this->pathToCsv)
         ->noHeaderRow()
         ->addRow([
@@ -119,7 +121,7 @@ it('allows setting the writer type manually', function () {
     expect($writer->getWriter())->toBeInstanceOf(Writer::class);
 });
 
-it('can write a CSV without bom', function () {
+it('can write a csv without bom', function () {
     $writer = SimpleExcelWriter::createWithoutBom($this->pathToCsv)
         ->addRow([
             'first_name' => 'Jane',
@@ -152,29 +154,58 @@ it('can add and name a xlsx sheet', function () {
     expect($writer->getWriter()->getCurrentSheet()->getName())->toEqual('TestSheet');
 });
 
-it('preserves header and row styles in xlsx exports', function () {
-    $style = new \OpenSpout\Common\Entity\Style\Style();
-    $style = method_exists($style, 'withFontBold')
-        ? $style->withFontBold(true)
-        : $style->setFontBold();
+it('preserves header and row styles in xlsx exports', function (bool $explicitHeader) {
+    $headerStyle = new Style();
+    $headerStyle = method_exists($headerStyle, 'withFontBold')
+        ? $headerStyle->withFontBold(true)
+        : $headerStyle->setFontBold();
+    $rowStyle = new Style();
+    $rowStyle = method_exists($rowStyle, 'withFontItalic')
+        ? $rowStyle->withFontItalic(true)
+        : $rowStyle->setFontItalic();
 
     $writer = SimpleExcelWriter::create($this->pathToXlsx)
-        ->setHeaderStyle($style)
-        ->addRow(['name' => 'Jane'], $style);
+        ->setHeaderStyle($headerStyle);
+
+    if ($explicitHeader) {
+        $writer->addHeader(['name', 'age']);
+    }
+
+    $writer->addRow(['name' => 'Jane', 'age' => 42], $rowStyle);
     $writer->close();
 
-    $zip = new \ZipArchive();
+    $zip = new ZipArchive();
     $zip->open($this->pathToXlsx);
     $sheet = simplexml_load_string($zip->getFromName('xl/worksheets/sheet1.xml'));
     $styles = simplexml_load_string($zip->getFromName('xl/styles.xml'));
     $zip->close();
 
+    expect($sheet->sheetData->row)->toHaveCount(2);
+
     foreach ($sheet->sheetData->row as $row) {
-        $styleIndex = (int) $row->c['s'];
-        $fontIndex = (int) $styles->cellXfs->xf[$styleIndex]['fontId'];
-        expect(isset($styles->fonts->font[$fontIndex]->b))->toBeTrue();
+        expect($row->c)->toHaveCount(2);
+
+        foreach ($row->c as $cell) {
+            $styleIndex = (int) $cell['s'];
+            $fontIndex = (int) $styles->cellXfs->xf[$styleIndex]['fontId'];
+            $font = $styles->fonts->font[$fontIndex];
+
+            expect(isset($font->b))->toBe((int) $row['r'] === 1);
+            expect(isset($font->i))->toBe((int) $row['r'] === 2);
+        }
     }
 
-    expect(\Spatie\SimpleExcel\SimpleExcelReader::create($this->pathToXlsx)->getRows()->all())
-        ->toBe([['name' => 'Jane']]);
+    expect(SimpleExcelReader::create($this->pathToXlsx)->getRows()->all())
+        ->toBe([['name' => 'Jane', 'age' => 42]]);
+})->with([false, true]);
+
+it('combines a custom csv delimiter with disabling the bom', function () {
+    $writer = SimpleExcelWriter::create(
+        file: $this->pathToCsv,
+        delimiter: ';',
+        shouldAddBom: false,
+    )->addRow(['name' => 'Jane', 'age' => 42]);
+    $writer->close();
+
+    expect(file_get_contents($this->pathToCsv))->toBe("name;age\nJane;42\n");
 });

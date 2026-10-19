@@ -768,12 +768,19 @@ it('can count and take rows', function () {
 });
 
 it('keeps csv options when setting another option', function () {
-    $rows = SimpleExcelReader::create(getStubPath('header-and-rows-other-delimiter.csv'))
-        ->useDelimiter(';')
-        ->useEncoding('UTF-8')
-        ->useFieldEnclosure('"')
-        ->getRows()
-        ->all();
+    $path = tempnam(sys_get_temp_dir(), 'simple-excel-');
+    file_put_contents($path, mb_convert_encoding("'name';'note'\n'André';'a;b'\n", 'Windows-1252', 'UTF-8'));
 
-    expect($rows)->toBe(SimpleExcelReader::create(getStubPath('header-and-rows.csv'))->getRows()->all());
+    try {
+        $rows = SimpleExcelReader::create($path, 'csv')
+            ->useDelimiter(';')
+            ->useEncoding('Windows-1252')
+            ->useFieldEnclosure("'")
+            ->getRows()
+            ->all();
+
+        expect($rows)->toBe([['name' => 'André', 'note' => 'a;b']]);
+    } finally {
+        unlink($path);
+    }
 });

@@ -14,6 +14,7 @@ use OpenSpout\Reader\RowIteratorInterface;
 use OpenSpout\Reader\SheetInterface;
 use OpenSpout\Reader\XLSX\Options as XLSXOptions;
 use OpenSpout\Reader\XLSX\Reader as XLSXReader;
+use ReflectionClass;
 
 class SimpleExcelReader
 {
@@ -72,7 +73,7 @@ class SimpleExcelReader
 
     protected function withOption(CSVOptions|XLSXOptions $options, string $name, mixed $value): CSVOptions|XLSXOptions
     {
-        if ((new \ReflectionClass($options))->isReadOnly()) {
+        if ((new ReflectionClass($options))->isReadOnly()) {
             return new ($options::class)(...array_replace(get_object_vars($options), [$name => $value]));
         }
 

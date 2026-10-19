@@ -20,11 +20,11 @@ jobs:
           - php: '8.5'
             openspout: '^5.0'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, xmlreader, zip, mbstring
+          extensions: dom, xmlreader, xmlwriter, zip, mbstring
           coverage: none
       - name: Install dependencies
         run: composer update --with="openspout/openspout:${{ matrix.openspout }}" --prefer-dist --no-interaction
