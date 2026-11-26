@@ -146,6 +146,10 @@ class SimpleExcelReader
 
     public function preserveEmptyRows(): self
     {
+        if ($this->reader instanceof CSVReader) {
+            $this->csvOptions = $this->withOption($this->csvOptions, 'SHOULD_PRESERVE_EMPTY_ROWS', true);
+        }
+
         if ($this->reader instanceof XLSXReader) {
             $this->xlsxOptions = $this->withOption($this->xlsxOptions, 'SHOULD_PRESERVE_EMPTY_ROWS', true);
         }

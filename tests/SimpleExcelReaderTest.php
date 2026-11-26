@@ -745,8 +745,15 @@ it('can preserve date formatting', function () {
     expect($formattedDates[1])->toEqual('9/19/2024');
 });
 
-it('can preserve empty rows', function () {
+it('can preserve empty rows in an xlsx', function () {
     $reader = SimpleExcelReader::create(getStubPath('empty_rows.xlsx'));
+
+    expect($reader->getRows()->count())->toBe(2);
+    expect($reader->preserveEmptyRows()->getRows()->count())->toBe(3);
+});
+
+it('can preserve empty rows in a csv', function () {
+    $reader = SimpleExcelReader::create(getStubPath('empty_rows.csv'));
 
     expect($reader->getRows()->count())->toBe(2);
     expect($reader->preserveEmptyRows()->getRows()->count())->toBe(3);
